@@ -19,7 +19,12 @@
         <c:if test="${!empty sUserid}">
           <span class="fw-bold text-primary">${sUserid}님</span>
           <span class="mx-2 text-muted">|</span>
-          <a href="${ctp}/member/myPage" class="text-decoration-none text-secondary">마이페이지</a>
+          <c:if test="${sLevel != 0 }">
+          	<a href="${ctp}/member/memberMain" class="text-decoration-none text-secondary">마이페이지</a>
+          </c:if>
+          <c:if test="${sLevel == 0 }">
+          	<a href="${ctp}/admin/adminMain" class="text-decoration-none text-secondary">관리자페이지</a>
+          </c:if>
           <span class="mx-2 text-muted">|</span>
           <a href="${ctp}/cart/cartList" class="text-decoration-none text-secondary">장바구니</a>
           <span class="mx-2 text-muted">|</span>
@@ -36,7 +41,7 @@
     <div class="container">
       <div class="d-flex align-items-center justify-content-between" style="height: 5rem;">
         <div>
-          <a href="${ctp}/" class="text-decoration-none">
+          <a href="http://localhost:9090/springGroupS10/" class="text-decoration-none">
             <h1 class="h2 fw-bold text-dark">Scheherazade</h1>
           </a>
         </div>

@@ -1,5 +1,8 @@
 package com.spring.springGroupS10.controller;
 
+import java.util.UUID;
+
+import javax.mail.MessagingException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.spring.springGroupS10.common.ProjectProvide;
 import com.spring.springGroupS10.service.MemberService;
 import com.spring.springGroupS10.vo.MemberVO;
 
@@ -27,6 +31,9 @@ public class MemberController {
 	
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	ProjectProvide projectProvide;
 	
 	
 	@GetMapping("/memberLogin")
@@ -54,16 +61,23 @@ public class MemberController {
 		
 		MemberVO vo = memberService.getMemberByUserid(userid);
 		
-		if(vo != null && passwordEncoder.matches(password, vo.getPassword())) {
+		if(vo != null &&  passwordEncoder.matches(password, vo.getPassword())) {
 			
 			if(vo.isDeleted()) {
-				return "redirect:/message/loginError?msgFlag=deleted";
+				return "redirect:/message/loginDelError";
 			}
+			
+			String strLevel = "";
+			if(vo.getLevel() == 0) strLevel = "관리자";
+			else if(vo.getLevel() == 1) strLevel = "우수회원";
+			else if(vo.getLevel() == 2) strLevel = "정회원";
+			else if(vo.getLevel() == 3) strLevel = "준회원";
 			
 			session.setAttribute("sUserid", vo.getUserid());
 			session.setAttribute("sNickname", vo.getNickname());
 			session.setAttribute("sLevel", vo.getLevel());
-			session.setAttribute("sRole", vo.getRole());
+			session.setAttribute("strLevel", strLevel);
+			session.setAttribute("sLastLoginAt", vo.getLastLoginAt());
 			
 			if(idCheck.equals("on")) {
 				Cookie cookie = new Cookie("cUserid", userid);
@@ -106,12 +120,13 @@ public class MemberController {
 	}
 	
 	@PostMapping("/memberJoin")
-	public String memberJoinPost(MemberVO vo) {
+	public String memberJoinPost(MemberVO vo, String email1, String email2) {
 		if(memberService.getMemberByUserid(vo.getUserid()) != null) {
 			return "redirect:/message/memberJoinNo";
 		}
 		
 		vo.setPassword(passwordEncoder.encode(vo.getPassword()));
+		vo.setEmail(email1 + "@" + email2);
 		
 		int res = memberService.setMemberJoin(vo);
 		
@@ -144,6 +159,28 @@ public class MemberController {
 		}
 		return "";
 	}
+	
+	@GetMapping("/memberMain")
+	public String memberMainGet(Model model, HttpSession session) {
+		String userid = (String) session.getAttribute("sUserid");
+		MemberVO vo = memberService.getMemberByUserid(userid);
+		
+		model.addAttribute(vo);
+		
+		return "/member/memberMain";
+	}
+	
+	@PostMapping("/memberEmailCheck")
+	public int memberEmailCheckPost(String email, HttpSession session) throws MessagingException {
+		String emailKey = UUID.randomUUID().toString().substring(0, 8);
+		
+		session.setAttribute("sEmailKey", emailKey);
+		
+		projectProvide.mailSend(email, "이메일 인증키입니다.", "이메일 인증키 : " + emailKey);
+		
+		return 1;
+	}
+	
 	
 	
 }

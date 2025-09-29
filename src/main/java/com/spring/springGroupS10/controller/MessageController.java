@@ -39,6 +39,11 @@ public class MessageController {
 			model.addAttribute("url", "/member/home");
 		}
 		
+		else if(msgFlag.equals("loginDelError")) {
+			model.addAttribute("message", "탈퇴 신청된 회원입니다.");
+			model.addAttribute("url", "/member/memberLogin");
+		}
+		
 		else if(msgFlag.equals("memberJoinOk")) {
 			model.addAttribute("message", "정상적으로 회원가입 가입되었습니다.");
 			model.addAttribute("url", "/member/memberLogin");

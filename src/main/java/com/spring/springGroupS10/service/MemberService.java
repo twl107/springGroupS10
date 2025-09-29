@@ -1,5 +1,7 @@
 package com.spring.springGroupS10.service;
 
+import java.util.List;
+
 import com.spring.springGroupS10.vo.MemberVO;
 
 public interface MemberService {
@@ -9,5 +11,7 @@ public interface MemberService {
 	int setMemberJoin(MemberVO vo);
 
 	MemberVO getMemberByNickname(String nickname);
+
+	List<MemberVO> getMemberList();
 
 }

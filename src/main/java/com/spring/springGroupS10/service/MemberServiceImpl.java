@@ -1,5 +1,7 @@
 package com.spring.springGroupS10.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public MemberVO getMemberByNickname(String nickname) {
 		return memberDAO.getMemberByNickname(nickname);
+	}
+
+	@Override
+	public List<MemberVO> getMemberList() {
+		return memberDAO.getMemberList();
 	}
 
 }

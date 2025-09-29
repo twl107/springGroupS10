@@ -1,8 +1,10 @@
 show databases;
 
+show tables;
+
 CREATE TABLE member (
     -- 기본 정보
-    member_id       BIGINT        NOT NULL AUTO_INCREMENT,  -- PK는 int보다 BIGINT가 안전합니다.
+    idx       BIGINT        NOT NULL AUTO_INCREMENT,  -- PK는 int보다 BIGINT가 안전합니다.
     userid      	  VARCHAR(30)   NOT NULL,                 -- 로그인 아이디
     password        VARCHAR(255)  NOT NULL,                 -- 암호화된 비밀번호 (넉넉한 길이)
     nickname        VARCHAR(20)   NOT NULL,
@@ -22,14 +24,16 @@ CREATE TABLE member (
     -- 쇼핑몰 관련 정보
     point           INT           DEFAULT 0,
     level           INT           DEFAULT 3,                -- 회원 등급 (0: 관리자 1: 우수회원, 2: 정회원 3: 준회원)
-
+		today_cnt				INT						DEFAULT 0,
+    visit_cnt				INT						DEFAULT 0,
+    
     -- 상태 및 일시 정보
     is_deleted      BOOLEAN       DEFAULT FALSE,            -- 탈퇴 여부 (true/false)
     deleted_at      DATETIME,                               -- 탈퇴 처리 일시
     created_at      DATETIME      DEFAULT NOW(),            -- 가입일
     last_login_at   DATETIME      DEFAULT NOW(),            -- 마지막 로그인
 
-    PRIMARY KEY (member_id),
+    PRIMARY KEY (idx),
     UNIQUE (userid),
     UNIQUE (nickname)
 );

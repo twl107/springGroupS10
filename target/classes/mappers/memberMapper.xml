@@ -10,6 +10,10 @@
 		select * from member where nickname = #{nickname}
 	</select>
 	
+	<select id="getMemberList" resultType="com.spring.springGroupS10.vo.MemberVO">
+		select * from member
+	</select>
+	
 	
 	
 	
