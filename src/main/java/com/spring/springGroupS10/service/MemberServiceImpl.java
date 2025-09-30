@@ -34,4 +34,19 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.getMemberList();
 	}
 
+	@Override
+	public void setMemberLevelUp(String userid) {
+		memberDAO.setMemberLevelUp(userid);
+	}
+
+	@Override
+	public void setMemberTodayCntClear(String userid) {
+		memberDAO.setMemberTodayCntClear(userid);
+	}
+
+	@Override
+	public void setMemberInforUpdate(String userid, int point) {
+		memberDAO.setMemberInforUpdate(userid, point);
+	}
+
 }

@@ -1,25 +1,26 @@
 package com.spring.springGroupS10.common;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.spring.springGroupS10.service.AdminService;
+import com.spring.springGroupS10.service.MemberService;
 import com.spring.springGroupS10.vo.PageVO;
 
 @Service
 public class Pagination {
 	
 	/*
-	@Autowired
-	BoardService boardService;
-	
+	 * @Autowired BoardService boardService;
+	 */
 	@Autowired
 	MemberService memberService;
 	
 	@Autowired
 	AdminService adminService;
-	
-	@Autowired
-	PdsService pdsService;
-	*/
+	/*
+	 * @Autowired PdsService pdsService;
+	 */
 	
 	public PageVO pagination(PageVO pageVO) {	// 각각의 변수로 받으면 초기값처리를 spring가 자동할수 있으나, 객체로 받으면 개별 문자/객체 자료에는 null이 들어오기에 따로 초기화 작업처리해야함.
 		//System.out.println("pageVO(Pagination) : " + pageVO);

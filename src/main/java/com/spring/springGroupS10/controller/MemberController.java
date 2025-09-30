@@ -1,5 +1,6 @@
 package com.spring.springGroupS10.controller;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -51,6 +52,7 @@ public class MemberController {
 		return "/member/memberLogin";
 	}
 	
+	// 일반 로그인 처리
 	@PostMapping("/memberLogin")
 	public String memberLoginPost(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(name="userid", defaultValue="", required = false) String userid,
@@ -96,6 +98,26 @@ public class MemberController {
 					}
 				}
 			}
+			
+			if(vo.getLevel() == 3 && vo.getVisitCnt() > 3) {
+				memberService.setMemberLevelUp(userid);
+			}
+			
+			int todaySw = 0;
+			if(!LocalDateTime.now().toString().substring(0,10).equals(vo.getLastLoginAt().substring(0,10))) {
+				memberService.setMemberTodayCntClear(userid);
+				vo.setTodayCnt(0);
+				todaySw = 1;
+			}
+			
+			if(vo.getLevel() < 3) {
+				int point = vo.getTodayCnt() < 5 ? 10 : 0;
+				memberService.setMemberInforUpdate(userid, point);
+			}
+			else memberService.setMemberInforUpdate(userid, 0);
+			
+			
+			
 			
 			return "redirect:/message/memberLoginOk?userid="+userid;
 		}
@@ -170,6 +192,7 @@ public class MemberController {
 		return "/member/memberMain";
 	}
 	
+	@ResponseBody
 	@PostMapping("/memberEmailCheck")
 	public int memberEmailCheckPost(String email, HttpSession session) throws MessagingException {
 		String emailKey = UUID.randomUUID().toString().substring(0, 8);
@@ -180,6 +203,23 @@ public class MemberController {
 		
 		return 1;
 	}
+	
+	@ResponseBody
+	@PostMapping("/memberEmailCheckOk")
+	public int memberEmailCheckOkPost(String checkKey, HttpSession session) {
+		String emailKey = (String) session.getAttribute("sEmailKey");
+		if(checkKey.equals(emailKey)) {
+			session.removeAttribute("sEmailKey");
+			return 1;
+		}
+		return 0;
+	}
+	
+	@ResponseBody
+	@PostMapping("/memberEmailCheckNo")
+	public void memberEmailCheckNoPost(HttpSession session) {
+	   session.removeAttribute("sEmeilKey");
+	}	
 	
 	
 	

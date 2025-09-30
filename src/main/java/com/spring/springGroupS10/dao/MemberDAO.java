@@ -16,4 +16,10 @@ public interface MemberDAO {
 
 	List<MemberVO> getMemberList();
 
+	void setMemberLevelUp(@Param("userid") String userid);
+
+	void setMemberTodayCntClear(@Param("userid") String userid);
+
+	void setMemberInforUpdate(@Param("userid") String userid, @Param("point") int point);
+
 }

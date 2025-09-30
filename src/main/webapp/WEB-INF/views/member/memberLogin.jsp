@@ -29,7 +29,7 @@
 
             <!-- 비밀번호 (Floating Labels 적용) -->
             <div class="form-floating mb-4">
-              <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호" required>
+              <input type="password" class="form-control" id="password" name="password" value="1234" placeholder="비밀번호" required>
               <label for="password">비밀번호</label>
             </div>
 

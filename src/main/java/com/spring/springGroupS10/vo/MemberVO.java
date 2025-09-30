@@ -6,7 +6,7 @@ import lombok.Data;
 public class MemberVO {
 	
 	// 기본 정보
-	private long memberId;
+	private long idx;
 	private String userid;
 	private String password;
 	private String nickname;
@@ -18,20 +18,25 @@ public class MemberVO {
 	private String postcode;
 	private String address1;
 	private String address2;
+	private String fullAddress;
 
 	// 개인 정보
 	private String gender;
 	private String birthday;
 
 	// 쇼핑몰 관련 정보
-	private int point;
-	private int level;
-	private String role;
-	
+	private int point;        // INT
+  private int level;        // INT
+  private int todayCnt;     // INT (today_cnt -> todayCnt)
+  private int visitCnt;     // INT (visit_cnt -> visitCnt)
+
 	// 상태 및 일시 정보
 	private boolean isDeleted;
 	private String deletedAt;   // DATETIME 타입을 String으로 처리
 	private String createdAt;
 	private String lastLoginAt;
+	
+	
+	private int deleteDiff;
 	
 }

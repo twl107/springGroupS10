@@ -38,13 +38,13 @@ public class AdminController {
 		return "/admin/adminContent";
 	}
 	
-	
 	@GetMapping("/member/adminMemberList")
 	public String adminMemberListGet(Model model) {
 		List<MemberVO> vos = memberService.getMemberList();
 		
 		model.addAttribute("vos", vos);
 		
+		System.out.println("vos" + vos);
 		return "admin/member/adminMemberList";
 	}
 	

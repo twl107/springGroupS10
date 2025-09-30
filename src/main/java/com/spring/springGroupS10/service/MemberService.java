@@ -14,4 +14,10 @@ public interface MemberService {
 
 	List<MemberVO> getMemberList();
 
+	void setMemberLevelUp(String userid);
+
+	void setMemberTodayCntClear(String userid);
+
+	void setMemberInforUpdate(String userid, int point);
+
 }

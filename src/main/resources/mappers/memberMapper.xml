@@ -11,16 +11,42 @@
 	</select>
 	
 	<select id="getMemberList" resultType="com.spring.springGroupS10.vo.MemberVO">
-		select * from member
+		select *, timestampdiff(day, deleted_at, now()) as deleteDiff from member
 	</select>
 	
 	
 	
 	
 	<insert id="setMemberJoin">
-		insert into member (userid, password, nickname, name, email, tel, postcode, address1, address2) 
-		values (#{vo.userid}, #{vo.password}, #{vo.nickname}, #{vo.name}, #{vo.email}, #{vo.tel}, #{vo.postcode}, #{vo.address1}, #{vo.address2})
+		insert into member (userid, password, nickname, name, email, tel, birthday, gender, postcode, address1, address2) 
+		values (#{vo.userid}, #{vo.password}, #{vo.nickname}, #{vo.name}, #{vo.email}, #{vo.tel}, #{vo.birthday}, #{vo.gender}, #{vo.postcode}, #{vo.address1}, #{vo.address2})
 	</insert>
+	
+	
+	
+	
+	<update id="setMemberLevelUp">
+		update member set level = 2 where userid = #{userid};
+	</update>
+	
+	<update id="setMemberTodayCntClear">
+		update member set today_cnt = 0 where userid = #{userid};
+	</update>
+	
+	<update id="setMemberInforUpdate">
+		update member set visit_cnt=visit_cnt+1, last_login_at=now(), today_cnt=today_cnt+1, point=point+#{point} where userid = #{userid};
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
