@@ -6,6 +6,8 @@
 <html>
 <head>
   <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
   <title>상품 전체보기</title>
   <style>
     .card-img-top {
@@ -15,6 +17,8 @@
   </style>
 </head>
 <body>
+<jsp:include page="/WEB-INF/views/include/header.jsp" />
+<jsp:include page="/WEB-INF/views/include/nav.jsp" />
 <div class="container my-5">
   <h2 class="text-center mb-4">상품 전체보기</h2>
   
@@ -28,7 +32,7 @@
               <img src="${ctp}/images/default_product.png" class="card-img-top" alt="기본 이미지">
             </c:if>
             <c:if test="${!empty vo.thumbnail}">
-              <img src="${ctp}/uploads/${vo.thumbnail}" class="card-img-top" alt="${vo.name}">
+              <img src="${ctp}/resources/images/product/${vo.thumbnail}" class="card-img-top" alt="${vo.name}">
             </c:if>
           </a>
           <div class="card-body">
@@ -52,5 +56,6 @@
     </c:if>
   </div>
 </div>
+<jsp:include page="/WEB-INF/views/include/footer.jsp" />
 </body>
 </html>

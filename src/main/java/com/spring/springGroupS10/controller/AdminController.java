@@ -38,6 +38,7 @@ public class AdminController {
 		return "/admin/adminContent";
 	}
 	
+	// 관리자 회원리스트 조회
 	@GetMapping("/member/adminMemberList")
 	public String adminMemberListGet(Model model) {
 		List<MemberVO> vos = memberService.getMemberList();
@@ -47,6 +48,10 @@ public class AdminController {
 		System.out.println("vos" + vos);
 		return "admin/member/adminMemberList";
 	}
+	
+	
+	
+	
 	
 	
 	
