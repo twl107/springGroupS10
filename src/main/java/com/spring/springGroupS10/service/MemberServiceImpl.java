@@ -30,10 +30,10 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<MemberVO> getMemberList() {
-		return memberDAO.getMemberList();
+	public List<MemberVO> getMemberList(int startIndexNo, int pageSize, int level) {
+		return memberDAO.getMemberList(startIndexNo, pageSize, level);
 	}
-
+	
 	@Override
 	public void setMemberLevelUp(String userid) {
 		memberDAO.setMemberLevelUp(userid);
@@ -48,5 +48,26 @@ public class MemberServiceImpl implements MemberService {
 	public void setMemberInforUpdate(String userid, int point) {
 		memberDAO.setMemberInforUpdate(userid, point);
 	}
+
+
+	@Override
+	public int updateMemberLevel(int idx, int level) {
+		return memberDAO.updateMemberLevel(idx, level);
+	}
+
+	@Override
+	public int getTotRecCnt(int level) {
+		return memberDAO.getTotRecCnt(level);
+	}
+
+	@Override
+	public void deleteExpiredMembers() {
+		memberDAO.deleteExpiredMembers();
+	}
+	
+	
+	
+	
+	
 
 }

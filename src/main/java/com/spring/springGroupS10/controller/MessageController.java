@@ -52,6 +52,14 @@ public class MessageController {
 			model.addAttribute("message", "회원가입 실패");
 			model.addAttribute("url", "/member/memberJoin");
 		}
+		else if(msgFlag.equals("dbProductInputOk")) {
+			model.addAttribute("message", "상품이 등록되었습니다.");
+			model.addAttribute("url", "/dbShop/dbShopList");
+		}
+		else if(msgFlag.equals("dbProductInputNo")) {
+			model.addAttribute("message", "상품 등록 실패~~.");
+			model.addAttribute("url", "/dbShop/dbProduct");
+		}
 		
 		
 		return "include/message";

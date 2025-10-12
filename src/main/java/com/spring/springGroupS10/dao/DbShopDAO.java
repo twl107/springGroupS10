@@ -3,6 +3,7 @@ package com.spring.springGroupS10.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.springGroupS10.vo.DbProductVO;
 
@@ -27,6 +28,21 @@ public interface DbShopDAO {
 	DbProductVO getCategoryProductName(@Param("vo") DbProductVO vo);
 
 	List<DbProductVO> getCategoryMiddleName(@Param("categoryMainCode") String categoryMainCode);
+
+	DbProductVO getProductMaxIdx();
+
+	int setDbProductInput(@Param("vo") DbProductVO vo);
+
+	List<DbProductVO> getMiddleCategory(@Param("mainCategory") String mainCategory);
+
+	List<DbProductVO> getAllMainCategory();
+
+	List<DbProductVO> getAllMiddleCategory();
+
+	List<DbProductVO> getDbShopList(@Param("mainCategories") List<String> mainCategories, @Param("middleCategories") List<String> middleCategories);
+
+
+
 
 
 	

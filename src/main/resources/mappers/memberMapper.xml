@@ -10,9 +10,25 @@
 		select * from member where nickname = #{nickname}
 	</select>
 	
-	<select id="getMemberList" resultType="com.spring.springGroupS10.vo.MemberVO">
-		select *, timestampdiff(day, deleted_at, now()) as deleteDiff from member
+	<!-- 등급별 전체 회원 수 구하기 (동적 쿼리) -->
+	<select id="getTotRecCnt" resultType="int">
+	  select count(*) from member
+	  <if test="level != 99">
+	    where level = #{level}
+	  </if>
 	</select>
+	
+	<!-- 페이징 처리 및 등급별 조회를 적용한 회원 목록 (동적 쿼리) -->
+	<select id="getMemberList" resultType="com.spring.springGroupS10.vo.MemberVO">
+	  select *, timestampdiff(day, deleted_at, now()) as deleteDiff from member
+	  <if test="level != 99">
+	    where level = #{level}
+	  </if>
+	  order by idx desc 
+	  limit #{startIndexNo}, #{pageSize}
+	</select>
+	
+	
 	
 	
 	
@@ -21,6 +37,8 @@
 		insert into member (userid, password, nickname, name, email, tel, birthday, gender, postcode, address1, address2) 
 		values (#{vo.userid}, #{vo.password}, #{vo.nickname}, #{vo.name}, #{vo.email}, #{vo.tel}, #{vo.birthday}, #{vo.gender}, #{vo.postcode}, #{vo.address1}, #{vo.address2})
 	</insert>
+	
+	
 	
 	
 	
@@ -37,19 +55,21 @@
 		update member set visit_cnt=visit_cnt+1, last_login_at=now(), today_cnt=today_cnt+1, point=point+#{point} where userid = #{userid};
 	</update>
 	
+  <!-- 회원 등급 변경 -->
+  <update id="updateMemberLevel">
+    update member set level = #{level} where idx = #{idx}
+  </update>	
 	
 	
 	
 	
 	
 	
+  <!-- 30일 경과 탈퇴 회원 삭제 (추가된 부분) -->
+  <delete id="deleteExpiredMembers">
+    delete from member where isDeleted = true and timestampdiff(day, deleted_at, now()) >= 30
+  </delete>
 	
 	
-	
-	
-	
-	
-	
-	
-
 </mapper>
+

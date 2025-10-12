@@ -29,6 +29,60 @@
 		select * from categoryMiddle where categoryMainCode=#{categoryMainCode};
 	</select>
 	
+	<select id="getProductMaxIdx" resultType="com.spring.springGroupS10.vo.DbProductVO">
+		select * from dbProduct order by idx desc limit 1;
+	</select>
+	
+	<select id="getMiddleCategory" resultType="com.spring.springGroupS10.vo.DbProductVO">
+		select * from categoryMiddle where categoryMainCode=#{mainCategory};
+	</select>
+	
+	<select id="getAllMainCategory" resultType="com.spring.springGroupS10.vo.DbProductVO">
+	  select * from categoryMain order by categoryMainCode;
+	</select>
+		
+	<select id="getAllMiddleCategory" resultType="com.spring.springGroupS10.vo.DbProductVO">
+	  select 
+	    MIN(categoryMiddleCode) as categoryMiddleCode, 
+	    categoryMiddleName 
+	  from 
+	    categoryMiddle 
+	  group by 
+	    categoryMiddleName 
+	  order by 
+	    categoryMiddleCode;
+	</select>
+	
+	<select id="getDbShopList" parameterType="map" resultType="com.spring.springGroupS10.vo.DbProductVO">
+	  SELECT * FROM dbProduct
+	  <where>
+	    <if test="mainCategories != null and mainCategories.size() > 0">
+	      categoryMainCode IN
+	      <foreach item="mainCode" collection="mainCategories" open="(" separator="," close=")">
+	        #{mainCode}
+	      </foreach>
+	    </if>
+	    
+	    <if test="middleCategories != null and middleCategories.size() > 0">
+	      <if test="mainCategories != null and mainCategories.size() > 0">
+	        OR
+	      </if>
+	      categoryMiddleCode IN
+	      <foreach item="middleCode" collection="middleCategories" open="(" separator="," close=")">
+	        #{middleCode}
+	      </foreach>
+	    </if>
+	  </where>
+	  ORDER BY idx DESC
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	<insert id="setCategoryMainInput">
@@ -39,7 +93,9 @@
 		insert into categoryMiddle values (#{vo.categoryMainCode},#{vo.categoryMiddleCode},#{vo.categoryMiddleName});
 	</insert>
 
-	
+	<insert id="setDbProductInput">
+    insert into dbProduct value (#{vo.idx},#{vo.categoryMainCode},#{vo.categoryMiddleCode},#{vo.productCode},#{vo.productName},#{vo.detail},#{vo.mainPrice},#{vo.fSName},#{vo.content});
+  </insert>
 	
 	
 	

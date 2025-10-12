@@ -22,7 +22,7 @@
   <div class="collapse" id="productMenu">
     <a href="${ctp}/dbShop/dbCategory" target="adminContent" class="list-group-item list-group-item-action ps-4">· 상품카테고리</a>
     <a href="${ctp}/dbShop/dbProduct" target="adminContent" class="list-group-item list-group-item-action ps-4">· 상품등록관리</a>
-    <a href="${ctp}/admin/product/adminProductList" target="adminContent" class="list-group-item list-group-item-action ps-4">· 상품리스트</a>
+    <a href="${ctp}/dbShop/dbShopList" target="adminContent" class="list-group-item list-group-item-action ps-4">· 상품리스트</a>
     <a href="#" target="adminContent" class="list-group-item list-group-item-action ps-4">· 주문/배송관리</a>
     <a href="#" target="adminContent" class="list-group-item list-group-item-action ps-4">· 결제처리</a>
   </div>

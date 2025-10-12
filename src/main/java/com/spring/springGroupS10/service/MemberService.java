@@ -11,13 +11,19 @@ public interface MemberService {
 	int setMemberJoin(MemberVO vo);
 
 	MemberVO getMemberByNickname(String nickname);
-
-	List<MemberVO> getMemberList();
-
+	
+	List<MemberVO> getMemberList(int startIndexNo, int pageSize, int level);
+	
 	void setMemberLevelUp(String userid);
 
 	void setMemberTodayCntClear(String userid);
 
 	void setMemberInforUpdate(String userid, int point);
+
+	int updateMemberLevel(int idx, int level);
+
+	int getTotRecCnt(int level);
+
+	void deleteExpiredMembers();
 
 }
