@@ -15,8 +15,8 @@ public class MemberServiceImpl implements MemberService {
 	MemberDAO memberDAO;
 	
 	@Override
-	public MemberVO getMemberByUserid(String userid) {
-		return memberDAO.getMemberByUserid(userid);
+	public MemberVO getMemberByUserId(String userId) {
+		return memberDAO.getMemberByUserId(userId);
 	}
 
 	@Override
@@ -25,8 +25,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public MemberVO getMemberByNickname(String nickname) {
-		return memberDAO.getMemberByNickname(nickname);
+	public MemberVO getMemberByNickName(String nickName) {
+		return memberDAO.getMemberByNickName(nickName);
 	}
 
 	@Override
@@ -35,18 +35,18 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	@Override
-	public void setMemberLevelUp(String userid) {
-		memberDAO.setMemberLevelUp(userid);
+	public void setMemberLevelUp(String userId) {
+		memberDAO.setMemberLevelUp(userId);
 	}
 
 	@Override
-	public void setMemberTodayCntClear(String userid) {
-		memberDAO.setMemberTodayCntClear(userid);
+	public void setMemberTodayCntClear(String userId) {
+		memberDAO.setMemberTodayCntClear(userId);
 	}
 
 	@Override
-	public void setMemberInforUpdate(String userid, int point) {
-		memberDAO.setMemberInforUpdate(userid, point);
+	public void setMemberInforUpdate(String userId, int point) {
+		memberDAO.setMemberInforUpdate(userId, point);
 	}
 
 
@@ -64,10 +64,5 @@ public class MemberServiceImpl implements MemberService {
 	public void deleteExpiredMembers() {
 		memberDAO.deleteExpiredMembers();
 	}
-	
-	
-	
-	
-	
-
 }
+

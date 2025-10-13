@@ -7,17 +7,17 @@
   <div class="bg-light border-bottom">
     <div class="container d-flex justify-content-end align-items-center" style="height: 2.5rem;">
       <div class="small">
-        <c:if test="${empty sUserid}">
+        <c:if test="${empty sUserId}">
           <a href="${ctp}/member/memberLogin" class="text-decoration-none text-secondary">로그인</a>
           <span class="mx-2 text-muted">|</span>
           <a href="${ctp}/member/memberJoin" class="text-decoration-none text-secondary">회원가입</a>
           <span class="mx-2 text-muted">|</span>
-          <a href="${ctp}/cart/cartList" class="text-decoration-none text-secondary">장바구니</a>
+          <a href="${ctp}/dbShop/cartList" class="text-decoration-none text-secondary">장바구니</a>
           <span class="mx-2 text-muted">|</span>
           <a href="${ctp}/support/qnaList" class="text-decoration-none text-secondary">고객센터</a>
         </c:if>
-        <c:if test="${!empty sUserid}">
-          <span class="fw-bold text-primary">${sUserid}님</span>
+        <c:if test="${!empty sUserId}">
+          <span class="fw-bold text-primary">${sUserId}님</span>
           <span class="mx-2 text-muted">|</span>
           <c:if test="${sLevel != 0 }">
           	<a href="${ctp}/member/memberMain" class="text-decoration-none text-secondary">마이페이지</a>
@@ -26,7 +26,7 @@
           	<a href="${ctp}/admin/adminMain" class="text-decoration-none text-secondary">관리자페이지</a>
           </c:if>
           <span class="mx-2 text-muted">|</span>
-          <a href="${ctp}/cart/cartList" class="text-decoration-none text-secondary">장바구니</a>
+          <a href="${ctp}/dbShop/cartList" class="text-decoration-none text-secondary">장바구니</a>
           <span class="mx-2 text-muted">|</span>
           <a href="${ctp}/support/qnaList" class="text-decoration-none text-secondary">고객센터</a>
           <span class="mx-2 text-muted">|</span>

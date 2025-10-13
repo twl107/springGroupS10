@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.springGroupS10.dao.CartDAO">
+
+	<!-- 장바구니에 동일 상품(옵션포함) 존재 여부 확인 -->
+	<select id="getCartItem" resultType="com.spring.springGroupS10.vo.CartVO">
+		select * from cart 
+		where memberIdx = #{vo.memberIdx} and productIdx = #{vo.productIdx}
+		<!-- 옵션이 없는 상품(optionIdx is null)인 경우까지 고려 -->
+		<if test="vo.optionIdx == null">
+			and optionIdx is null
+		</if>
+		<if test="vo.optionIdx != null">
+			and optionIdx = #{vo.optionIdx}
+		</if>
+	</select>
+
+	<!-- 특정 회원의 장바구니 목록 조회 (상품/옵션 정보 JOIN) -->
+	<select id="getCartList" resultType="com.spring.springGroupS10.vo.CartVO">
+		SELECT 
+			c.idx,
+			c.memberIdx,
+			c.productIdx,
+			c.optionIdx,
+			c.quantity,
+			p.productName,
+			p.mainPrice,
+			p.fSName,
+			o.optionName,
+			o.optionPrice,
+			(p.mainPrice + IFNULL(o.optionPrice, 0)) * c.quantity AS totalPrice
+		FROM cart c
+		JOIN dbProduct p ON c.productIdx = p.idx
+		LEFT JOIN dbOption o ON c.optionIdx = o.idx
+		WHERE c.memberIdx = #{memberIdx}
+		ORDER BY c.idx DESC;
+	</select>
+
+
+
+
+
+
+	<!-- 장바구니에 새 상품 추가 -->
+	<insert id="addCart">
+		insert into cart (memberIdx, productIdx, optionIdx, quantity) 
+		values (#{vo.memberIdx}, #{vo.productIdx}, #{vo.optionIdx}, #{vo.quantity})
+	</insert>
+
+	
+	
+	
+	
+	
+	<!-- 기존 장바구니 상품 수량 업데이트 (기존수량 + 추가수량) -->
+	<update id="updateCartQuantity">
+		update cart set quantity = quantity + #{vo.quantity} where idx = #{vo.idx}
+	</update>
+
+	<!-- 장바구니 항목 수량 직접 변경 -->
+	<update id="updateItemQuantity">
+		update cart set quantity = #{quantity} where idx = #{cartIdx}
+	</update>
+	
+	
+	
+	
+	
+	
+	<!-- 장바구니 항목 삭제 -->
+	<delete id="deleteCartItem">
+		delete from cart where idx = #{cartIdx}
+	</delete>
+	
+	
+	
+	
+	
+	
+
+</mapper>

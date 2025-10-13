@@ -43,8 +43,9 @@ public class MemberController {
 		
 		if(cookies != null) {
 			for(int i=0; i<cookies.length; i++) {
-				if(cookies[i].getName().equals("cUserid")) {
-					request.setAttribute("userid", cookies[i].getValue());
+				// 쿠키 이름 cUserId로 수정
+				if(cookies[i].getName().equals("cUserId")) {
+					request.setAttribute("userId", cookies[i].getValue());
 					break;
 				}
 			}
@@ -55,13 +56,14 @@ public class MemberController {
 	// 일반 로그인 처리
 	@PostMapping("/memberLogin")
 	public String memberLoginPost(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam(name="userid", defaultValue="", required = false) String userid,
+			// RequestParam name을 userId로 수정
+			@RequestParam(name="userId", defaultValue="", required = false) String userId,
 			@RequestParam(name="password", defaultValue="", required = false) String password,
 			@RequestParam(name="idCheck", defaultValue="off", required = false) String idCheck,
 			HttpSession session, Model model
 		) {
 		
-		MemberVO vo = memberService.getMemberByUserid(userid);
+		MemberVO vo = memberService.getMemberByUserId(userId);
 		
 		if(vo != null &&  passwordEncoder.matches(password, vo.getPassword())) {
 			
@@ -75,14 +77,16 @@ public class MemberController {
 			else if(vo.getLevel() == 2) strLevel = "정회원";
 			else if(vo.getLevel() == 3) strLevel = "준회원";
 			
-			session.setAttribute("sUserid", vo.getUserid());
-			session.setAttribute("sNickname", vo.getNickname());
+			// 세션 변수명 camelCase로 통일
+			session.setAttribute("sUserId", vo.getUserId());
+			session.setAttribute("sNickName", vo.getNickName());
 			session.setAttribute("sLevel", vo.getLevel());
 			session.setAttribute("strLevel", strLevel);
 			session.setAttribute("sLastLoginAt", vo.getLastLoginAt());
 			
 			if(idCheck.equals("on")) {
-				Cookie cookie = new Cookie("cUserid", userid);
+				// 쿠키 이름 cUserId로 수정
+				Cookie cookie = new Cookie("cUserId", userId);
 				cookie.setMaxAge(60*60*24*7);
 				response.addCookie(cookie);
 			}
@@ -90,7 +94,8 @@ public class MemberController {
 				Cookie[] cookies = request.getCookies();
 				if(cookies != null) {
 					for(int i=0; i<cookies.length; i++) {
-						if(cookies[i].getName().equals("cUserid")) {
+						// 쿠키 이름 cUserId로 수정
+						if(cookies[i].getName().equals("cUserId")) {
 							cookies[i].setMaxAge(0);
 							response.addCookie(cookies[i]);
 							break;
@@ -100,26 +105,22 @@ public class MemberController {
 			}
 			
 			if(vo.getLevel() == 3 && vo.getVisitCnt() > 3) {
-				memberService.setMemberLevelUp(userid);
+				memberService.setMemberLevelUp(userId);
 			}
 			
-			int todaySw = 0;
 			if(!LocalDateTime.now().toString().substring(0,10).equals(vo.getLastLoginAt().substring(0,10))) {
-				memberService.setMemberTodayCntClear(userid);
+				memberService.setMemberTodayCntClear(userId);
 				vo.setTodayCnt(0);
-				todaySw = 1;
 			}
 			
 			if(vo.getLevel() < 3) {
 				int point = vo.getTodayCnt() < 5 ? 10 : 0;
-				memberService.setMemberInforUpdate(userid, point);
+				memberService.setMemberInforUpdate(userId, point);
 			}
-			else memberService.setMemberInforUpdate(userid, 0);
+			else memberService.setMemberInforUpdate(userId, 0);
 			
-			
-			
-			
-			return "redirect:/message/memberLoginOk?userid="+userid;
+			// redirect 파라미터명 userId로 수정
+			return "redirect:/message/memberLoginOk?userId="+userId;
 		}
 		else return "redirect:/message/memberLoginNo"; 
 	}
@@ -143,7 +144,7 @@ public class MemberController {
 	
 	@PostMapping("/memberJoin")
 	public String memberJoinPost(MemberVO vo, String email1, String email2) {
-		if(memberService.getMemberByUserid(vo.getUserid()) != null) {
+		if(memberService.getMemberByUserId(vo.getUserId()) != null) {
 			return "redirect:/message/memberJoinNo";
 		}
 		
@@ -157,12 +158,12 @@ public class MemberController {
 		
 	}
 	
-	
-	@PostMapping("/useridCheck")
+	// PostMapping URL 경로 수정
+	@PostMapping("/userIdCheck")
 	@ResponseBody
-	public String useridCheckPost(@RequestParam("userid") String userid) {
+	public String userIdCheckPost(@RequestParam("userId") String userId) {
 		
-		MemberVO vo = memberService.getMemberByUserid(userid);
+		MemberVO vo = memberService.getMemberByUserId(userId);
 		
 		if(vo != null) {
 			return "true";
@@ -170,11 +171,12 @@ public class MemberController {
 		return "";
 	}
 	
-	@PostMapping("/nicknameCheck")
+	// PostMapping URL 경로 수정
+	@PostMapping("/nickNameCheck")
 	@ResponseBody
-	public String nicknameCheckPost(@RequestParam("nickname") String nickname) {
+	public String nickNameCheckPost(@RequestParam("nickName") String nickName) {
 		
-		MemberVO vo = memberService.getMemberByNickname(nickname);
+		MemberVO vo = memberService.getMemberByNickName(nickName);
 		
 		if(vo != null) {
 			return "true";
@@ -184,10 +186,10 @@ public class MemberController {
 	
 	@GetMapping("/memberMain")
 	public String memberMainGet(Model model, HttpSession session) {
-		String userid = (String) session.getAttribute("sUserid");
-		MemberVO vo = memberService.getMemberByUserid(userid);
+		String userId = (String) session.getAttribute("sUserId");
+		MemberVO vo = memberService.getMemberByUserId(userId);
 		
-		model.addAttribute(vo);
+		model.addAttribute("memberVO", vo);
 		
 		return "/member/memberMain";
 	}
@@ -220,7 +222,5 @@ public class MemberController {
 	public void memberEmailCheckNoPost(HttpSession session) {
 	   session.removeAttribute("sEmeilKey");
 	}	
-	
-	
-	
 }
+

@@ -21,13 +21,13 @@
           <h2 class="card-title text-center fw-bold mb-4">로그인</h2>
           <form name="loginForm" method="post" action="${ctp}/member/memberLogin">
             
-            <!-- 아이디 (Floating Labels 적용) -->
+            <!-- 아이디 (id, name, value 수정) -->
             <div class="form-floating mb-3">
-              <input type="text" class="form-control" id="userid" name="userid" placeholder="아이디" value="${userid}" required autofocus>
-              <label for="userid">아이디</label>
+              <input type="text" class="form-control" id="userId" name="userId" placeholder="아이디" value="${userId}" required autofocus>
+              <label for="userId">아이디</label>
             </div>
 
-            <!-- 비밀번호 (Floating Labels 적용) -->
+            <!-- 비밀번호 -->
             <div class="form-floating mb-4">
               <input type="password" class="form-control" id="password" name="password" value="1234" placeholder="비밀번호" required>
               <label for="password">비밀번호</label>

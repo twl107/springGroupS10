@@ -2,15 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.springGroupS10.dao.MemberDAO">
 
-	<select id="getMemberByUserid" resultType="com.spring.springGroupS10.vo.MemberVO">
-		select * from member where userid = #{userid}
+	<!-- DB 컬럼명이 camelCase(userId)로 변경되어 수정 -->
+	<select id="getMemberByUserId" resultType="com.spring.springGroupS10.vo.MemberVO">
+		select * from member where userId = #{userId}
 	</select>
 	
-	<select id="getMemberByNickname" resultType="com.spring.springGroupS10.vo.MemberVO">
-		select * from member where nickname = #{nickname}
+	<!-- DB 컬럼명이 camelCase(nickName)로 변경되어 수정 -->
+	<select id="getMemberByNickName" resultType="com.spring.springGroupS10.vo.MemberVO">
+		select * from member where nickName = #{nickName}
 	</select>
 	
-	<!-- 등급별 전체 회원 수 구하기 (동적 쿼리) -->
 	<select id="getTotRecCnt" resultType="int">
 	  select count(*) from member
 	  <if test="level != 99">
@@ -18,9 +19,9 @@
 	  </if>
 	</select>
 	
-	<!-- 페이징 처리 및 등급별 조회를 적용한 회원 목록 (동적 쿼리) -->
+	<!-- DB 컬럼명이 camelCase(deletedAt)로 변경되어 수정 -->
 	<select id="getMemberList" resultType="com.spring.springGroupS10.vo.MemberVO">
-	  select *, timestampdiff(day, deleted_at, now()) as deleteDiff from member
+	  select *, timestampdiff(day, deletedAt, now()) as deleteDiff from member
 	  <if test="level != 99">
 	    where level = #{level}
 	  </if>
@@ -28,48 +29,34 @@
 	  limit #{startIndexNo}, #{pageSize}
 	</select>
 	
-	
-	
-	
-	
-	
+	<!-- DB 컬럼명이 camelCase로 변경되어 수정 -->
 	<insert id="setMemberJoin">
-		insert into member (userid, password, nickname, name, email, tel, birthday, gender, postcode, address1, address2) 
-		values (#{vo.userid}, #{vo.password}, #{vo.nickname}, #{vo.name}, #{vo.email}, #{vo.tel}, #{vo.birthday}, #{vo.gender}, #{vo.postcode}, #{vo.address1}, #{vo.address2})
+		insert into member (userId, password, nickName, name, email, tel, birthday, gender, postCode, address1, address2) 
+		values (#{vo.userId}, #{vo.password}, #{vo.nickName}, #{vo.name}, #{vo.email}, #{vo.tel}, #{vo.birthday}, #{vo.gender}, #{vo.postCode}, #{vo.address1}, #{vo.address2})
 	</insert>
 	
-	
-	
-	
-	
-	
 	<update id="setMemberLevelUp">
-		update member set level = 2 where userid = #{userid};
+		update member set level = 2 where userId = #{userId}
 	</update>
 	
+	<!-- DB 컬럼명이 camelCase(todayCnt, userId)로 변경되어 수정 -->
 	<update id="setMemberTodayCntClear">
-		update member set today_cnt = 0 where userid = #{userid};
+		update member set todayCnt = 0 where userId = #{userId}
 	</update>
 	
+	<!-- DB 컬럼명이 camelCase로 변경되어 수정 -->
 	<update id="setMemberInforUpdate">
-		update member set visit_cnt=visit_cnt+1, last_login_at=now(), today_cnt=today_cnt+1, point=point+#{point} where userid = #{userid};
+		update member set visitCnt=visitCnt+1, lastLoginAt=now(), todayCnt=todayCnt+1, point=point+#{point} where userId = #{userId}
 	</update>
 	
-  <!-- 회원 등급 변경 -->
   <update id="updateMemberLevel">
     update member set level = #{level} where idx = #{idx}
   </update>	
 	
-	
-	
-	
-	
-	
-  <!-- 30일 경과 탈퇴 회원 삭제 (추가된 부분) -->
+  <!-- DB 컬럼명이 camelCase(isDeleted, deletedAt)로 변경되어 수정 -->
   <delete id="deleteExpiredMembers">
-    delete from member where isDeleted = true and timestampdiff(day, deleted_at, now()) >= 30
+    delete from member where isDeleted = true and timestampdiff(day, deletedAt, now()) >= 30
   </delete>
-	
 	
 </mapper>
 

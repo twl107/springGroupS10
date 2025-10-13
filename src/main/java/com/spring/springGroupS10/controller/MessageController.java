@@ -17,8 +17,8 @@ public class MessageController {
 	@RequestMapping(value = "/message/{msgFlag}", method = RequestMethod.GET)
 	public String getMessage(Model model, HttpSession session, PageVO pageVO,
 			@PathVariable String msgFlag,
-			@RequestParam(name="userid", defaultValue = "", required = false) String userid,
-			@RequestParam(name="member_id", defaultValue = "0", required = false) int memberId
+			@RequestParam(name="userId", defaultValue = "", required = false) String userId,
+			@RequestParam(name="memberId", defaultValue = "0", required = false) int memberId
 			//@RequestParam(name="tempFlag", defaultValue = "", required = false) String tempFlag
 			//@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
 			//@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize
@@ -26,8 +26,8 @@ public class MessageController {
 		
 		
 		if(msgFlag.equals("memberLoginOk")) {
-			model.addAttribute("message", userid + "님 환영합니다.");
-			model.addAttribute("url", "/member/home?userid="+userid);
+			model.addAttribute("message", userId + "님 환영합니다.");
+			model.addAttribute("url", "/member/home?userId="+userId);
 		}
 		
 		else if(msgFlag.equals("memberLoginNo")) {

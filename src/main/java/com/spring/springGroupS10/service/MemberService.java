@@ -6,19 +6,19 @@ import com.spring.springGroupS10.vo.MemberVO;
 
 public interface MemberService {
 
-	MemberVO getMemberByUserid(String userid);
+	MemberVO getMemberByUserId(String userId);
 
 	int setMemberJoin(MemberVO vo);
 
-	MemberVO getMemberByNickname(String nickname);
+	MemberVO getMemberByNickName(String nickName);
 	
 	List<MemberVO> getMemberList(int startIndexNo, int pageSize, int level);
 	
-	void setMemberLevelUp(String userid);
+	void setMemberLevelUp(String userId);
 
-	void setMemberTodayCntClear(String userid);
+	void setMemberTodayCntClear(String userId);
 
-	void setMemberInforUpdate(String userid, int point);
+	void setMemberInforUpdate(String userId, int point);
 
 	int updateMemberLevel(int idx, int level);
 
@@ -27,3 +27,4 @@ public interface MemberService {
 	void deleteExpiredMembers();
 
 }
+

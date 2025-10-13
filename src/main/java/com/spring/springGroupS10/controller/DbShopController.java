@@ -3,6 +3,7 @@ package com.spring.springGroupS10.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,9 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.springGroupS10.service.CartService;
 import com.spring.springGroupS10.service.DbShopService;
+import com.spring.springGroupS10.service.MemberService;
+import com.spring.springGroupS10.vo.CartVO;
 import com.spring.springGroupS10.vo.DbOptionVO;
 import com.spring.springGroupS10.vo.DbProductVO;
+import com.spring.springGroupS10.vo.MemberVO;
 
 @Controller
 @RequestMapping("/dbShop")
@@ -25,7 +30,11 @@ public class DbShopController {
 	@Autowired
 	DbShopService dbShopService;
 	
+	@Autowired
+	MemberService memberService;
 	
+	@Autowired
+	CartService cartService;
 	
 	
 	// 상품 카테고리 등록폼/리스트 출력
@@ -219,6 +228,62 @@ public class DbShopController {
 	}
 	
 	
+	@GetMapping("/cartList")
+	public String cartListGet(HttpSession session, Model model) {
+		String sUserId = (String) session.getAttribute("sUserId"); 
+		if (sUserId == null) {
+			return "redirect:/member/memberLogin";
+		}
+		
+		MemberVO memberVO = memberService.getMemberByUserId(sUserId);
+		long memberIdx = memberVO.getIdx();
+		
+		List<CartVO> vos = cartService.getCartList(memberIdx);
+		model.addAttribute("vos", vos);
+		
+		return "dbShop/cartList";
+	}
+	
+	/**
+	 * 장바구니에 상품 추가 (AJAX)
+	 * URL: /dbShop/cartAdd
+	 */
+	@ResponseBody
+	@PostMapping("/cartAdd")
+	public String addCartPost(HttpSession session, CartVO vo) {
+		String sUserId = (String) session.getAttribute("sUserId");
+		if (sUserId == null) {
+			return "login_required";
+		}
+		
+		MemberVO memberVO = memberService.getMemberByUserId(sUserId);
+		vo.setMemberIdx(memberVO.getIdx());
+		
+		int res = cartService.addOrUpdateCart(vo);
+		return res + "";
+	}
+	
+	/**
+	 * 장바구니 항목 삭제 (AJAX)
+	 * URL: /dbShop/cartDelete
+	 */
+	@ResponseBody
+	@PostMapping("/cartDelete")
+	public String deleteCartPost(int cartIdx) {
+		cartService.deleteCartItem(cartIdx);
+		return "1";
+	}
+	
+	/**
+	 * 장바구니 수량 변경 (AJAX)
+	 * URL: /dbShop/cartUpdateQuantity
+	 */
+	@ResponseBody
+	@PostMapping("/cartUpdateQuantity")
+	public String updateQuantityPost(int cartIdx, int quantity) {
+		cartService.updateItemQuantity(cartIdx, quantity);
+		return "1";
+	}
 	
 	
 	

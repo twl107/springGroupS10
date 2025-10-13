@@ -7,15 +7,15 @@ public class MemberVO {
 	
 	// 기본 정보
 	private long idx;
-	private String userid;
+	private String userId;
 	private String password;
-	private String nickname;
+	private String nickName;
 	private String name;
 	private String email;
 	private String tel;
 
 	// 주소 정보
-	private String postcode;
+	private String postCode;
 	private String address1;
 	private String address2;
 	private String fullAddress;
@@ -25,18 +25,18 @@ public class MemberVO {
 	private String birthday;
 
 	// 쇼핑몰 관련 정보
-	private int point;        // INT
-  private int level;        // INT
-  private int todayCnt;     // INT (today_cnt -> todayCnt)
-  private int visitCnt;     // INT (visit_cnt -> visitCnt)
+	private int point;
+	private int level;
+	private int todayCnt;
+	private int visitCnt;
 
 	// 상태 및 일시 정보
 	private boolean isDeleted;
-	private String deletedAt;   // DATETIME 타입을 String으로 처리
+	private String deletedAt;
 	private String createdAt;
 	private String lastLoginAt;
-	
 	
 	private int deleteDiff;
 	
 }
+

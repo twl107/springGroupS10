@@ -91,8 +91,8 @@
     <c:forEach var="vo" items="${vos}" varStatus="st">
       <tr>
         <td>${vo.idx}</td>
-        <td>${vo.userid}</td>
-        <td>${vo.nickname}</td>
+        <td>${vo.userId}</td>
+        <td>${vo.nickName}</td>
         <td>${vo.name}</td>
         <td>${vo.email}</td>
         <td>${fn:substring(vo.lastLoginAt,0,16)}</td>
