@@ -19,6 +19,7 @@ public class MessageController {
 			@PathVariable String msgFlag,
 			@RequestParam(name="userid", defaultValue = "", required = false) String userid,
 			@RequestParam(name="member_id", defaultValue = "0", required = false) int memberId
+			//@RequestParam(name="tempFlag", defaultValue = "", required = false) String tempFlag
 			//@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
 			//@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize
 		) {
@@ -59,6 +60,14 @@ public class MessageController {
 		else if(msgFlag.equals("dbProductInputNo")) {
 			model.addAttribute("message", "상품 등록 실패~~.");
 			model.addAttribute("url", "/dbShop/dbProduct");
+		}
+		else if(msgFlag.equals("dbOptionInputOk")) {
+			model.addAttribute("message", "옵션이 등록되었습니다.");
+			model.addAttribute("url", "/admin/dbShop/dbOption");
+		}
+		else if(msgFlag.equals("dbOptionInputNo")) {
+			model.addAttribute("message", "옵션 등록 실패~~");
+			model.addAttribute("url", "/admin/dbShop/dbOption");
 		}
 		
 		

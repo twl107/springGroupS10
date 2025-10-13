@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.springGroupS10.common.ProjectProvide;
 import com.spring.springGroupS10.dao.DbShopDAO;
+import com.spring.springGroupS10.vo.DbOptionVO;
 import com.spring.springGroupS10.vo.DbProductVO;
 
 @Service
@@ -144,6 +145,56 @@ public class DbShopServiceImpl implements DbShopService {
 	@Override
 	public List<DbProductVO> getDbShopList(List<String> mainCategories, List<String> middleCategories) {
 		return dbShopDAO.getDbShopList(mainCategories, middleCategories);
+	}
+
+	@Override
+	public DbProductVO getDbShopProduct(int idx) {
+		return dbShopDAO.getDbShopProduct(idx);
+	}
+
+	@Override
+	public List<DbProductVO> getDbShopOption(int idx) {
+		return dbShopDAO.getDbShopOption(idx);
+	}
+
+	@Override
+	public DbProductVO getCategoryProductNameOne(String productName) {
+		return dbShopDAO.getCategoryProductNameOne(productName);
+	}
+
+	@Override
+	public DbProductVO getCategoryProductNameOneVO(DbProductVO imsiVO) {
+		return dbShopDAO.getCategoryProductNameOneVO(imsiVO);
+	}
+
+	@Override
+	public List<DbProductVO> getCategoryProductNameAjax(String categoryMainCode, String categoryMiddleCode) {
+		return dbShopDAO.getCategoryProductNameAjax(categoryMainCode, categoryMiddleCode);
+	}
+
+	@Override
+	public DbProductVO getProductInfor(String productName) {
+		return dbShopDAO.getProductInfor(productName);
+	}
+
+	@Override
+	public List<DbProductVO> getOptionList(int productIdx) {
+		return dbShopDAO.getOptionList(productIdx);
+	}
+
+	@Override
+	public int getOptionSame(int productIdx, String optionName) {
+		return dbShopDAO.getOptionSame(productIdx, optionName);
+	}
+
+	@Override
+	public int setDbOptionInput(DbOptionVO vo) {
+		return dbShopDAO.setDbOptionInput(vo);
+	}
+
+	@Override
+	public int setOptionDelete(int idx) {
+		return dbShopDAO.setOptionDelete(idx);
 	}
 
 		

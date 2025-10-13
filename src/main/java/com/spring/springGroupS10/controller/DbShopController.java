@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.springGroupS10.service.DbShopService;
+import com.spring.springGroupS10.vo.DbOptionVO;
 import com.spring.springGroupS10.vo.DbProductVO;
 
 @Controller
@@ -121,22 +122,102 @@ public class DbShopController {
 	    @RequestParam(name = "middleCategory", required = false) List<String> middleCategories
 	  ) {
 
-	  // 1. [항상 실행] 모든 대분류/중분류 목록을 가져와 메뉴를 구성합니다.
+	  // 모든 대분류/중분류 목록을 가져와 메뉴를 구성합니다.
 	  List<DbProductVO> mainCategoryVOS = dbShopService.getAllMainCategory();
 	  List<DbProductVO> middleCategoryVOS = dbShopService.getAllMiddleCategory(); // 모든 중분류를 가져오는 서비스 메소드
 	  model.addAttribute("mainCategoryVOS", mainCategoryVOS);
 	  model.addAttribute("middleCategoryVOS", middleCategoryVOS);
 
-	  // 2. [항상 실행] 선택된 카테고리 목록을 다시 뷰로 보내 체크박스 상태를 유지합니다.
+	  // 선택된 카테고리 목록을 다시 뷰로 보내 체크박스 상태를 유지합니다.
 	  model.addAttribute("selectedMainCodes", mainCategories);
 	  model.addAttribute("selectedMiddleCodes", middleCategories);
 	  
-	  // 3. [핵심] 선택된 카테고리 목록에 해당하는 상품 목록을 가져옵니다.
+	  // 선택된 카테고리 목록에 해당하는 상품 목록을 가져옵니다.
 	  List<DbProductVO> productVOS = dbShopService.getDbShopList(mainCategories, middleCategories);
 	  model.addAttribute("productVOS", productVOS);
 	  
 	  return "admin/dbShop/dbShopList";
 	}
+	
+	@GetMapping("/dbShopContent")
+	public String dbShopContentGet(Model model, int idx) {
+		DbProductVO productVO = dbShopService.getDbShopProduct(idx);			// 상품 1건의 정보를 불러온다.
+		List<DbProductVO> optionVOS = dbShopService.getDbShopOption(idx);	// 해당 상품의 모든 옵션 정보를 가져온다.
+		
+		model.addAttribute("productVO", productVO);
+		model.addAttribute("optionVOS", optionVOS);
+		
+		return "admin/dbShop/dbShopContent";
+	}
+	
+	@GetMapping("/dbOption")
+	public String dbOptionGet(Model model, 
+			@RequestParam(name = "productName", defaultValue = "", required = false) String productName
+		) {
+		
+		if(productName.equals("")) {
+			List<DbProductVO> mainVos = dbShopService.getCategoryMain();
+			model.addAttribute("mainVos", mainVos);
+		}
+		else {
+			DbProductVO imsiVO = dbShopService.getCategoryProductNameOne(productName);
+			DbProductVO productVO = dbShopService.getCategoryProductNameOneVO(imsiVO);
+			model.addAttribute("productVO", productVO);
+		}
+		return "admin/dbShop/dbOption";
+	}
+	
+	// 중분류 선택 시 해당 상품명(모델명) 가져오기
+	@ResponseBody
+	@PostMapping("/categoryProductName")
+	public List<DbProductVO> categoryProductNameGet(String categoryMainCode, String categoryMiddleCode) {
+		return dbShopService.getCategoryProductNameAjax(categoryMainCode, categoryMiddleCode);
+	}
+	
+	// 옵션보기에서 상품선택 콤보상자에서 상품을 선택 시 해당 상품의 정보를 보여준다.
+	@ResponseBody
+	@PostMapping("/getProductInfor")
+	public DbProductVO getProductInforGet(String productName) {
+		return dbShopService.getProductInfor(productName);
+	}
+	
+	// 옵션보기에서 옵션보기 버튼 클릭 시 해당 상품의 옵션리스트를 보여준다.
+	@ResponseBody
+	@PostMapping("/getOptionList")
+	public List<DbProductVO> getOptionListPost(int productIdx) {
+		return dbShopService.getOptionList(productIdx);
+	}
+	
+	// 옵션에 기록한 내용들을 등록처리
+	@ResponseBody
+	@PostMapping("/dbOption")
+	public String dbOptionPost(Model model, DbOptionVO vo, String[] optionName, int[] optionPrice) {
+		int res = 0;
+		boolean isSuccess = false;
+		
+		for(int i=0; i<optionName.length; i++) {
+			if(optionName[i] == null || optionName[i].trim().equals("")) continue;
+			
+			int optionCnt = dbShopService.getOptionSame(vo.getProductIdx(), optionName[i]);
+			if(optionCnt != 0) continue;
+			
+			vo.setOptionName(optionName[i].trim());
+			vo.setOptionPrice(optionPrice[i]);
+			
+			res = dbShopService.setDbOptionInput(vo);
+			if(res != 0) isSuccess = true;
+		}
+		
+		if(isSuccess) return "1";
+		else return "0";
+	}
+	
+	@ResponseBody
+	@PostMapping("/optionDelete")
+	public int optionDeletePost(int idx) {
+		return dbShopService.setOptionDelete(idx);
+	}
+	
 	
 	
 	

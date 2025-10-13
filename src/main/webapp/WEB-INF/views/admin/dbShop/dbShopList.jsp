@@ -19,6 +19,8 @@
   </script>
   <style>
     .category-box { border: 1px solid #ddd; padding: 15px; border-radius: 5px; }
+    
+    a  {text-decoration: none}
   </style>
 </head>
 <body>
