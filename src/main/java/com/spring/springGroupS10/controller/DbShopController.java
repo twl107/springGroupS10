@@ -227,7 +227,27 @@ public class DbShopController {
 		return dbShopService.setOptionDelete(idx);
 	}
 	
+	// 전체 상품 리스트 출력
+	@GetMapping("/dbProductList")
+	public String dbProductListGet(Model model) {
+		List<DbProductVO> vos = dbShopService.getDbProductList();
+		model.addAttribute("vos", vos);
+		return "dbShop/dbProductList";
+	}
 	
+	// 상품 상세 정보 출력
+	@GetMapping("/dbProductContent")
+	public String dbProductContentGet(int idx, Model model) {
+		DbProductVO productVO = dbShopService.getDbShopProduct(idx);
+		List<DbProductVO> optionVOS = dbShopService.getDbShopOption(idx);
+		
+		model.addAttribute("productVO", productVO);
+		model.addAttribute("optionVOS", optionVOS);
+		
+		return "dbShop/dbProductContent";
+	}
+	
+	// 장바구니 보기
 	@GetMapping("/cartList")
 	public String cartListGet(HttpSession session, Model model) {
 		String sUserId = (String) session.getAttribute("sUserId"); 
@@ -244,29 +264,23 @@ public class DbShopController {
 		return "dbShop/cartList";
 	}
 	
-	/**
-	 * 장바구니에 상품 추가 (AJAX)
-	 * URL: /dbShop/cartAdd
-	 */
+	/* 장바구니에 상품 추가 (AJAX) */
 	@ResponseBody
 	@PostMapping("/cartAdd")
 	public String addCartPost(HttpSession session, CartVO vo) {
-		String sUserId = (String) session.getAttribute("sUserId");
-		if (sUserId == null) {
-			return "login_required";
+		String userId = (String) session.getAttribute("sUserId");
+		if (userId == null) {
+			return "0";
 		}
 		
-		MemberVO memberVO = memberService.getMemberByUserId(sUserId);
+		MemberVO memberVO = memberService.getMemberByUserId(userId);
 		vo.setMemberIdx(memberVO.getIdx());
 		
 		int res = cartService.addOrUpdateCart(vo);
 		return res + "";
 	}
 	
-	/**
-	 * 장바구니 항목 삭제 (AJAX)
-	 * URL: /dbShop/cartDelete
-	 */
+	/* 장바구니 항목 삭제 (AJAX) */
 	@ResponseBody
 	@PostMapping("/cartDelete")
 	public String deleteCartPost(int cartIdx) {
@@ -274,10 +288,7 @@ public class DbShopController {
 		return "1";
 	}
 	
-	/**
-	 * 장바구니 수량 변경 (AJAX)
-	 * URL: /dbShop/cartUpdateQuantity
-	 */
+	 /* 장바구니 수량 변경 (AJAX) */
 	@ResponseBody
 	@PostMapping("/cartUpdateQuantity")
 	public String updateQuantityPost(int cartIdx, int quantity) {

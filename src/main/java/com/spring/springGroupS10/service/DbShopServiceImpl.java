@@ -197,6 +197,11 @@ public class DbShopServiceImpl implements DbShopService {
 		return dbShopDAO.setOptionDelete(idx);
 	}
 
+	@Override
+	public List<DbProductVO> getDbProductList() {
+		return dbShopDAO.getDbProductList();
+	}
+
 		
 		
 		

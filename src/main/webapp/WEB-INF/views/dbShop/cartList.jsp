@@ -54,7 +54,7 @@
 							<div class="row align-items-center">
 								<div class="col-md-2 text-center">
 									<!-- 상품 썸네일 -->
-									<img src="${ctp}/product/${vo.fSName.split('/')[0]}" class="img-fluid rounded product-img" alt="${vo.productName}">
+									<img src="${ctp}/product/${vo.FSName.split('/')[0]}" class="img-fluid rounded product-img" alt="${vo.productName}">
 								</div>
 								<div class="col-md-4">
 									<!-- 상품명 및 옵션 -->

@@ -115,6 +115,9 @@
     select count(*) from dbOption where productIdx=#{productIdx} and optionName=#{optionName};
   </select>
 	
+	<select id="getDbProductList" resultType="com.spring.springGroupS10.vo.DbProductVO">
+		select * from dbProduct order by idx desc;
+	</select>
 	
 	
 	

@@ -6,7 +6,7 @@
   <div class="container">
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a class="nav-link active" aria-current="page" href="${ctp}/product/productList">상품 전체보기</a></li>
+        <li class="nav-item"><a class="nav-link active" aria-current="page" href="${ctp}/dbShop/dbProductList">상품 전체보기</a></li>
         <li class="nav-item"><a class="nav-link" href="#">브랜드별</a></li>
         <li class="nav-item"><a class="nav-link" href="#">이어폰</a></li>
         <li class="nav-item"><a class="nav-link" href="#">헤드폰</a></li>

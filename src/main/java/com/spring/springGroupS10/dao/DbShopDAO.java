@@ -61,6 +61,8 @@ public interface DbShopDAO {
 
 	int setOptionDelete(@Param("idx") int idx);
 
+	List<DbProductVO> getDbProductList();
+
 
 
 

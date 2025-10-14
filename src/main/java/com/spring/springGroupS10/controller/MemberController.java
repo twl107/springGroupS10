@@ -43,7 +43,6 @@ public class MemberController {
 		
 		if(cookies != null) {
 			for(int i=0; i<cookies.length; i++) {
-				// 쿠키 이름 cUserId로 수정
 				if(cookies[i].getName().equals("cUserId")) {
 					request.setAttribute("userId", cookies[i].getValue());
 					break;
@@ -56,7 +55,6 @@ public class MemberController {
 	// 일반 로그인 처리
 	@PostMapping("/memberLogin")
 	public String memberLoginPost(HttpServletRequest request, HttpServletResponse response,
-			// RequestParam name을 userId로 수정
 			@RequestParam(name="userId", defaultValue="", required = false) String userId,
 			@RequestParam(name="password", defaultValue="", required = false) String password,
 			@RequestParam(name="idCheck", defaultValue="off", required = false) String idCheck,
@@ -77,7 +75,6 @@ public class MemberController {
 			else if(vo.getLevel() == 2) strLevel = "정회원";
 			else if(vo.getLevel() == 3) strLevel = "준회원";
 			
-			// 세션 변수명 camelCase로 통일
 			session.setAttribute("sUserId", vo.getUserId());
 			session.setAttribute("sNickName", vo.getNickName());
 			session.setAttribute("sLevel", vo.getLevel());
@@ -85,7 +82,6 @@ public class MemberController {
 			session.setAttribute("sLastLoginAt", vo.getLastLoginAt());
 			
 			if(idCheck.equals("on")) {
-				// 쿠키 이름 cUserId로 수정
 				Cookie cookie = new Cookie("cUserId", userId);
 				cookie.setMaxAge(60*60*24*7);
 				response.addCookie(cookie);
@@ -94,7 +90,6 @@ public class MemberController {
 				Cookie[] cookies = request.getCookies();
 				if(cookies != null) {
 					for(int i=0; i<cookies.length; i++) {
-						// 쿠키 이름 cUserId로 수정
 						if(cookies[i].getName().equals("cUserId")) {
 							cookies[i].setMaxAge(0);
 							response.addCookie(cookies[i]);
@@ -119,7 +114,6 @@ public class MemberController {
 			}
 			else memberService.setMemberInforUpdate(userId, 0);
 			
-			// redirect 파라미터명 userId로 수정
 			return "redirect:/message/memberLoginOk?userId="+userId;
 		}
 		else return "redirect:/message/memberLoginNo"; 
@@ -158,7 +152,6 @@ public class MemberController {
 		
 	}
 	
-	// PostMapping URL 경로 수정
 	@PostMapping("/userIdCheck")
 	@ResponseBody
 	public String userIdCheckPost(@RequestParam("userId") String userId) {
@@ -171,7 +164,6 @@ public class MemberController {
 		return "";
 	}
 	
-	// PostMapping URL 경로 수정
 	@PostMapping("/nickNameCheck")
 	@ResponseBody
 	public String nickNameCheckPost(@RequestParam("nickName") String nickName) {

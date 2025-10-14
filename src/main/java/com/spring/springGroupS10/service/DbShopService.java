@@ -59,6 +59,8 @@ public interface DbShopService {
 
 	int setOptionDelete(int idx);
 
+	List<DbProductVO> getDbProductList();
+
 
 
 
