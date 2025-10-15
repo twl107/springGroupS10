@@ -5,8 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.text.DecimalFormat;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -63,49 +62,39 @@ public class ProjectProvide {
 		
 		return "1";
 	}
-
-	// 파일 업로드후 서버에 구분처리해서 저장하기
-	public String fileUpload(MultipartFile fName, String mid, String part) {
-		// 파일명 중복처리
-		String oFileName = fName.getOriginalFilename();
-		String sFileName = mid + "_" + UUID.randomUUID().toString().substring(0, 4) + "_" + oFileName;
+	
+	public String saveFile(MultipartFile file, String part, HttpServletRequest request) throws IOException {
+		String originalfileName = file.getOriginalFilename();
+		UUID uuid = UUID.randomUUID();
+		String serverFileName = uuid + "_" + originalfileName;
 		
-		try {
-			// 서버에 파일 구분처리하여 저장하기
-			writeFile(fName, sFileName, part);
-		} catch (IOException e) {
-			e.printStackTrace();
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/" + part + "/");
+		
+		File realPathFile = new File(realPath);
+		if(!realPathFile.exists()) {
+			realPathFile.mkdirs();
 		}
-		return sFileName;
-	}
-
-	// 지정된경로에 파일 저정하기
-	public void writeFile(MultipartFile fName, String sFileName, String part) throws IOException {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/"+part+"/");
 		
-		FileOutputStream fos = new FileOutputStream(realPath + sFileName);
+		file.transferTo(new File(realPath + serverFileName));
 		
-		if(fName.getBytes().length != -1) {
-			fos.write(fName.getBytes());
-		}
-		fos.flush();
-		fos.close();
+		return serverFileName;
 	}
-
+	
+	public String formatFileSize(long size) {
+		if(size <= 0) return "0";
+		final String[] units = new String[] {"Bytes", "KB", "MB", "GB", "TB"};
+		int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+		return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+	}
+	
+	
 	// 지정된 경로의 파일 삭제하기
-	public void fileDelete(String fileName, String part) {
+	public void deleteFile(String serverFileName, String part) {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/"+part+"/");
-		File file = new File(realPath + fileName);
+		
+		File file = new File(realPath + serverFileName);
 		if(file.exists()) file.delete();
-	}
-
-	// 파일 이름 변경하기(서버 파일시스템에 저장되는 파일명의 중복을 방지하기위함)
-	public String saveFileName(String oFileName) {
-		Date date = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
-		return sdf.format(date) + "_" + oFileName;
 	}
 
 	public void fileCopyCheck(String oriFilePath, String copyFilePath) {

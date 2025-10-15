@@ -13,6 +13,7 @@
         <li class="nav-item"><a class="nav-link" href="#">DAC/AMP</a></li>
         <li class="nav-item"><a class="nav-link" href="#">커스텀 케이블</a></li>
         <li class="nav-item"><a class="nav-link" href="#">액세서리</a></li>
+        <li class="nav-item"><a class="nav-link" href="${ctp}/pds/pdsList">자료실</a></li>
       </ul>
     </div>
   </div>

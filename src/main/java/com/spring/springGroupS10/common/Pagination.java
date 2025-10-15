@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.springGroupS10.service.AdminService;
 import com.spring.springGroupS10.service.MemberService;
+import com.spring.springGroupS10.service.PdsService;
 import com.spring.springGroupS10.vo.PageVO;
 
 @Service
@@ -16,13 +17,23 @@ public class Pagination {
 	@Autowired
 	AdminService adminService;
 	
+	@Autowired
+	PdsService pdsService;
+	
+	
   public PageVO pagination(PageVO pageVO) {
     int pag = pageVO.getPag() == 0 ? 1 : pageVO.getPag();
     int pageSize = pageVO.getPageSize() == 0 ? 5 : pageVO.getPageSize();
+    String part = pageVO.getPart() == null ? "" : pageVO.getPart();
+    
     int totRecCnt = 0;
     if(pageVO.getSection().equals("member")) {
       totRecCnt = memberService.getTotRecCnt(pageVO.getLevel());
     }
+    else if(pageVO.getSection().equals("pds")) {
+    	totRecCnt = pdsService.getTotRecCnt(part);
+    }
+    
     
     int totPage = (totRecCnt % pageSize) == 0 ? totRecCnt / pageSize : (totRecCnt / pageSize) + 1;
     int startIndexNo = (pag - 1) * pageSize;

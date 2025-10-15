@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.springGroupS10.dao.PdsDAO">
+	
+	<select id="getTotRecCnt" resultType="com.spring.springGroupS10.vo.PdsVO">
+		select count(*) from pds <if test='part != ""'> where part = #{part} </if>
+	</select>
+	
+	<select id="getPdsList" resultType="com.spring.springGroupS10.vo.PdsVO">
+		select p.*, m.nickName 
+		from pds p
+		join member m on p.memberIdx = m.idx
+		order by p.idx desc
+		limit #{startIndexNo}, #{pageSize};
+	</select>
+	
+	
+	
+
+</mapper>
