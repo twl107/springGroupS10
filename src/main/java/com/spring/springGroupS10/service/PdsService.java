@@ -14,6 +14,8 @@ public interface PdsService {
 
 	int pdsUpload(PdsVO vo, HttpServletRequest request);
 
+	PdsVO getPdsContent(int idx);
+
 	
 	
 	

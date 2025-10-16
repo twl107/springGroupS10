@@ -64,9 +64,9 @@ public class ProjectProvide {
 	}
 	
 	public String saveFile(MultipartFile file, String part, HttpServletRequest request) throws IOException {
-		String originalfileName = file.getOriginalFilename();
+		String originalFileName = file.getOriginalFilename();
 		UUID uuid = UUID.randomUUID();
-		String serverFileName = uuid + "_" + originalfileName;
+		String serverFileName = uuid + "_" + originalFileName;
 		
 		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/" + part + "/");
 		
@@ -89,8 +89,7 @@ public class ProjectProvide {
 	
 	
 	// 지정된 경로의 파일 삭제하기
-	public void deleteFile(String serverFileName, String part) {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+	public void deleteFile(String serverFileName, String part, HttpServletRequest request) {
 		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/"+part+"/");
 		
 		File file = new File(realPath + serverFileName);

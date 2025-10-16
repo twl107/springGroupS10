@@ -81,25 +81,22 @@ public class DbShopServiceImpl implements DbShopService {
 	@Override
 	public int mainImgToSubImgSave(MultipartFile file, DbProductVO vo) {
 		int res = 0;
-		// 메인 이미지 업로드
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+
+		// 1. 메인 이미지 업로드
 		try {
-			String originalFilename = file.getOriginalFilename();
-			if(originalFilename != null && originalFilename != "") {
-				String saveFileName = projectProvide.saveFileName(originalFilename);
-				
-					projectProvide.writeFile(file, saveFileName, "/dbShop/product/");
-					vo.setFSName(saveFileName);
+			if(file != null && !file.isEmpty()) {
+				String saveFileName = projectProvide.saveFile(file, "dbShop/product", request);
+				vo.setFSName(saveFileName);
 			}
-			else return res;
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		// ckeditor에서 올린 이미지 파일 처리
+		// 2. ckeditor에서 올린 이미지 파일 처리
 		String content = vo.getContent();
-		if(content.indexOf("src=\"/") != -1) {
-			HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		if(content != null && content.indexOf("src=\"/") != -1) {
 			String uploadPath = request.getSession().getServletContext().getRealPath("/resources/data/");
 			
 			Pattern pattern = Pattern.compile("src=\"/springGroupS10/data/ckeditor/([^\"]+)\"");
@@ -116,14 +113,17 @@ public class DbShopServiceImpl implements DbShopService {
 			vo.setContent(content.replace("/data/ckeditor/", "/data/dbShop/product/"));
 		}
 		
-		// 고유번호 idx값 만들기(상품코드 만들 때 필요)
+		// 3. 고유번호 idx값 만들기(상품코드 만들 때 필요)
 		int maxIdx = 1;
 		DbProductVO maxVO = dbShopDAO.getProductMaxIdx();
 		if(maxVO != null) maxIdx = maxVO.getIdx() + 1;
 		
 		vo.setIdx(maxIdx);
 		vo.setProductCode(vo.getCategoryMainCode()+vo.getCategoryMiddleCode() + maxIdx);
+		
+		// 4. DB 저장
 		res = dbShopDAO.setDbProductInput(vo);
+		
 		return res;
 	}
 

@@ -52,7 +52,7 @@
 				<tr>
 					<td>${st.count}</td>
 					<td class="text-start">
-						<a href="${ctp}/pds/download?idx=${vo.idx}" class="text-decoration-none">
+						<a href="${ctp}/pds/pdsContent?idx=${vo.idx}" class="text-decoration-none">
 							<i class="bi bi-file-earmark-arrow-down"></i>
 							${vo.title}
 						</a>

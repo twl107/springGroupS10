@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.springGroupS10.dao.PdsDAO">
 	
-	<select id="getTotRecCnt" resultType="com.spring.springGroupS10.vo.PdsVO">
-		select count(*) from pds <if test='part != ""'> where part = #{part} </if>
+	<select id="getTotRecCnt" resultType="int">
+		select ifnull(count(*), 0) from pds <if test='part != ""'> where part = #{part} </if>
 	</select>
 	
 	<select id="getPdsList" resultType="com.spring.springGroupS10.vo.PdsVO">
@@ -14,7 +14,20 @@
 		limit #{startIndexNo}, #{pageSize};
 	</select>
 	
+	<select id="getPdsContent" resultType="com.spring.springGroupS10.vo.PdsVO">
+		select p.*, m.nickName from pds p join member m on p.memberIdx = m.idx where p.idx = #{idx};
+	</select>
 	
+	
+	
+	
+	<insert id="pdsUpload" parameterType="com.spring.springGroupS10.vo.PdsVO">
+	    insert into pds (
+	        memberIdx, fName, fSName, fSize, part, title, content, openSw, hostIp, createdAt, downNum) 
+	        values (
+	        #{vo.memberIdx}, #{vo.fName}, #{vo.fSName}, #{vo.fSize}, #{vo.part}, #{vo.title}, #{vo.content}, #{vo.openSw}, 
+	        #{vo.hostIp}, now(), 0 );
+	</insert>
 	
 
 </mapper>

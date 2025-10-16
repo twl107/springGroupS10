@@ -1,5 +1,6 @@
 package com.spring.springGroupS10.vo;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +19,7 @@ public class PdsVO {
 	private String content;
 	private String openSw;
 	private String hostIp;
-	private String createdAt;
+	private Timestamp createdAt;
 	private int downNum;
 	
 	private String nickName;				// member 테이블과 JOIN하여 가져올 작성자 닉네임
