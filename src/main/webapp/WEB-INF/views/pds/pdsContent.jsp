@@ -13,6 +13,18 @@
 	<script>
 	  'use strict';
 	  
+	  // 다운로드 수 증가
+	  function downNumCheck(idx) {
+		  $.ajax({
+				url 	: '${ctp}/pds/pdsDownNumCheck',
+				type	: 'post',
+				data	: {idx : idx},
+				success	: () => location.reload(),
+				error	: () => alert('전송오류')
+		  });
+	  }
+	  
+	  
 	  // 게시글 삭제 함수
 	  function pdsDelete() {
 	    let ans = confirm("현재 게시글을 삭제하시겠습니까?");
@@ -57,8 +69,7 @@
 	      <c:if test="${!empty fNames}">
           <c:forEach var="fName" items="${fNames}" varStatus="st">
             <p class="my-1">
-              <a href="${ctp}/pds/pdsDownload?file=${fSNames[st.index]}">${fName}</a>
-                
+            	<a href="${ctp}/pds/pdsDownload?idx=${vo.idx}&fName=${fName}&fSName=${fSNames[st.index]}" onclick="downNumCheck(${vo.idx})">${fName}</a>
             </p>
           </c:forEach>
 	      </c:if>

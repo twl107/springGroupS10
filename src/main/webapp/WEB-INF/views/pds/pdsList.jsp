@@ -25,9 +25,11 @@
         <option ${pageVO.part=="기타" ? "selected" : ""}>기타</option>
       </select>
 		</div>
-		<div>
-			<a href="${ctp}/pds/pdsForm" class="btn btn-primary">자료 올리기</a>
-		</div>
+		<c:if test="${sLevel == 0}">
+			<div>
+				<a href="${ctp}/pds/pdsForm" class="btn btn-primary">자료 올리기</a>
+			</div>
+		</c:if>
 	</div>
 
 	<!-- 자료실 목록 테이블 -->
@@ -35,11 +37,11 @@
 		<thead class="table-light">
 			<tr>
 				<th>번호</th>
-				<th>자료명</th>
+				<th class="text-start">자료명</th>
 				<th>올린이</th>
 				<th>파일 크기</th>
 				<th>업로드일</th>
-				<th>다운로드</th>
+				<th>다운로드 횟수</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -49,19 +51,24 @@
 				</tr>
 			</c:if>
 			<c:forEach var="vo" items="${vos}" varStatus="st">
-				<tr>
-					<td>${st.count}</td>
-					<td class="text-start">
-						<a href="${ctp}/pds/pdsContent?idx=${vo.idx}" class="text-decoration-none">
-							<i class="bi bi-file-earmark-arrow-down"></i>
-							${vo.title}
-						</a>
-					</td>
-					<td>${vo.nickName}</td>
-					<td>${vo.formattedFSize}</td>
-					<td>${fn:substring(vo.createdAt, 0, 10)}</td>
-					<td>${vo.downNum}</td>
-				</tr>
+				<c:if test="${vo.openSw == '공개' || sLevel == 0}">
+					<tr>
+						<td>${st.count}</td>
+						<td class="text-start">
+							<a href="${ctp}/pds/pdsContent?idx=${vo.idx}" class="text-decoration-none">
+								<i class="bi bi-file-earmark-arrow-down"></i>
+								${vo.title}
+								<c:if test="${vo.openSw == '비공개'}">
+									<span class="badge bg-secondary ms-2">비공개</span>
+								</c:if>
+							</a>
+						</td>
+						<td>${vo.nickName}</td>
+						<td>${vo.formattedFSize}</td>
+						<td>${fn:substring(vo.createdAt, 0, 10)}</td>
+						<td>${vo.downNum}</td>
+					</tr>
+				</c:if>
 			</c:forEach>
 		</tbody>
 	</table>

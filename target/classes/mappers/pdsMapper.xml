@@ -18,6 +18,12 @@
 		select p.*, m.nickName from pds p join member m on p.memberIdx = m.idx where p.idx = #{idx};
 	</select>
 	
+	<select id="getPdsIdx" resultType="com.spring.springGroupS10.vo.PdsVO">
+		select * from pds where idx = #{idx};
+	</select>
+	
+	
+	
 	
 	
 	
@@ -28,6 +34,27 @@
 	        #{vo.memberIdx}, #{vo.fName}, #{vo.fSName}, #{vo.fSize}, #{vo.part}, #{vo.title}, #{vo.content}, #{vo.openSw}, 
 	        #{vo.hostIp}, now(), 0 );
 	</insert>
+	
+	
+	
+	
+	
+	
+	<update id="setPdsDownNumCheck">
+		update pds set downNum = downNum + 1 where idx = #{idx};
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	<delete id="getPdsDelelte">
+		delete from pds where idx = #{idx};
+	</delete>
+	
+	
 	
 
 </mapper>

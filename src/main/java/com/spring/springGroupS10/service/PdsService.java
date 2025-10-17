@@ -16,6 +16,12 @@ public interface PdsService {
 
 	PdsVO getPdsContent(int idx);
 
+	void setPdsDownNumCheck(int idx);
+
+	int getPdsDelelte(int idx);
+
+	PdsVO getPdsIdx(int idx);
+
 	
 	
 	

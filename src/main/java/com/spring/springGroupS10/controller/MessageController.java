@@ -69,6 +69,26 @@ public class MessageController {
 			model.addAttribute("message", "옵션 등록 실패~~");
 			model.addAttribute("url", "/admin/dbShop/dbOption");
 		}
+		else if(msgFlag.equals("pdsUploadOk")) {
+			model.addAttribute("message", "게시글이 등록 되었습니다.");
+			model.addAttribute("url", "/pds/pdsList");
+		}
+		else if(msgFlag.equals("pdsUploadNo")) {
+			model.addAttribute("message", "게시글 등록 실패~~");
+			model.addAttribute("url", "/pds/pdsForm");
+		}
+		else if(msgFlag.equals("pdsDeleteOk")) {
+			model.addAttribute("message", "게시글이 삭제되었습니다.");
+			model.addAttribute("url", "/pds/pdsList");
+		}
+		else if(msgFlag.equals("pdsDeleteNo")) {
+			model.addAttribute("message", "게시글 삭제 실패~~");
+			model.addAttribute("url", "/pds/pdsContent");
+		}
+		else if(msgFlag.equals("noPerMission")) {
+			model.addAttribute("message", "등록 권한이 없습니다.");
+			model.addAttribute("url", "/pds/pdsContent");
+		}
 		
 		
 		return "include/message";

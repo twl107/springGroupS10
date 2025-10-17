@@ -16,6 +16,12 @@ public interface PdsDAO {
 
 	PdsVO getPdsContent(@Param("idx") int idx);
 
+	void setPdsDownNumCheck(@Param("idx") int idx);
+
+	int getPdsDelelte(@Param("idx") int idx);
+
+	PdsVO getPdsIdx(@Param("idx") int idx);
+
 	
 	
 	

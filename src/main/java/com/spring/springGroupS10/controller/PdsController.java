@@ -1,19 +1,27 @@
 package com.spring.springGroupS10.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.spring.springGroupS10.common.Pagination;import com.spring.springGroupS10.common.ProjectProvide;
+import com.spring.springGroupS10.common.Pagination;
+import com.spring.springGroupS10.common.ProjectProvide;
 import com.spring.springGroupS10.service.MemberService;
 import com.spring.springGroupS10.service.PdsService;
 import com.spring.springGroupS10.vo.MemberVO;
@@ -56,14 +64,22 @@ public class PdsController {
 	}
 	
 	@GetMapping("/pdsForm")
-	public String pdsFormGet() {
+	public String pdsFormGet(HttpSession session) {
+		Integer sLevel = (Integer) session.getAttribute("sLevel");
+		if(sLevel == null || sLevel != 0) {
+			return "redirect:/message/noPerMission";
+		}
 		return "pds/pdsForm";
 	}
 	
 	@PostMapping("/pdsUpload")
 	public String pdsUploadPost(PdsVO vo, HttpSession session, HttpServletRequest request) {
+		Integer sLevel = (Integer) session.getAttribute("sLevel");
+		if(sLevel == null || sLevel != 0) {
+			return "redirect:/message/noPerMission";
+		}
+		
 		String sUserId = (String) session.getAttribute("sUserId");
-		if(sUserId == null) return "redirect:/member/memberLogin";
 		
 		MemberVO memberVO = memberService.getMemberByUserId(sUserId);
 		vo.setMemberIdx(memberVO.getIdx());
@@ -99,13 +115,57 @@ public class PdsController {
 		return "pds/pdsContent";
 	}
 	
+	// 파일 개별 다운로드
 	@GetMapping("/pdsDownload")
-	public void pdsDownloadGet() {
+	public void pdsDownloadGet(HttpServletRequest request, HttpServletResponse response, 
+			@RequestParam("idx") int idx,
+			@RequestParam("fSName") String fSName,
+			@RequestParam("fName") String fName
+		) throws Exception {
 		
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/pds/");
+		File file = new File(realPath + fSName);
 		
+		response.setContentType("application/octet-stream");
+		
+		String encodedFName = URLEncoder.encode(fName, "UTF-8");
+		
+		response.setHeader("Content-Disposition", "attachment; filename=" +encodedFName);
+		
+		FileInputStream fis = new FileInputStream(file);
+		OutputStream os = response.getOutputStream();
+		
+		FileCopyUtils.copy(fis, os);
+		
+		if(fis != null) fis.close();
+		if(os != null) os.close();
 		
 	}
 	
+	@ResponseBody
+	@PostMapping("/pdsDownNumCheck")
+	public void pdsDownNumCheckPost(int idx) {
+		pdsService.setPdsDownNumCheck(idx);
+	}
+	
+	@GetMapping("/pdsDelete")
+	public String pdsDeleteGet(int idx, HttpServletRequest request) {
+		
+		PdsVO vo = pdsService.getPdsIdx(idx);
+		
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/pds/");
+		
+		String[] fSNames = vo.getFSName().split("/");
+		
+		for(String fSName : fSNames) {
+			new File(realPath + fSName).delete();
+		}
+		
+		int res = pdsService.getPdsDelelte(idx);
+		
+		if(res != 0) return "redirect:/message/pdsDeleteOk";
+		else return "redirect:/message/pdsDeleteNo";
+	}
 	
 	
 	
