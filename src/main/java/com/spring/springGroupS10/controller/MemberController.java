@@ -80,6 +80,7 @@ public class MemberController {
 			session.setAttribute("sLevel", vo.getLevel());
 			session.setAttribute("strLevel", strLevel);
 			session.setAttribute("sLastLoginAt", vo.getLastLoginAt());
+			session.setAttribute("sMemberIdx", vo.getIdx());
 			
 			if(idCheck.equals("on")) {
 				Cookie cookie = new Cookie("cUserId", userId);

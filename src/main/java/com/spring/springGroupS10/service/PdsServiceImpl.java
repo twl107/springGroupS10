@@ -3,7 +3,11 @@ package com.spring.springGroupS10.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -96,17 +100,103 @@ public class PdsServiceImpl implements PdsService {
 		pdsDAO.setPdsDownNumCheck(idx);
 	}
 
-
 	@Override
 	public int getPdsDelelte(int idx) {
 		return pdsDAO.getPdsDelelte(idx);
 	}
 
-
 	@Override
 	public PdsVO getPdsIdx(int idx) {
 		return pdsDAO.getPdsIdx(idx);
 	}
+
+	@Override
+	public void deletedPdsFiles(String[] deleteFiles, HttpServletRequest request) {
+		String realPath = request.getSession().getServletContext().getRealPath("resources/data/pds/");
+		for(String fSName : deleteFiles) {
+			File file = new File(realPath + fSName);
+			if(file.exists()) {
+				file.delete();
+			}
+		}
+	}
+
+	@Override
+	public Map<String, String> uploadNewPdsFiles(MultipartFile[] newFiles, HttpServletRequest request) {
+		Map<String, String> newFilesMap = new HashMap<>();
+		try {
+			for(MultipartFile file : newFiles) {
+				if(file.getSize() > 0) {
+					String oFileName = file.getOriginalFilename();
+					String sFileName = projectProvide.saveFile(file, "pds", request);
+					newFilesMap.put(sFileName, oFileName);
+				}
+			}
+		}
+		catch (IOException e) {
+			System.out.println("신규 파일 업로드 실패 : " + e.getMessage());
+			e.printStackTrace();
+		}
+		return newFilesMap;
+	}
+
+	@Override
+	public void updatePdsVO(PdsVO vo, String[] deleteFiles, Map<String, String> newFilesMap, HttpServletRequest request) {
+		
+		// 1. 기존 파일 정보를 List로 변환
+		List<String> fNameList = new ArrayList<>(Arrays.asList(vo.getFName().split("/")));
+		List<String> fSNameList = new ArrayList<>(Arrays.asList(vo.getFSName().split("/")));
+		
+		if(vo.getFName() != null && vo.getFName().trim().isEmpty()) {
+			fNameList.addAll(Arrays.asList(vo.getFName().split("/")));
+			fSNameList.addAll(Arrays.asList(vo.getFSName().split("/")));
+		}
+		
+		// 2. 삭제할 파일 정보를 List에서 제거
+		if(deleteFiles != null && deleteFiles.length > 0) {
+			for(String delFSName : deleteFiles) {
+				int index = fSNameList.indexOf(delFSName);
+				if(index != -1) {
+					fSNameList.remove(index);
+					fNameList.remove(index);
+				}
+			}
+		}
+		
+		// 3. 새로 추가된 파일 정보를 List에 추가
+		if(newFilesMap != null && !newFilesMap.isEmpty()) {
+			for(String sFileName : newFilesMap.keySet()) {
+				fSNameList.add(sFileName);
+				fNameList.add(newFilesMap.get(sFileName));
+			}
+		}
+		
+		fNameList = fNameList.stream().filter(name -> !name.trim().isEmpty()).collect(Collectors.toList());
+		fSNameList = fSNameList.stream().filter(name -> !name.trim().isEmpty()).collect(Collectors.toList());
+		
+		// 4. 다시 '/'로 묶어서 VO에 저장
+		vo.setFName(String.join("/", fNameList));
+		vo.setFSName(String.join("/", fSNameList));
+		
+		long totalSize = 0;
+		if(!fSNameList.isEmpty()) {
+			String realPath = request.getSession().getServletContext().getRealPath("resources/data/pds/");
+			for(String sFileName : fSNameList) {
+				File file = new File(realPath + sFileName);
+				if(file.exists()) {
+					totalSize += file.length();
+				}
+			}
+		}
+		vo.setFSize(totalSize);
+	}
+
+	@Override
+	public int pdsUpdate(PdsVO vo) {
+		return pdsDAO.pdsUpdate(vo);
+	}
+	
+	
 	
 	
 	

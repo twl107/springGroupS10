@@ -18,7 +18,8 @@ public class MessageController {
 	public String getMessage(Model model, HttpSession session, PageVO pageVO,
 			@PathVariable String msgFlag,
 			@RequestParam(name="userId", defaultValue = "", required = false) String userId,
-			@RequestParam(name="memberId", defaultValue = "0", required = false) int memberId
+			@RequestParam(name="memberId", defaultValue = "0", required = false) int memberId,
+			@RequestParam(name="idx", defaultValue = "0", required = false) int idx
 			//@RequestParam(name="tempFlag", defaultValue = "", required = false) String tempFlag
 			//@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
 			//@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize
@@ -89,6 +90,40 @@ public class MessageController {
 			model.addAttribute("message", "등록 권한이 없습니다.");
 			model.addAttribute("url", "/pds/pdsContent");
 		}
+		else if(msgFlag.equals("pdsUpdateOk")) {
+			model.addAttribute("message", "게시글이 수정되었습니다.");
+			model.addAttribute("url", "/pds/pdsContent?idx=" + idx);
+		}
+		else if(msgFlag.equals("pdsUpdateNo")) {
+			model.addAttribute("message", "게시글 수정 실패~~");
+			model.addAttribute("url", "/pds/pdsUpdate?idx=" + idx);
+		}
+		else if(msgFlag.equals("noticeInputOk")) {
+			model.addAttribute("message", "공지사항이 등록되었습니다.");
+			model.addAttribute("url", "/notice/noticeList");
+		}
+		else if(msgFlag.equals("noticeInputNo")) {
+			model.addAttribute("message", "공지사항 등록에 실패했습니다.");
+			model.addAttribute("url", "/notice/noticeInput");
+		}
+		else if(msgFlag.equals("noticeUpdateOk")) {
+			model.addAttribute("message", "공지사항이 수정되었습니다.");
+			model.addAttribute("url", "/notice/noticeContent?idx=" + idx);
+		}
+		else if(msgFlag.equals("noticeUpdateNo")) {
+			model.addAttribute("message", "공지사항 수정에 실패했습니다.");
+			model.addAttribute("url", "/notice/noticeUpdate?idx=" + idx);
+		}
+		else if(msgFlag.equals("noticeDeleteOk")) {
+			model.addAttribute("message", "공지사항이 삭제되었습니다.");
+			model.addAttribute("url", "/notice/noticeList");
+		}
+		else if(msgFlag.equals("noticeDeleteNo")) {
+			model.addAttribute("message", "공지사항 삭제에 실패했습니다.");
+			model.addAttribute("url", "/notice/noticeContent?idx=" + idx);
+		}
+		
+		
 		
 		
 		return "include/message";

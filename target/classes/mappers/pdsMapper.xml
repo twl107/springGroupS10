@@ -44,6 +44,17 @@
 		update pds set downNum = downNum + 1 where idx = #{idx};
 	</update>
 	
+	<update id="pdsUpdate">
+		update pds set
+			fName    = #{vo.FName},
+			fSName   = #{vo.FSName},
+			fSize    = #{vo.FSize},
+			title    = #{vo.title},
+			part     = #{vo.part},
+			content  = #{vo.content},
+			openSw   = #{vo.openSw}
+		where idx = #{vo.idx}
+	</update>
 	
 	
 	

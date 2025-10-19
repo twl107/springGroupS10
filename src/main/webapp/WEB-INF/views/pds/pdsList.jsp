@@ -20,7 +20,7 @@
 		<div>
 			<select name="part" id="part" onchange="partCheck()" class="form-select">
         <option value="" ${pageVO.part=="" ? "selected" : ""}>전체</option>
-        <option ${pageVO.part=="메뉴얼" ? "selected" : ""}>메뉴얼</option>
+        <option ${pageVO.part=="매뉴얼" ? "selected" : ""}>매뉴얼</option>
         <option ${pageVO.part=="펌웨어" ? "selected" : ""}>펌웨어</option>
         <option ${pageVO.part=="기타" ? "selected" : ""}>기타</option>
       </select>

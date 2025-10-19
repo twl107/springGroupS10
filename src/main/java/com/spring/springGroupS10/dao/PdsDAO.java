@@ -22,6 +22,8 @@ public interface PdsDAO {
 
 	PdsVO getPdsIdx(@Param("idx") int idx);
 
+	int pdsUpdate(@Param("vo") PdsVO vo);
+
 	
 	
 	

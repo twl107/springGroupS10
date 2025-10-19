@@ -32,7 +32,7 @@
 						<div class="mb-3">
 							<label for="part" class="form-label">분류</label>
 							<select class="form-select" id="part" name="part">
-								<option value="메뉴얼">메뉴얼</option>
+								<option value="매뉴얼">매뉴얼</option>
 								<option value="펌웨어">펌웨어</option>
 								<option value="기타">기타</option>
 							</select>

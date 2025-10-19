@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.springGroupS10.common.Pagination;
 import com.spring.springGroupS10.common.ProjectProvide;
@@ -167,8 +169,45 @@ public class PdsController {
 		else return "redirect:/message/pdsDeleteNo";
 	}
 	
+	@GetMapping("/pdsUpdate")
+	public String pdsUpdateGet(Model model, int idx) {
+		PdsVO vo = pdsService.getPdsContent(idx);
+		
+		if(vo != null && vo.getFName() != null) {
+			String[] fNames = vo.getFName().split("/");
+			String[] fSNames = vo.getFSName().split("/");
+			model.addAttribute("fNames", fNames);
+			model.addAttribute("fSNames", fSNames);
+		}
+		
+		model.addAttribute("vo", vo);
+		return "pds/pdsUpdate";
+	}
 	
-	
+	@PostMapping("/pdsUpdate")
+	public String pdsUpdatePost(PdsVO vo,
+			String[] deleteFiles,
+			MultipartFile[] newFiles,
+			HttpServletRequest request
+		) {
+		
+		// 1. 기존 파일 중 삭제를 선택한 파일들을 서버에서 먼저 삭제
+		if(deleteFiles != null) {
+			pdsService.deletedPdsFiles(deleteFiles, request);
+		}
+		
+		// 2. 새로운 파일을 업로드하고, 서버에 저장된 파일명을 받아옴
+		Map<String, String> newFilesMap = pdsService.uploadNewPdsFiles(newFiles, request);
+		
+		// 3. 기존에 남아있는 파일과 새로 업로드된 파일 정보를 합쳐서 VO에 업데이트
+		pdsService.updatePdsVO(vo, deleteFiles, newFilesMap, request);
+		
+		// 4. 최종적으로 DB에 업데이트
+		int res = pdsService.pdsUpdate(vo);
+		
+		if(res != 0) return "redirect:/message/pdsUpdateOk?idx=" + vo.getIdx();
+		else return "redirect:/message/pdsUpdateNo";
+	}
 	
 	
 }

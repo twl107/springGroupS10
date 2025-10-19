@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.springGroupS10.service.AdminService;
 import com.spring.springGroupS10.service.MemberService;
+import com.spring.springGroupS10.service.NoticeService;
 import com.spring.springGroupS10.service.PdsService;
 import com.spring.springGroupS10.vo.PageVO;
 
@@ -20,6 +21,9 @@ public class Pagination {
 	@Autowired
 	PdsService pdsService;
 	
+	@Autowired
+	NoticeService noticeService;
+	
 	
   public PageVO pagination(PageVO pageVO) {
     int pag = pageVO.getPag() == 0 ? 1 : pageVO.getPag();
@@ -32,6 +36,9 @@ public class Pagination {
     }
     else if(pageVO.getSection().equals("pds")) {
     	totRecCnt = pdsService.getTotRecCnt(part);
+    }
+    else if(pageVO.getSection().equals("notice")) {
+    	totRecCnt = noticeService.getTotRecCnt();
     }
     
     

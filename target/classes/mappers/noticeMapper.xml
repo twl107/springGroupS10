@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.springGroupS10.dao.NoticeDAO">
+
+    <select id="getTotRecCnt" resultType="int">
+        SELECT count(*) FROM notice;
+    </select>
+
+    <select id="getNoticeList" resultType="com.spring.springGroupS10.vo.NoticeVO">
+        SELECT n.*, m.nickName 
+        FROM notice n
+        JOIN member m ON n.memberIdx = m.idx
+        ORDER BY n.idx DESC 
+        LIMIT #{startIndexNo}, #{pageSize};
+    </select>
+    
+    <select id="getNoticeContent" resultType="com.spring.springGroupS10.vo.NoticeVO">
+        SELECT n.*, m.nickName 
+        FROM notice n
+        JOIN member m ON n.memberIdx = m.idx
+        WHERE n.idx = #{idx};
+    </select>
+
+
+
+
+
+    <insert id="setNoticeInput">
+        INSERT INTO notice (title, content, memberIdx) 
+        VALUES (#{vo.title}, #{vo.content}, #{vo.memberIdx});
+    </insert>
+
+
+
+
+    <update id="setViewCntUpdate">
+        UPDATE notice SET viewCnt = viewCnt + 1 WHERE idx = #{idx};
+    </update>
+
+    <update id="setNoticeUpdate">
+        UPDATE notice SET title=#{vo.title}, content=#{vo.content} WHERE idx = #{vo.idx};
+    </update>
+
+
+
+    <delete id="setNoticeDelete">
+        DELETE FROM notice WHERE idx = #{idx};
+    </delete>
+    
+    
+</mapper>
