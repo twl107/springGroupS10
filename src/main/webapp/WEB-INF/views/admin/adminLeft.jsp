@@ -33,7 +33,7 @@
   <div class="collapse" id="boardMenu">
     <a href="#" target="adminContent" class="list-group-item list-group-item-action ps-4">· Q&A</a>
     <a href="#" target="adminContent" class="list-group-item list-group-item-action ps-4">· FAQ</a>
-    <a href="#" target="adminContent" class="list-group-item list-group-item-action ps-4">· 1:1문의</a>
+    <a href="${ctp}/admin/inquiry/adInquiryList" target="adminContent" class="list-group-item list-group-item-action ps-4">· 1:1문의</a>
   </div>
 
   <a href="#boardMenu" class="list-group-item list-group-item-action fw-bold" data-bs-toggle="collapse">

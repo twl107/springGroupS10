@@ -1,9 +1,11 @@
 package com.spring.springGroupS10.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.spring.springGroupS10.common.Pagination;
 import com.spring.springGroupS10.service.AdminService;
 import com.spring.springGroupS10.service.MemberService;
+import com.spring.springGroupS10.vo.InquiryReplyVO;
+import com.spring.springGroupS10.vo.InquiryVO;
 import com.spring.springGroupS10.vo.MemberVO;
 import com.spring.springGroupS10.vo.PageVO;
 
@@ -69,6 +73,73 @@ public class AdminController {
   public int memberUpdateLevelPost(	int idx, int level) {
     return memberService.updateMemberLevel(idx, level);
   }
+	
+	@GetMapping("/inquiry/adInquiryList")
+	public String adInquiryListGet(Model model,
+			@RequestParam(name = "part", defaultValue = "전체", required = false) String part,
+			@RequestParam(name = "pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name = "pageSize", defaultValue = "5", required = false) int pageSize
+		) {
+		PageVO pageVO = new PageVO();
+		pageVO.setPart(part);
+		pageVO.setPag(pag);
+		pageVO.setPageSize(pageSize);
+		pageVO.setSection("adminInquiry");
+		pageVO = pagination.pagination(pageVO);
+		
+		ArrayList<InquiryVO> vos = adminService.getInquiryListAdmin(pageVO.getStartIndexNo(), pageSize, part);
+		
+		model.addAttribute("vos", vos);
+		model.addAttribute("pageVO", pageVO);
+		model.addAttribute("part", part);
+		
+		return "admin/inquiry/adInquiryList";
+	}
+	
+	@GetMapping("/inquiry/adInquiryReply")
+	public String adInquiryReplyGet(Model model, int idx,
+			@RequestParam(name = "part", defaultValue = "전체", required = false) String part,
+			@RequestParam(name = "pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name = "pageSize", defaultValue = "5", required = false) int pageSize,
+			@RequestParam(name = "replySw", defaultValue = "", required = false) String replySw
+		) {
+		
+		InquiryVO vo = adminService.getInquiryContent(idx);
+		InquiryReplyVO reVO = adminService.getInquiryReplyContent(idx);
+		
+		model.addAttribute("part", part);
+		model.addAttribute("pag", pag);
+		model.addAttribute("vo", vo);
+		model.addAttribute("reVO", reVO);
+		model.addAttribute("replySw", replySw);
+		
+		return "admin/inquiry/adInquiryReply";
+	}
+	
+	// 관리자 답변 저장
+	@Transactional
+	@ResponseBody
+	@PostMapping("/inquiry/adInquiryReplyInput")
+	public int adInquiryReplyInputPost(InquiryReplyVO vo) {
+		int res = 0;
+		res = adminService.setInquiryInputAdmin(vo);
+		if(res != 0) adminService.setInquiryUpdateAdmin(vo.getInquiryIdx());
+		
+		return res;
+	}
+	
+	// 관리자 답변 수정
+	@PostMapping("/inquiry/adInquiryReply")
+	public String adInquiryReplyUpdatePost(InquiryReplyVO reVO) {
+		int res = adminService.setInquiryReplyUpdate(reVO);	// 관리자가 답변글을 수정했을 때 처리 루틴
+		
+		if(res != 0) return "redirect:/message/adInquiryReplyUpdateOk?idx="+reVO.getInquiryIdx();
+		return "redirect:/message/adInquiryReplyUpdateNo?idx="+reVO.getInquiryIdx();
+	}
+	
+	
+	
+	
 	
 	
 	

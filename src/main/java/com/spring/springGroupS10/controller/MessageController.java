@@ -122,6 +122,27 @@ public class MessageController {
 			model.addAttribute("message", "공지사항 삭제에 실패했습니다.");
 			model.addAttribute("url", "/notice/noticeContent?idx=" + idx);
 		}
+		else if(msgFlag.equals("inquiryInputOk")) {
+			model.addAttribute("message", "1:1 문의가 등록되었습니다.");
+			model.addAttribute("url", "/inquiry/inquiryList");
+		}
+		else if(msgFlag.equals("inquiryUpdateOk")) {
+			model.addAttribute("message", "1:1 문의 내역이 수정되었습니다.");
+			model.addAttribute("url", "/inquiry/inquiryList");
+		}
+		else if(msgFlag.equals("inquiryUpdateNo")) {
+			model.addAttribute("message", "1:1 문의 수정실패~~");
+			model.addAttribute("url", "/inquiry/inquiryUpdate?idx="+idx);
+		}
+		else if(msgFlag.equals("inquiryDeleteOk")) {
+			model.addAttribute("message", "1:1 문의 내역이 삭제되었습니다.");
+			model.addAttribute("url", "/inquiry/inquiryList");
+		}
+		else if(msgFlag.equals("inquiryDeleteNo")) {
+			model.addAttribute("message", "1:1 문의 삭제실패~~");
+			model.addAttribute("url", "/admin/inquiry/inquiryView?idx="+idx);
+		}
+		
 		
 		
 		

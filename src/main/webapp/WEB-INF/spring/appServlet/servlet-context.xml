@@ -26,6 +26,7 @@
 	<resources mapping="/product/**" location="/resources/data/dbShop/product/" />
 	<resources mapping="/images/**" location="/resources/images/" />
 	<resources mapping="/member/**" location="/resources/data/member/" />
+	<resources mapping="/inquiry/**" location="/resources/data/inquiry/" />
 	
 <!-- 	
 	<resources mapping="/css/**" location="/resources/css/" />

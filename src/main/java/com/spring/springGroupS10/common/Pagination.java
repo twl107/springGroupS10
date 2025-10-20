@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.springGroupS10.service.AdminService;
+import com.spring.springGroupS10.service.InquiryService;
 import com.spring.springGroupS10.service.MemberService;
 import com.spring.springGroupS10.service.NoticeService;
 import com.spring.springGroupS10.service.PdsService;
@@ -24,6 +25,9 @@ public class Pagination {
 	@Autowired
 	NoticeService noticeService;
 	
+	@Autowired
+	InquiryService inquiryService;
+	
 	
   public PageVO pagination(PageVO pageVO) {
     int pag = pageVO.getPag() == 0 ? 1 : pageVO.getPag();
@@ -39,6 +43,13 @@ public class Pagination {
     }
     else if(pageVO.getSection().equals("notice")) {
     	totRecCnt = noticeService.getTotRecCnt();
+    }
+    else if(pageVO.getSection().equals("inquiry")) {
+    	String userId = pageVO.getSearchString();
+    	totRecCnt = inquiryService.getTotRecCnt(part, userId);
+    }
+    else if(pageVO.getSection().equals("adInquiry")) {
+    	totRecCnt = inquiryService.getTotRecCntAdmin(part);
     }
     
     

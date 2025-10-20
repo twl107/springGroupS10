@@ -2,7 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.springGroupS10.dao.AdminDAO">
 
-
+	<select id="getInquiryListAdmin" resultType="com.spring.springGroupS10.vo.InquiryVO">
+		select * from inquiry <if test="part != '전체'"> where reply = #{part} </if> order by idx desc limit #{startIndexNo},#{pageSize}; 
+	</select>
+	
+	<select id="getInquiryContent" resultType="com.spring.springGroupS10.vo.InquiryVO">
+		select * from inquiry where idx = #{idx}; 
+	</select>
+	
+	<select id="getInquiryReplyContent" resultType="com.spring.springGroupS10.vo.InquiryReplyVO">
+		select * from inquiryReply where inquiryIdx = #{idx}; 
+	</select>
+	
+	
+	
+	
+  <insert id="setInquiryInputAdmin">
+    insert into inquiryReply values (default,#{vo.inquiryIdx},default,#{vo.reContent});
+  </insert>
+	
+	
+	
+	
+	
+	
+  <update id="setInquiryUpdateAdmin">
+    update inquiry set reply = '답변완료' where idx = #{inquiryIdx};
+  </update>
+	
+  <update id="setInquiryReplyUpdate">
+    update inquiryReply set reContent = #{reVO.reContent} where reIdx = #{reVO.reIdx};
+  </update>
+	
+	
+	
 	
 
 </mapper>
