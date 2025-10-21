@@ -1,6 +1,7 @@
 package com.spring.springGroupS10.controller;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -214,6 +215,159 @@ public class MemberController {
 	@PostMapping("/memberEmailCheckNo")
 	public void memberEmailCheckNoPost(HttpSession session) {
 	   session.removeAttribute("sEmeilKey");
-	}	
+	}
+	
+	/* 아이디/비밀번호 찾기 폼화면 */
+	@GetMapping("/memberFind")
+  public String memberFindGet() {
+    return "member/memberFind";
+  }
+  
+	/* 아이디 찾기 이메일 발송 */
+	@ResponseBody
+  @PostMapping("/sendAuthCodeForFind")
+  public String sendAuthCodeForFindPost(String email, HttpSession session) throws MessagingException {
+    
+		List<String> userIds = memberService.findUserIdByEmail(email);
+		
+    if (userIds == null || userIds.isEmpty()) {
+      return "0"; // 0: 가입되지 않은 이메일
+    }
+    
+    String authKey = UUID.randomUUID().toString().substring(0, 8);
+    
+    session.setAttribute("sAuthKey", authKey);
+    session.setAttribute("sAuthEmail", email);
+    session.setMaxInactiveInterval(300); // 유효시간 5분
+    
+    String title = "[MyWebSite] 아이디 찾기 인증키입니다.";
+    String mailFlag = "인증키 : " + authKey;
+    
+    projectProvide.mailSend(email, title, mailFlag);
+    
+    return "1"; // 1: 인증키 발송 성공
+  }
+	
+	/* 비밀번호 찾기 이메일 발송 */
+	@ResponseBody
+  @PostMapping("/sendAuthCodeForPwReset")
+  public String sendAuthCodeForPwResetPost(String userId, String email, HttpSession session) throws MessagingException {
+    
+    MemberVO vo = memberService.getMemberByUserId(userId);
+    
+    // 아이디가 없거나, 해당 아이디의 이메일 정보가 일치하지 않으면 실패 처리
+    if (vo == null || !vo.getEmail().equals(email)) {
+      return "0"; // 0: 아이디가 없거나, 아이디와 이메일이 일치하지 않음
+    }
+    
+    String authKey = UUID.randomUUID().toString().substring(0, 8);
+    
+    // 세션에 인증받을 대상의 userId를 저장
+    session.setAttribute("sAuthKey", authKey);
+    session.setAttribute("sAuthUserId", userId);
+    session.setMaxInactiveInterval(300);
+    
+    String title = "[MyWebSite] 비밀번호 찾기 인증키입니다.";
+    String mailFlag = "인증키 : " + authKey;
+    
+    projectProvide.mailSend(email, title, mailFlag);
+    
+    return "1"; // 1: 인증키 발송 성공
+  }
+	
+  /* 아이디 찾기 (AJAX) - 인증번호 확인 */
+	@ResponseBody
+  @PostMapping("/findId")
+  public String findIdPost(String email, String authKey, HttpSession session) {
+    String sAuthKey = (String) session.getAttribute("sAuthKey");
+    String sAuthEmail = (String) session.getAttribute("sAuthEmail");
+    
+    if (sAuthKey == null || !sAuthKey.equals(authKey) || sAuthEmail == null || !sAuthEmail.equals(email)) {
+      return "0"; // 0: 인증 실패
+    }
+    
+    List<String> userIds = memberService.findUserIdByEmail(email);
+    
+    // 이메일 중복 가입이 가능하다면, Service단에서 List로 받아와서 처리하거나 정책을 정해야 합니다.
+    // 여기서는 첫 번째 검색된 회원ID를 반환하는 것으로 가정합니다.
+    
+    session.removeAttribute("sAuthKey");
+    session.removeAttribute("sAuthEmail");
+    
+    return String.join(", ", userIds);
+  }
+  
+  /* 비밀번호 재설정 (AJAX) - 인증번호 확인 */
+	@ResponseBody
+  @PostMapping("/verifyForPwReset")
+  public String verifyForPwResetPost(String authKey, HttpSession session) {
+    String sAuthKey = (String) session.getAttribute("sAuthKey");
+    String sAuthUserId = (String) session.getAttribute("sAuthUserId");
+    
+    if (sAuthKey == null || !sAuthKey.equals(authKey) || sAuthUserId == null) {
+      return "0"; // 0: 인증 실패
+    }
+    
+    // 인증 성공 시, '비밀번호 변경 가능' 상태로 'userId'를 세션에 저장
+    session.setAttribute("pwResetUserId", sAuthUserId);
+    
+    session.removeAttribute("sAuthKey");
+    session.removeAttribute("sAuthUserId");
+    
+    return "1"; // 1: 인증 성공
+  }
+  
+  /* 비밀번호 재설정 폼 페이지 (View) */
+	@GetMapping("/memberPwdReset")
+  public String resetPasswordGet(HttpSession session, Model model, HttpServletRequest request) {
+    String pwResetUserId = (String) session.getAttribute("pwResetUserId");
+    
+    if (pwResetUserId == null) return "redirect:/message/noUserId";
+    
+    model.addAttribute("userId", pwResetUserId);
+    return "member/memberPwdReset"; // /WEB-INF/views/member/memberPwdReset.jsp
+  }
+  
+   /* 비밀번호 재설정 처리 */
+	@PostMapping("/memberPwdReset")
+  public String resetPasswordPost(String userId, String newPassword, String newPasswordCheck, 
+                                  HttpSession session, HttpServletRequest request) {
+    
+    String pwResetUserId = (String) session.getAttribute("pwResetUserId");
+    
+    // 세션의 userId와 폼의 userId가 일치하는지 최종 확인
+    if (pwResetUserId == null || !pwResetUserId.equals(userId)) {
+      return "redirect:/message/userIdMathNo";
+    }
+    
+    if (!newPassword.equals(newPasswordCheck)) {
+      return "redirect:/message/pwdMathNo";
+    }
+    
+    // userId를 기준으로 암호화된 비밀번호 업데이트
+    String encodedPassword = passwordEncoder.encode(newPassword);
+    memberService.updatePasswordByUserId(userId, encodedPassword);
+    
+    session.removeAttribute("pwResetUserId");
+    
+    return "redirect:/message/pwdMathOk";
+  }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
 

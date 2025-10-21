@@ -64,5 +64,22 @@ public class MemberServiceImpl implements MemberService {
 	public void deleteExpiredMembers() {
 		memberDAO.deleteExpiredMembers();
 	}
+
+	@Override
+	public void updatePasswordByUserId(String userId, String encodedPassword) {
+		memberDAO.updatePasswordByUserId(userId, encodedPassword);
+	}
+
+	@Override
+	public List<String> findUserIdByEmail(String email) {
+		return memberDAO.findUserIdByEmail(email);
+	}
+
+	
+	
+	
+	
+	
+	
 }
 

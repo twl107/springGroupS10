@@ -235,6 +235,20 @@ public class DbShopController {
 		return "dbShop/dbProductList";
 	}
 	
+	@GetMapping("/productSearch")
+	public String dbProductSearchGet(Model model, 
+			@RequestParam(name = "keyword", defaultValue = "", required = false) String keyword
+		) {
+		
+		List<DbProductVO> vos = dbShopService.getProductSearch(keyword);
+		
+		model.addAttribute("vos", vos);
+		model.addAttribute("keyword", keyword);
+		
+		return "dbShop/dbProductList";
+	}
+	
+	
 	// 상품 상세 정보 출력
 	@GetMapping("/dbProductContent")
 	public String dbProductContentGet(int idx, Model model) {
@@ -295,6 +309,41 @@ public class DbShopController {
 		cartService.updateItemQuantity(cartIdx, quantity);
 		return "1";
 	}
+	
+	@PostMapping("/orderForm")
+  public String dbShopOrderFormPost(
+	    @RequestParam("cartIdxs") List<Long> cartIdxs, // 1. JS에서 보낸 cartIdx 목록
+	    HttpSession session,
+	    Model model
+    ) {
+      
+      // 2. 로그인 회원 정보 조회
+      String sUserId = (String) session.getAttribute("sUserId");
+      if (sUserId == null) {
+          return "redirect:/member/memberLogin"; // 로그인이 안됐으면 로그인 페이지로
+      }
+      MemberVO memberVO = memberService.getMemberByUserId(sUserId);
+      
+      // 3. 주문할 상품 정보 조회 (cartIdxs 목록 기준)
+      //    (CartService/DAO/Mapper에 새로운 메소드 필요)
+      List<CartVO> orderItems = cartService.getCartListByIdxs(cartIdxs);
+      
+      // 4. 주문 총액 계산
+      int totalOrderPrice = 0;
+      for (CartVO item : orderItems) {
+          // CartVO의 totalPrice 필드 (단가*수량)를 합산
+          totalOrderPrice += item.getTotalPrice();
+      }
+      
+      // 5. Model에 데이터 담기 (orderForm.jsp에서 사용할 이름)
+      model.addAttribute("memberVO", memberVO);         // 회원 정보
+      model.addAttribute("orderItems", orderItems);     // 주문할 상품 목록
+      model.addAttribute("totalOrderPrice", totalOrderPrice); // 상품 총액 (배송비 제외)
+      
+      // 6. 주문서 작성 페이지로 이동
+      return "dbShop/orderForm";
+  }
+	
 	
 	
 	

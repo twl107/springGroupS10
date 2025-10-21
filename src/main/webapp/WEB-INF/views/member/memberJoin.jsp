@@ -66,10 +66,9 @@
                 <input type="text" class="form-control" placeholder="도메인" name="email2" id="emailDomain">
                 <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
                 <ul class="dropdown-menu dropdown-menu-end" id="domainDropdown">
+                  <li><a class="dropdown-item" href="javascript:void(0);">gmail.com</a></li>
                   <li><a class="dropdown-item" href="javascript:void(0);">naver.com</a></li>
                   <li><a class="dropdown-item" href="javascript:void(0);">hanmail.net</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);">hotmail.com</a></li>
-                  <li><a class="dropdown-item" href="javascript:void(0);">gmail.com</a></li>
                   <li><a class="dropdown-item" href="javascript:void(0);">nate.com</a></li>
                   <li><a class="dropdown-item" href="javascript:void(0);">yahoo.com</a></li>
                   <li><hr class="dropdown-divider"></li>

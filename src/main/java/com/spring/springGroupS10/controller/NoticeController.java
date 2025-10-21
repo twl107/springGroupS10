@@ -94,7 +94,7 @@ public class NoticeController {
 
   // 공지사항 수정 폼 (관리자만 접근)
   @GetMapping("/noticeUpdate")
-  public String noticeUpdateGet(Model model, int idx, HttpSession session) {
+  public String noticeUpdateGet(Model model, int idx, HttpSession session, PageVO pageVO) {
     Integer sLevel = (Integer) session.getAttribute("sLevel");
     if (sLevel == null || sLevel != 0) {
         return "redirect:/message/noPermission";
@@ -102,6 +102,7 @@ public class NoticeController {
 
     NoticeVO vo = noticeService.getNoticeContent(idx); // 조회수 증가 없는 메소드 필요 시 서비스에 추가
     model.addAttribute("vo", vo);
+    model.addAttribute("pageVO", pageVO);
     return "notice/noticeUpdate";
   }
   

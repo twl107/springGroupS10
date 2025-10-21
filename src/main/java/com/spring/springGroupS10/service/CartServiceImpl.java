@@ -48,4 +48,9 @@ public class CartServiceImpl implements CartService {
 		cartDAO.updateItemQuantity(cartIdx, quantity);
 	}
 
+	@Override
+	public List<CartVO> getCartListByIdxs(List<Long> cartIdxs) {
+		return cartDAO.getCartListByIdxs(cartIdxs);
+	}
+
 }

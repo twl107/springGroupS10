@@ -63,6 +63,8 @@ public interface DbShopDAO {
 
 	List<DbProductVO> getDbProductList();
 
+	List<DbProductVO> getProductSearch(@Param("keyword") String keyword);
+
 
 
 

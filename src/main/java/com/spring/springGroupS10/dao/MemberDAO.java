@@ -29,5 +29,18 @@ public interface MemberDAO {
 
 	void deleteExpiredMembers();
 
+	void updatePasswordByUserId(@Param("userId") String userId, @Param("encodedPassword") String encodedPassword);
+
+	List<String> findUserIdByEmail(@Param("email") String email);
+
+
+	
+	
+	
+	
+	
+	
+	
+	
 }
 

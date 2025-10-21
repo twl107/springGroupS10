@@ -119,6 +119,10 @@
 		select * from dbProduct order by idx desc;
 	</select>
 	
+	<select id="getProductSearch" resultType="com.spring.springGroupS10.vo.DbProductVO">
+		select * from dbProduct where productName like concat('%', #{keyword}, '%') order by idx desc;
+	</select>
+	
 	
 	
 	

@@ -54,6 +54,30 @@ public class MessageController {
 			model.addAttribute("message", "회원가입 실패");
 			model.addAttribute("url", "/member/memberJoin");
 		}
+		else if(msgFlag.equals("noUserId")) {
+			model.addAttribute("message", "잘못된 접근입니다. 이메일 인증을 먼저 진행해주세요.");
+			model.addAttribute("url", "/member/memberFind");
+		}
+		else if(msgFlag.equals("userIdMathNo")) {
+			model.addAttribute("message", "비정상적인 접근입니다.");
+			model.addAttribute("url", "/member/memberLogin");
+		}
+		else if(msgFlag.equals("pwdMathNo")) {
+			model.addAttribute("message", "새 비밀번호가 일치하지 않습니다.");
+			model.addAttribute("url", "/member/memberPwdReset");
+		}
+		else if(msgFlag.equals("pwdMathOk")) {
+			model.addAttribute("message", "비밀번호가 성공적으로 변경되었습니다. 다시 로그인해주세요.");
+			model.addAttribute("url", "/member/memberLogin");
+		}
+		
+		
+		
+		
+		
+		
+		
+		
 		else if(msgFlag.equals("dbProductInputOk")) {
 			model.addAttribute("message", "상품이 등록되었습니다.");
 			model.addAttribute("url", "/dbShop/dbShopList");
@@ -142,7 +166,18 @@ public class MessageController {
 			model.addAttribute("message", "1:1 문의 삭제실패~~");
 			model.addAttribute("url", "/admin/inquiry/inquiryView?idx="+idx);
 		}
-		
+		else if(msgFlag.equals("adInquiryReplyUpdateOk")) {
+			model.addAttribute("message", "1:1 문의 답변글이 수정되었습니다.");
+			model.addAttribute("url", "/admin/inquiry/adInquiryReply?idx="+idx);
+		}
+		else if(msgFlag.equals("adInquiryReplyUpdateNo")) {
+			model.addAttribute("message", "1:1 문의 답변글이 수정 실패~~");
+			model.addAttribute("url", "/admin/inquiry/adInquiryReply?idx="+idx);
+		}
+		else if(msgFlag.equals("adInquiryDeleteOk")) {
+			model.addAttribute("message", "1:1 문의 원본글(+답변글)이 삭제 되었습니다.");
+			model.addAttribute("url", "/admin/inquiry/adInquiryList");
+		}
 		
 		
 		

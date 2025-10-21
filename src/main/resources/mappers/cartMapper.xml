@@ -36,6 +36,28 @@
 		ORDER BY c.idx DESC;
 	</select>
 
+	<select id="getCartListByIdxs" parameterType="java.util.List" resultType="com.spring.springGroupS10.vo.CartVO">
+		SELECT 
+	    c.idx AS idx,
+	    c.memberIdx,
+	    c.productIdx,
+	    c.optionIdx,
+	    c.quantity,
+	    p.productName,
+	    p.fSName,
+	    p.mainPrice,
+	    o.optionName,
+	    o.optionPrice,
+	    (p.mainPrice + IFNULL(o.optionPrice, 0)) * c.quantity AS totalPrice
+		FROM cart c
+		JOIN dbProduct p ON c.productIdx = p.idx
+		LEFT JOIN dbOption o ON c.optionIdx = o.idx
+		WHERE c.idx IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+    	#{item}
+		</foreach>
+		ORDER BY c.addDate DESC
+	</select>
 
 
 

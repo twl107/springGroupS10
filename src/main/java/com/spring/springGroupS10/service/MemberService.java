@@ -26,5 +26,10 @@ public interface MemberService {
 
 	void deleteExpiredMembers();
 
+	void updatePasswordByUserId(String userId, String encodedPassword);
+
+	List<String> findUserIdByEmail(String email);
+
+
 }
 

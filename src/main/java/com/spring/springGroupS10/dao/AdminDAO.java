@@ -21,6 +21,12 @@ public interface AdminDAO {
 
 	int setInquiryReplyUpdate(@Param("reVO") InquiryReplyVO reVO);
 
+	void setAdInquiryReplyDelete(@Param("reIdx") int reIdx);
+
+	int setInquiryReplyStatusUpdate(@Param("inquiryIdx") int inquiryIdx);
+
+	void setAdInquiryDelete(@Param("idx") int idx, @Param("fSName") String fSName, @Param("reIdx") int reIdx);
+
 	
 	
 	

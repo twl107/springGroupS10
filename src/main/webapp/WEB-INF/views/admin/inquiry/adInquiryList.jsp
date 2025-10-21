@@ -11,7 +11,6 @@
 	<title>adInquiryList.jsp</title>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/ko.js"></script>
-  <link rel="stylesheet" type="text/css" href="${ctp}/css/linkOrange.css">
 	<style>
 		td {text-align:center;}
 	</style>

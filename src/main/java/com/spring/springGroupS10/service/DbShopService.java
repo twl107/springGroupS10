@@ -61,6 +61,8 @@ public interface DbShopService {
 
 	List<DbProductVO> getDbProductList();
 
+	List<DbProductVO> getProductSearch(String keyword);
+
 
 
 

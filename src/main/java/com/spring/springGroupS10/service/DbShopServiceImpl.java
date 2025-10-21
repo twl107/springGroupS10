@@ -202,6 +202,11 @@ public class DbShopServiceImpl implements DbShopService {
 		return dbShopDAO.getDbProductList();
 	}
 
+	@Override
+	public List<DbProductVO> getProductSearch(String keyword) {
+		return dbShopDAO.getProductSearch(keyword);
+	}
+
 		
 		
 		

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<% pageContext.setAttribute("newLine", "\n"); %>
 <c:set var="ctp" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
@@ -148,7 +149,7 @@
 			<c:if test="${!empty replySw && replySw == 'U'}">
 				<textarea name="reContent" rows="5"  id="reContent" class="form-control" >${reVO.reContent}</textarea>
 				<div style="text-align: right">
-					<input type="submit" value="수정완료처리" id="updateOkBtn" onclick="updateReplyCheckOk()" class="btn btn-success btn-sm mt-2"/>
+					<input type="submit" value="수정완료처리" id="updateOkBtn" class="btn btn-success btn-sm mt-2"/>
 					<input type="button" value="삭제" id="deleteBtn" onclick="deleteReplyCheck()" class="btn btn-secondary btn-sm mt-2"/>
 				</div>
 			</c:if>

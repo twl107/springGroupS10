@@ -2,9 +2,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <c:set var="ctp" value="${pageContext.request.contextPath}" />
 
-<nav id="main-nav" class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+<nav id="main-nav" class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm sticky-top py-1">
   <div class="container">
     <div class="collapse navbar-collapse">
+      
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item"><a class="nav-link active" aria-current="page" href="${ctp}/dbShop/dbProductList">상품 전체보기</a></li>
         <li class="nav-item"><a class="nav-link" href="#">브랜드별</a></li>
@@ -17,6 +18,12 @@
         <li class="nav-item"><a class="nav-link" href="${ctp}/notice/noticeList">공지사항</a></li>
         <li class="nav-item"><a class="nav-link" href="${ctp}/inquiry/inquiryList">1:1문의</a></li>
       </ul>
+      
+      <form class="d-flex" method="get" action="${ctp}/dbShop/productSearch">
+        <input class="form-control me-2" type="search" name="keyword" placeholder="상품 검색" aria-label="Search">
+        <button class="btn btn-outline-secondary" type="submit">검색</button>
+      </form>
+      
     </div>
   </div>
 </nav>

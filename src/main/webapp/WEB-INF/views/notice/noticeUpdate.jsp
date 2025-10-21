@@ -30,7 +30,7 @@
               <label for="content">내용</label>
             </div>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-              <a href="${ctp}/notice/noticeContent?idx=${vo.idx}&pag=${pag}" class="btn btn-outline-secondary">취소</a>
+              <a href="${ctp}/notice/noticeContent?idx=${vo.idx}&pag=${pageVO.pag}" class="btn btn-outline-secondary">취소</a>
               <button type="submit" class="btn btn-primary">수정하기</button>
             </div>
           </form>

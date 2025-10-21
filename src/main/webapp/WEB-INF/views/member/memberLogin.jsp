@@ -41,7 +41,7 @@
                   아이디 저장
                 </label>
               </div>
-              <a href="#" class="text-decoration-none small">비밀번호를 잊으셨나요?</a>
+              <a href="${ctp}/member/memberFind" class="text-decoration-none small">아이디/비밀번호를 잊으셨나요?</a>
             </div>
 
             <!-- 로그인 버튼 -->

@@ -19,6 +19,12 @@ public interface AdminService {
 
 	int setInquiryReplyUpdate(InquiryReplyVO reVO);
 
+	void setAdInquiryReplyDelete(int reIdx);
+
+	int setInquiryReplyStatusUpdate(int inquiryIdx);
+
+	void setAdInquiryDelete(int idx, String fSName, int reIdx);
+
 	
 	
 	

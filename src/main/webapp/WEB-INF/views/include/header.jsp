@@ -45,14 +45,6 @@
             <h1 class="h2 fw-bold text-dark">Scheherazade</h1>
           </a>
         </div>
-        <div class="w-50" style="max-width: 300px;">
-          <div class="input-group">
-            <input id="search" name="search" class="form-control" placeholder="검색" type="search">
-            <button class="btn btn-outline-secondary" type="button">
-              <i class="bi bi-search"></i>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   </div>

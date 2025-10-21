@@ -20,4 +20,6 @@ public interface CartDAO {
 
 	void updateItemQuantity(@Param("cartIdx") int cartIdx, @Param("quantity") int quantity);
 
+	List<CartVO> getCartListByIdxs(@Param("list") List<Long> cartIdxs);
+
 }

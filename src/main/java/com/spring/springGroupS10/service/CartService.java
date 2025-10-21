@@ -14,4 +14,6 @@ public interface CartService {
 
 	void updateItemQuantity(int cartIdx, int quantity);
 
+	List<CartVO> getCartListByIdxs(List<Long> cartIdxs);
+
 }
