@@ -1,4 +1,3 @@
-show tables;
 
 /* 대분류(main) */
 create table categoryMain(
@@ -18,9 +17,6 @@ create table categoryMiddle(
 );
 
 
-select * from categoryMiddle;
-select * from categoryMiddle 
-    where categoryMiddleCode=#{vo.categoryMiddleCode} and categoryMiddleName=#{vo.categoryMiddleName};
 
 /* 상품 테이블 */
 create table dbProduct (
@@ -49,8 +45,6 @@ create table dbOption (
   foreign key(productIdx) references dbProduct(idx)
 );
 
-desc dbOption;
-select * from dbOption where productIdx = 1 order by optionName;
 
 /* 장바구니 테이블 */
 CREATE TABLE cart (
@@ -93,6 +87,15 @@ CREATE TABLE orders (
     -- 외래키 설정 (회원이 탈퇴해도 주문 기록은 남아야 하므로 ON DELETE CASCADE를 사용하지 않음)
     FOREIGN KEY (memberIdx) REFERENCES member(idx) ON DELETE RESTRICT
 );
+
+ALTER TABLE orders 
+ADD COLUMN shippingMessage VARCHAR(255) NULL AFTER recipientAddress2;
+
+ALTER TABLE orders 
+ADD COLUMN imp_uid VARCHAR(255) NULL AFTER shippingMessage;
+
+
+
 
 /* 주문 상세 테이블 : 특정 주문에 어떤 상품들이 포함되어 있는지에 대한 상세 정보 */
 CREATE TABLE orderDetails (

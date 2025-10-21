@@ -6,22 +6,29 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.springGroupS10.service.CartService;
 import com.spring.springGroupS10.service.DbShopService;
 import com.spring.springGroupS10.service.MemberService;
+import com.spring.springGroupS10.service.OrderService;
 import com.spring.springGroupS10.vo.CartVO;
 import com.spring.springGroupS10.vo.DbOptionVO;
 import com.spring.springGroupS10.vo.DbProductVO;
 import com.spring.springGroupS10.vo.MemberVO;
+import com.spring.springGroupS10.vo.OrderDetailVO;
+import com.spring.springGroupS10.vo.OrderVO;
 
 @Controller
 @RequestMapping("/dbShop")
@@ -36,6 +43,19 @@ public class DbShopController {
 	@Autowired
 	CartService cartService;
 	
+	@Autowired
+	OrderService orderService;
+	
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		// true 파라미터: 빈 문자열("")을 null로 변환하도록 허용
+		
+		// Integer 타입 필드(예: optionIdx)에 대한 설정
+		binder.registerCustomEditor(Integer.class, new CustomNumberEditor(Integer.class, true));
+		
+		// Long 타입 필드(예: cartIdxs)에 대한 설정 (보험용)
+		binder.registerCustomEditor(Long.class, new CustomNumberEditor(Long.class, true));
+	}
 	
 	// 상품 카테고리 등록폼/리스트 출력
 	@GetMapping("/dbCategory")
@@ -150,8 +170,8 @@ public class DbShopController {
 	
 	@GetMapping("/dbShopContent")
 	public String dbShopContentGet(Model model, int idx) {
-		DbProductVO productVO = dbShopService.getDbShopProduct(idx);			// 상품 1건의 정보를 불러온다.
-		List<DbProductVO> optionVOS = dbShopService.getDbShopOption(idx);	// 해당 상품의 모든 옵션 정보를 가져온다.
+		DbProductVO productVO = dbShopService.getDbShopProduct(idx);
+		List<DbProductVO> optionVOS = dbShopService.getDbShopOption(idx);
 		
 		model.addAttribute("productVO", productVO);
 		model.addAttribute("optionVOS", optionVOS);
@@ -317,33 +337,107 @@ public class DbShopController {
 	    Model model
     ) {
       
-      // 2. 로그인 회원 정보 조회
-      String sUserId = (String) session.getAttribute("sUserId");
-      if (sUserId == null) {
-          return "redirect:/member/memberLogin"; // 로그인이 안됐으면 로그인 페이지로
-      }
-      MemberVO memberVO = memberService.getMemberByUserId(sUserId);
-      
-      // 3. 주문할 상품 정보 조회 (cartIdxs 목록 기준)
-      //    (CartService/DAO/Mapper에 새로운 메소드 필요)
-      List<CartVO> orderItems = cartService.getCartListByIdxs(cartIdxs);
-      
-      // 4. 주문 총액 계산
-      int totalOrderPrice = 0;
-      for (CartVO item : orderItems) {
-          // CartVO의 totalPrice 필드 (단가*수량)를 합산
-          totalOrderPrice += item.getTotalPrice();
-      }
-      
-      // 5. Model에 데이터 담기 (orderForm.jsp에서 사용할 이름)
-      model.addAttribute("memberVO", memberVO);         // 회원 정보
-      model.addAttribute("orderItems", orderItems);     // 주문할 상품 목록
-      model.addAttribute("totalOrderPrice", totalOrderPrice); // 상품 총액 (배송비 제외)
-      
-      // 6. 주문서 작성 페이지로 이동
-      return "dbShop/orderForm";
+	  // 2. 로그인 회원 정보 조회
+	  String sUserId = (String) session.getAttribute("sUserId");
+	  if (sUserId == null) {
+	      return "redirect:/member/memberLogin"; // 로그인이 안됐으면 로그인 페이지로
+	  }
+	  MemberVO memberVO = memberService.getMemberByUserId(sUserId);
+	  
+	  // 3. 주문할 상품 정보 조회 (cartIdxs 목록 기준)
+	  //    (CartService/DAO/Mapper에 새로운 메소드 필요)
+	  List<CartVO> orderItems = cartService.getCartListByIdxs(cartIdxs);
+	  
+	  // 4. 주문 총액 계산
+	  int totalOrderPrice = 0;
+	  for (CartVO item : orderItems) {
+	      // CartVO의 totalPrice 필드 (단가*수량)를 합산
+	      totalOrderPrice += item.getTotalPrice();
+	  }
+	  
+	  // 5. Model에 데이터 담기 (orderForm.jsp에서 사용할 이름)
+	  model.addAttribute("memberVO", memberVO);         // 회원 정보
+	  model.addAttribute("orderItems", orderItems);     // 주문할 상품 목록
+	  model.addAttribute("totalOrderPrice", totalOrderPrice); // 상품 총액 (배송비 제외)
+	  
+	  // 6. 주문서 작성 페이지로 이동
+	  return "dbShop/orderForm";
   }
 	
+	@PostMapping("/createOrder")
+	public String createOrderPost(
+		OrderVO orderVO, // OrdersVO -> OrderVO
+		@RequestParam("cartIdxs") List<Long> cartIdxs,
+		HttpSession session,
+		RedirectAttributes redirectAttributes
+	) {
+		String sUserId = (String) session.getAttribute("sUserId");
+		if (sUserId == null) return "redirect:/member/memberLogin";
+		
+		MemberVO memberVO = memberService.getMemberByUserId(sUserId);
+		orderVO.setMemberIdx(memberVO.getIdx());
+		orderVO.setOrderStatus("결제완료");
+
+		boolean isOrderSuccess = orderService.processOrder(orderVO, cartIdxs);
+
+		if (!isOrderSuccess) {
+			return "redirect:/message/orderFailed";
+		}
+		
+		redirectAttributes.addAttribute("orderId", orderVO.getOrderId());
+		return "redirect:/dbShop/orderComplete";
+	}
+	
+	/**
+	 * 주문 완료 페이지
+	 */
+	@GetMapping("/orderComplete")
+	public String orderCompleteGet(@RequestParam("orderId") String orderId, Model model) {
+		OrderVO orderVO = orderService.getOrderByOrderId(orderId); // OrdersVO -> OrderVO
+		model.addAttribute("orderVO", orderVO); // ordersVO -> orderVO
+		return "dbShop/orderComplete";
+	}
+	
+	/**
+	 * 주문 내역 목록 페이지 (마이페이지용)
+	 */
+	@GetMapping("/myOrders")
+	public String myOrdersGet(HttpSession session, Model model) {
+		String sUserId = (String) session.getAttribute("sUserId");
+		if (sUserId == null) return "redirect:/member/memberLogin";
+		
+		long memberIdx = memberService.getMemberByUserId(sUserId).getIdx();
+		List<OrderVO> orderList = orderService.getOrderListByMemberIdx(memberIdx); // OrdersVO -> OrderVO
+		model.addAttribute("orderList", orderList);
+		
+		return "dbShop/myOrders";
+	}
+	
+	/**
+	 * 주문 상세 내역 페이지
+	 */
+	@GetMapping("/orderDetail")
+	public String orderDetailGet(
+		@RequestParam("orderId") String orderId,
+		HttpSession session, Model model
+	) {
+		String sUserId = (String) session.getAttribute("sUserId");
+		if (sUserId == null) return "redirect:/member/memberLogin";
+		
+		long memberIdx = memberService.getMemberByUserId(sUserId).getIdx();
+		OrderVO orderVO = orderService.getOrderByOrderIdAndMember(orderId, memberIdx);
+		
+		if (orderVO == null) {
+			return "redirect:/message/invalidOrderAccess";
+		}
+		
+		List<OrderDetailVO> detailsList = orderService.getOrderDetailItems(orderVO.getIdx());
+		
+		model.addAttribute("orderVO", orderVO);
+		model.addAttribute("detailsList", detailsList);
+		
+		return "dbShop/orderDetail";
+	}
 	
 	
 	

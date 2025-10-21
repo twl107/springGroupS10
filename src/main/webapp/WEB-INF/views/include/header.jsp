@@ -12,23 +12,23 @@
           <span class="mx-2 text-muted">|</span>
           <a href="${ctp}/member/memberJoin" class="text-decoration-none text-secondary">회원가입</a>
           <span class="mx-2 text-muted">|</span>
-          <a href="${ctp}/dbShop/cartList" class="text-decoration-none text-secondary">장바구니</a>
+          <a href="${ctp}/member/myOrders" class="text-decoration-none text-secondary">주문내역</a>
           <span class="mx-2 text-muted">|</span>
-          <a href="${ctp}/support/qnaList" class="text-decoration-none text-secondary">고객센터</a>
+          <a href="${ctp}/dbShop/cartList" class="text-decoration-none text-secondary">장바구니</a>
         </c:if>
         <c:if test="${!empty sUserId}">
           <span class="fw-bold text-primary">${sUserId}님</span>
           <span class="mx-2 text-muted">|</span>
           <c:if test="${sLevel != 0 }">
-          	<a href="${ctp}/member/memberMain" class="text-decoration-none text-secondary">마이페이지</a>
+            <a href="${ctp}/member/memberMain" class="text-decoration-none text-secondary">마이페이지</a>
           </c:if>
           <c:if test="${sLevel == 0 }">
-          	<a href="${ctp}/admin/adminMain" class="text-decoration-none text-secondary">관리자페이지</a>
+            <a href="${ctp}/admin/adminMain" class="text-decoration-none text-secondary">관리자페이지</a>
           </c:if>
           <span class="mx-2 text-muted">|</span>
-          <a href="${ctp}/dbShop/cartList" class="text-decoration-none text-secondary">장바구니</a>
+          <a href="${ctp}/dbShop/myOrders" class="text-decoration-none text-secondary">주문내역</a>
           <span class="mx-2 text-muted">|</span>
-          <a href="${ctp}/support/qnaList" class="text-decoration-none text-secondary">고객센터</a>
+          <a href="${ctp}/dbShop/cartList" class="text-decoration-none text-secondary">장바구니</a>
           <span class="mx-2 text-muted">|</span>
           <a href="${ctp}/member/memberLogout" id="logoutLink" class="text-decoration-none text-secondary">로그아웃</a>
         </c:if>
@@ -36,26 +36,57 @@
     </div>
   </div>
 
-  <%-- Main header with logo and search --%>
   <div id="nav-sentinel" class="border-bottom">
     <div class="container">
-      <div class="d-flex align-items-center justify-content-between" style="height: 5rem;">
+      <%-- 1. 로고 영역 높이 증가: height 값을 5rem에서 7rem으로 수정 --%>
+      <div class="d-flex align-items-center justify-content-between" style="height: 7rem;">
         <div>
-          <a href="http://localhost:9090/springGroupS10/" class="text-decoration-none">
-            <h1 class="h2 fw-bold text-dark">Scheherazade</h1>
-          </a>
+          <h1 class="h2 fw-bold mb-0">
+            <a href="${ctp}/" class="text-decoration-none text-dark">
+              Scheherazade
+            </a>
+          </h1>
+        </div>
+        <div id="header-search-slot" class="d-flex">
+          <%-- 상품 검색 폼 (product-search-form)이 JS에 의해 이곳으로 이동됩니다. --%>
         </div>
       </div>
     </div>
   </div>
+
+  <%-- 
+    2 & 3. 검색란/버튼 높이 축소 및 결합 CSS 
+    - JS에 의해 제어되는 #product-search-form 요소에 스타일을 적용합니다.
+  --%>
+  <style>
+    /* #product-search-form 내부의 입력창과 버튼의 높이를 
+      Bootstrap의 small(sm) 크기와 유사하게 조정합니다. 
+    */
+    #product-search-form .form-control,
+    #product-search-form .btn {
+      padding: 0.25rem 0.5rem; /* 상하 여백 축소 */
+      font-size: 0.875rem;   /* 폰트 크기 축소 */
+      line-height: 1.5;      /* 줄 높이 설정 */
+    }
+
+    #product-search-form.d-flex .form-control {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    
+    #product-search-form.d-flex .btn {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      margin-left: -1px; 
+    }
+  </style>
 </header>
 
-<!-- Sticky Navigation을 위한 Placeholder -->
+<%-- 헤더의 고정 스크롤을 위한 공간 확보 --%>
 <div id="header-placeholder" class="d-none"></div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // 로그아웃 확인창 기능
     const logoutLink = document.getElementById('logoutLink');
     if (logoutLink) {
       logoutLink.addEventListener('click', function(event) {
@@ -65,10 +96,34 @@
       });
     }
 
-    // 서버 메시지 알림창 기능
     <c:if test="${!empty message}">
       alert("${message}");
     </c:if>
+
+    const searchForm = document.getElementById('product-search-form'); 
+    const headerSearchSlot = document.getElementById('header-search-slot');
+    const navContainer = document.getElementById('main-nav-content');
+    const navSentinel = document.getElementById('nav-sentinel');
+    
+    if (searchForm && headerSearchSlot && navContainer && navSentinel) {
+      
+      const updateSearchFormPosition = () => {
+        const sentinelBottom = navSentinel.getBoundingClientRect().bottom;
+
+        if (sentinelBottom <= 0) {
+          if (searchForm.parentElement !== navContainer) {
+            navContainer.appendChild(searchForm);
+          }
+        } else {
+          if (searchForm.parentElement !== headerSearchSlot) {
+            headerSearchSlot.appendChild(searchForm);
+          }
+        }
+      };
+
+      updateSearchFormPosition();
+
+      window.addEventListener('scroll', updateSearchFormPosition);
+    }
   });
 </script>
-

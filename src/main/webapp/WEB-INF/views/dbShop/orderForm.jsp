@@ -11,7 +11,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-	<title>orderForm.jsp</title>
+	<title>주문서 작성</title>
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/include/header.jsp" />
@@ -37,40 +37,35 @@
         </div>
         
         <div class="mb-2">
-          <label class="form-label small">연락처</label>
-          <div class="input-group">
-            <input type="text" class="form-control" id="tel1" title="전화번호 첫자리" maxlength="3" required>
-            <span class="input-group-text">-</span>
-            <input type="text" class="form-control" id="tel2" title="전화번호 중간자리" maxlength="4" required>
-            <span class="input-group-text">-</span>
-            <input type="text" class="form-control" id="tel3" title="전화번호 마지막자리" maxlength="4" required>
-          </div>
-          <input type="hidden" id="tel" name="tel">
+          <label for="recipientTel" class="form-label small">연락처</label>
+          <input type="text" class="form-control" id="recipientTel" name="recipientTel" value="${memberVO.tel}" placeholder="'-' 없이 숫자만 입력" required>
         </div>
         
         <div class="mb-2">
           <label for="postCode" class="form-label small">우편번호</label>
           <div class="input-group">
-            <input type="text" class="form-control" id="postCode" name="postCode" placeholder="우편번호" readonly>
+            <%-- [수정] name="postCode" -> "recipientPostCode" --%>
+            <input type="text" class="form-control" id="postCode" name="recipientPostCode" placeholder="우편번호" value="${memberVO.postCode}" readonly>
             <button type="button" class="btn btn-outline-secondary" onclick="execDaumPostcode()">우편번호 찾기</button>
           </div>
         </div>
         
         <div class="mb-2">
           <label for="address1" class="form-label small">기본 주소</label>
-          <input type="text" class="form-control" id="address1" name="address1" placeholder="기본 주소" readonly>
+          <%-- [수정] name="address1" -> "recipientAddress1" --%>
+          <input type="text" class="form-control" id="address1" name="recipientAddress1" placeholder="기본 주소" value="${memberVO.address1}" readonly>
         </div>
         
         <div class="mb-2">
           <label for="address2" class="form-label small">상세 주소</label>
-          <input type="text" class="form-control" id="address2" name="address2" placeholder="상세 주소">
+          <%-- [수정] name="address2" -> "recipientAddress2" --%>
+          <input type="text" class="form-control" id="address2" name="recipientAddress2" value="${memberVO.address2}" placeholder="상세 주소">
         </div>
         
         <div class="mb-2">
           <label for="shippingMessage" class="form-label small">배송 요청사항 (선택)</label>
           <textarea class="form-control" placeholder="배송 요청사항" id="shippingMessage" name="shippingMessage" style="height: 100px"></textarea>
         </div>
-
       </div>
 			
 			<!-- 오른쪽: 주문 상품 및 결제 정보 요약 -->
@@ -79,27 +74,24 @@
 					<div class="card-body p-4">
 						<h4 class="mb-4 fw-bold border-bottom pb-2">주문 상품 정보</h4>
 						
-						<!-- 주문 상품 목록 -->
 						<ul class="list-group list-group-flush mb-4">
 							<c:forEach var="item" items="${orderItems}" varStatus="st">
 								<li class="list-group-item d-flex align-items-center px-0">
-									<img src="${ctp}/product/${item.FSName}" class="rounded" style="width: 60px; height: 60px; object-fit: cover;">
+									<img src="${ctp}/data/product/${item.FSName}" class="rounded" style="width: 60px; height: 60px; object-fit: cover;">
 									<div class="ms-3 flex-grow-1">
 										<div class="fw-bold small">${item.productName}</div>
-										<c:if test="${not empty item.optionName}">
-											<div class="text-muted small">옵션: ${item.optionName}</div>
-										</c:if>
+										<c:if test="${not empty item.optionName}"><div class="text-muted small">옵션: ${item.optionName}</div></c:if>
 										<div class="text-muted small">${item.quantity}개</div>
 									</div>
-									<div class="fw-bold text-end">
-										<fmt:formatNumber value="${item.totalPrice}" pattern="#,###" />원
-									</div>
+									<div class="fw-bold text-end"><fmt:formatNumber value="${item.totalPrice}" pattern="#,###" />원</div>
 								</li>
-								<!-- 서버로 전송될 숨은 데이터 -->
 								<input type="hidden" name="orderDetails[${st.index}].productIdx" value="${item.productIdx}">
 								<input type="hidden" name="orderDetails[${st.index}].optionIdx" value="${item.optionIdx}">
 								<input type="hidden" name="orderDetails[${st.index}].quantity" value="${item.quantity}">
-								<input type="hidden" name="orderDetails[${st.index}].price" value="${item.totalPrice / item.quantity}">
+								<%-- <input type="hidden" name="orderDetails[${st.index}].price" value="${item.totalPrice / item.quantity}"> --%>
+								<c:set var="unitPrice" value="${item.totalPrice / item.quantity}" />
+								<input type="hidden" name="orderDetails[${st.index}].price" value="<fmt:formatNumber value='${unitPrice}' pattern='0' />">
+								<input type="hidden" name="cartIdxs" value="${item.idx}">
 							</c:forEach>
 						</ul>
 
@@ -108,7 +100,7 @@
 						<ul class="list-group list-group-flush">
 							<li class="list-group-item d-flex justify-content-between align-items-center px-0">
 								<span>총 상품 금액</span>
-								<span id="items-total-price"><fmt:formatNumber value="${totalOrderPrice}" pattern="#,###" />원</span>
+								<span><fmt:formatNumber value="${totalOrderPrice}" pattern="#,###" />원</span>
 							</li>
 							<li class="list-group-item d-flex justify-content-between align-items-center px-0">
 								<span>배송비</span>
@@ -116,24 +108,20 @@
 							</li>
 							<li class="list-group-item d-flex justify-content-between align-items-center px-0 fw-bold fs-5 border-top pt-3">
 								<span>최종 결제 금액</span>
-								<span class="text-danger" id="final-total-price">
-									<%-- <fmt:formatNumber value="${totalOrderPrice + 3000}" pattern="#,###" />원 --%>
-									<fmt:formatNumber value="${totalOrderPrice}" pattern="#,###" />원
-								</span>
+								<%-- <span class="text-danger"><fmt:formatNumber value="${totalOrderPrice + 3000}" pattern="#,###" />원</span> --%>
+								<span class="text-danger"><fmt:formatNumber value="${totalOrderPrice}" pattern="#,###" />원</span>
 							</li>
 						</ul>
 						<%-- <input type="hidden" name="totalPrice" id="totalPrice" value="${totalOrderPrice + 3000}"> --%>
 						<input type="hidden" name="totalPrice" id="totalPrice" value="${totalOrderPrice}">
 						
 						<div class="d-grid mt-4">
-							<!-- type="submit"을 type="button"으로 변경하고 id를 부여합니다 -->
 							<button type="button" id="paymentBtn" class="btn btn-primary btn-lg">결제하기</button>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!-- 포트원 결제 후 서버로 전송할 추가 데이터 -->
 		<input type="hidden" name="imp_uid" id="imp_uid">
 		<input type="hidden" name="orderId" id="orderId">
 	</form>
@@ -144,30 +132,19 @@
 	function execDaumPostcode() {
     new daum.Postcode({
       oncomplete: function(data) {
-        let addr = (data.userSelectedType === 'R') ? data.roadAddress : data.jibunAddress;
         document.getElementById("postCode").value = data.zonecode;
-        document.getElementById("address1").value = addr;
+        document.getElementById("address1").value = (data.userSelectedType === 'R') ? data.roadAddress : data.jibunAddress;
         document.getElementById("address2").focus();
       }
     }).open();
   }
 
-	// 포트원 결제 로직
 	$(document).ready(function() {
-		const IMP = window.IMP; 
+		const IMP = window.IMP;
 		IMP.init("imp50352711");
 
-		// 2. '결제하기' 버튼 클릭 이벤트 처리
 		$("#paymentBtn").on("click", function() {
-			
-			const tel1 = $("#tel1").val();
-			const tel2 = $("#tel2").val();
-			const tel3 = $("#tel3").val();
-			if (tel1 && tel2 && tel3) {
-				$("#tel").val(tel1 + "-" + tel2 + "-" + tel3);
-			}
-			
-			if ($("#recipientName").val() === "" || tel1 === "" || tel2 === "" || tel3 === "" || $("#postCode").val() === "") {
+			if ($("#recipientName").val() === "" || $("#recipientTel").val() === "" || $("#postCode").val() === "") {
 				alert("배송 정보를 모두 입력해주세요.");
 				return;
 			}
@@ -177,12 +154,8 @@
 	
 	function requestPay() {
 		const orderId = "ORD" + new Date().getTime();
-		
 		const productName = "${orderItems[0].productName}<c:if test='${orderItems.size() > 1}'> 외 ${orderItems.size() - 1}건</c:if>";
-		const buyerName = $("#recipientName").val();
-		const buyerTel = $("#tel").val();
-		const buyerPostcode = $("#postCode").val();
-		const buyerAddr = $("#address1").val() + " " + $("#address2").val();
+		const buyerTel = $("#recipientTel").val();
 		
 		IMP.request_pay({
 			pg: "html5_inicis.INIpayTest",
@@ -191,20 +164,17 @@
 			name: productName,
 			amount: parseInt($("#totalPrice").val()),
 			buyer_email: "${memberVO.email}",
-			buyer_name: buyerName,
+			buyer_name: $("#recipientName").val(),
 			buyer_tel: buyerTel,
-			buyer_addr: buyerAddr,
-			buyer_postcode: buyerPostcode
-		}, function(rsp) { // 5. 결제 후 콜백 함수
+			buyer_addr: $("#address1").val() + " " + $("#address2").val(),
+			buyer_postcode: $("#postCode").val()
+		}, function(rsp) {
 			if (rsp.success) {
-				// 결제 성공 시, 서버에 최종적으로 주문 정보 전송 및 검증 요청
-				$("#imp_uid").val(rsp.imp_uid);
+				$("#imp_uid").val(rsp.imp_uid); 
 				$("#orderId").val(rsp.merchant_uid);
-				
 				$("#orderForm").submit();
-				
 			} else {
-				alert("결제에 실패했습니다. 에러 내용: " + rsp.error_msg);
+				alert("결제에 실패했습니다. 에러: " + rsp.error_msg);
 			}
 		});
 	}

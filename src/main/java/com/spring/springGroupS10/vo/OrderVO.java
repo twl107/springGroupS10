@@ -1,5 +1,7 @@
 package com.spring.springGroupS10.vo;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
@@ -11,7 +13,7 @@ public class OrderVO {
 	private long idx;
 	private String orderId;
 	private long memberIdx;
-	private String orderDate;
+	private Date orderDate;
 	private int totalPrice;
 	
 	// 배송지 정보
@@ -20,8 +22,11 @@ public class OrderVO {
 	private String recipientPostCode;
 	private String recipientAddress1;
 	private String recipientAddress2;
+	private String shippingMessage;
 	
 	private String orderStatus;
+	
+	private String imp_uid;
 
-	private List<OrderDetailVO> orderDetails;
+	private List<OrderDetailVO> orderDetails = new ArrayList<OrderDetailVO>();
 }

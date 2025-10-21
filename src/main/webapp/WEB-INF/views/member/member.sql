@@ -38,24 +38,11 @@ CREATE TABLE member (
     UNIQUE (nickname)
 );
 
-ALTER TABLE member CHANGE COLUMN userid userId VARCHAR(30) NOT NULL;
-ALTER TABLE member CHANGE COLUMN nickname nickName VARCHAR(20) NOT NULL;
-ALTER TABLE member CHANGE COLUMN postcode postCode VARCHAR(10);
-ALTER TABLE member CHANGE COLUMN today_cnt todayCnt INT DEFAULT 0;
-ALTER TABLE member CHANGE COLUMN visit_cnt visitCnt INT DEFAULT 0;
-ALTER TABLE member CHANGE COLUMN is_deleted isDeleted BOOLEAN DEFAULT FALSE;
-ALTER TABLE member CHANGE COLUMN deleted_at deletedAt DATETIME;
-ALTER TABLE member CHANGE COLUMN created_at createdAt DATETIME DEFAULT NOW();
-ALTER TABLE member CHANGE COLUMN last_login_at lastLoginAt DATETIME DEFAULT NOW();
-
-
-
 
 
 desc member;
 
 drop table member;
-
 
 
 select * from member;

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.springGroupS10.dao.OrderDAO">
+
+	<insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderVO.idx">
+		INSERT INTO orders (
+			orderId, memberIdx, totalPrice,
+			recipientName, recipientTel, recipientPostCode, recipientAddress1, recipientAddress2, shippingMessage,
+			orderStatus, imp_uid
+		) VALUES (
+			#{orderVO.orderId}, #{orderVO.memberIdx}, #{orderVO.totalPrice},
+			#{orderVO.recipientName}, #{orderVO.recipientTel}, #{orderVO.recipientPostCode}, #{orderVO.recipientAddress1}, #{orderVO.recipientAddress2}, #{orderVO.shippingMessage},
+			#{orderVO.orderStatus}, #{orderVO.imp_uid}
+		)
+	</insert>
+	
+	<insert id="insertOrderDetail">
+		INSERT INTO orderDetails (orderIdx, productIdx, optionIdx, quantity, price)
+		VALUES (#{detail.orderIdx}, #{detail.productIdx}, #{detail.optionIdx}, #{detail.quantity}, #{detail.price})
+	</insert>
+	
+	<delete id="deleteCartItems">
+		DELETE FROM cart WHERE idx IN
+		<foreach collection="cartIdxs" item="idx" open="(" separator="," close=")">
+			#{idx}
+		</foreach>
+	</delete>
+	
+	<!-- [수정] id를 DAO 메소드명과 일치시킴 -->
+	<select id="getOrderByOrderId" resultType="com.spring.springGroupS10.vo.OrderVO">
+		SELECT * FROM orders WHERE orderId = #{orderId}
+	</select>
+	
+	<!-- [수정] id를 DAO 메소드명과 일치시킴 -->
+	<select id="getOrderListByMemberIdx" resultType="com.spring.springGroupS10.vo.OrderVO">
+		SELECT * FROM orders WHERE memberIdx = #{memberIdx} ORDER BY orderDate DESC
+	</select>
+	
+	<!-- [수정] id를 DAO 메소드명과 일치시킴 -->
+	<select id="getOrderByOrderIdAndMember" resultType="com.spring.springGroupS10.vo.OrderVO">
+		SELECT * FROM orders WHERE orderId = #{orderId} AND memberIdx = #{memberIdx}
+	</select>
+	
+	<!-- [수정] id를 DAO 메소드명과 일치시킴 -->
+	<select id="getOrderDetailItems" resultType="com.spring.springGroupS10.vo.OrderDetailVO">
+		SELECT
+			d.*,
+			p.productName AS productName,
+			p.fSName AS fSName,
+			o.optionName AS optionName
+		FROM orderDetails d
+		JOIN dbProduct p ON d.productIdx = p.idx
+		LEFT JOIN dbOption o ON d.optionIdx = o.idx
+		WHERE d.orderIdx = #{orderIdx}
+	</select>
+
+</mapper>
+
