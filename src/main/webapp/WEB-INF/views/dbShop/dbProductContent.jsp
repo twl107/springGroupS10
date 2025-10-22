@@ -11,8 +11,24 @@
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script>
+	
+		function myOrderStatus() {
+    	var startDateJumun = new Date(document.getElementById("startJumun").value);
+    	var endDateJumun = new Date(document.getElementById("endJumun").value);
+    	var conditionOrderStatus = document.getElementById("conditionOrderStatus").value;
+    	
+    	if((startDateJumun - endDateJumun) > 0) {
+    		alert("주문일자를 확인하세요!");
+    		return false;
+    	}
+    	
+    	let startJumun = moment(startDateJumun).format("YYYY-MM-DD");
+    	let endJumun = moment(endDateJumun).format("YYYY-MM-DD");
+    	location.href="dbMyOrderStatus?pag=${pageVO.pag}&startJumun="+startJumun+"&endJumun="+endJumun+"&conditionOrderStatus="+conditionOrderStatus;
+    }
+	
+	
 		$(document).ready(function() {
-			// --- 최종 가격 계산 함수 ---
 			function updateTotal() {
 				const basePrice = parseInt('${productVO.mainPrice}');
 				let optionPrice = 0;
@@ -28,10 +44,8 @@
 				$('#totalPrice').text(totalPrice.toLocaleString() + '원');
 			}
 
-			// --- 옵션 또는 수량 변경 시 최종 가격 업데이트 ---
 			$('#optionSelect, #quantity').on('change', updateTotal);
 
-			// --- 수량 증가/감소 버튼 ---
 			$('#btn-plus').on('click', function() {
 				let currentVal = parseInt($('#quantity').val());
 				$('#quantity').val(currentVal + 1).trigger('change');
@@ -44,9 +58,7 @@
 				}
 			});
 
-			// --- 장바구니 담기 버튼 클릭 (AJAX) ---
 			$('#add-to-cart-btn').on('click', function() {
-				// 옵션이 있는 상품인데 옵션을 선택하지 않은 경우 방지
 				if ($('#optionSelect option').length > 1 && $('#optionSelect').val() === "") {
 					alert("상품 옵션을 선택해주세요.");
 					return;
@@ -79,8 +91,22 @@
 					}
 				});
 			});
+
+			$('#buy-now-btn').on('click', function() {
+				if ($('#optionSelect option').length > 1 && $('#optionSelect').val() === "") {
+					alert("상품 옵션을 선택해주세요.");
+					return;
+				}
+				
+				const optionIdx = $('#optionSelect').val();
+				const quantity = $('#quantity').val();
+				
+				$('#buy-optionIdx').val(optionIdx);
+				$('#buy-quantity').val(quantity);
+				
+				$('#buy-now-form').submit();
+			});
 			
-			// 페이지 첫 로드 시 가격 초기화
 			updateTotal();
 		});
 	</script>
@@ -91,12 +117,10 @@
 
 <div class="container my-5">
 	<div class="row g-5">
-		<!-- 상품 이미지 -->
 		<div class="col-lg-6">
 			<img src="${ctp}/product/${productVO.FSName.split('/')[0]}" class="img-fluid rounded" alt="${productVO.productName}">
 		</div>
 		
-		<!-- 상품 정보 및 구매 옵션 -->
 		<div class="col-lg-6">
 			<h2 class="fw-bold">${productVO.productName}</h2>
 			<p class="text-muted">${productVO.detail}</p>
@@ -107,7 +131,6 @@
 				<span class="fs-3 fw-bold ms-3"><fmt:formatNumber value="${productVO.mainPrice}" pattern="#,##0" />원</span>
 			</div>
 			
-			<!-- 옵션 선택 (옵션이 있을 경우에만 표시) -->
 			<c:if test="${not empty optionVOS}">
 				<div class="mb-3">
 					<label for="optionSelect" class="form-label">옵션 선택</label>
@@ -122,7 +145,6 @@
 				</div>
 			</c:if>
 
-			<!-- 수량 선택 -->
 			<div class="mb-4">
 				<label class="form-label">수량</label>
 				<div class="input-group" style="max-width: 150px;">
@@ -134,21 +156,24 @@
 			
 			<hr>
 			
-			<!-- 최종 주문 금액 -->
 			<div class="d-flex justify-content-end align-items-center mb-4">
 				<span class="fs-5">총 상품 금액</span>
 				<span id="totalPrice" class="fs-2 fw-bold text-danger ms-3"></span>
 			</div>
 			
-			<!-- 구매 버튼 -->
 			<div class="d-grid gap-2">
 				<button class="btn btn-primary btn-lg" id="add-to-cart-btn">장바구니 담기</button>
-				<button class="btn btn-outline-secondary btn-lg">바로 구매</button>
+				<button class="btn btn-outline-secondary btn-lg" id="buy-now-btn">바로 구매</button>
 			</div>
 		</div>
 	</div>
 	
-	<!-- 상품 상세 내용 (CKEditor 내용) -->
+	<form id="buy-now-form" action="${ctp}/dbShop/orderFormOne" method="POST" style="display: none;">
+		<input type="hidden" name="productIdx" value="${productVO.idx}">
+		<input type="hidden" id="buy-optionIdx" name="optionIdx">
+		<input type="hidden" id="buy-quantity" name="quantity">
+	</form>
+	
 	<div class="row mt-5">
 		<div class="col">
 			<hr class="mb-5">
@@ -157,6 +182,10 @@
 			</div>
 		</div>
 	</div>
+	
+	
+	
+	
 </div>
 
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />

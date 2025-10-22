@@ -12,7 +12,7 @@
           <span class="mx-2 text-muted">|</span>
           <a href="${ctp}/member/memberJoin" class="text-decoration-none text-secondary">회원가입</a>
           <span class="mx-2 text-muted">|</span>
-          <a href="${ctp}/member/myOrders" class="text-decoration-none text-secondary">주문내역</a>
+          <a href="${ctp}/dbShop/myOrders" class="text-decoration-none text-secondary">주문내역</a>
           <span class="mx-2 text-muted">|</span>
           <a href="${ctp}/dbShop/cartList" class="text-decoration-none text-secondary">장바구니</a>
         </c:if>
@@ -38,7 +38,6 @@
 
   <div id="nav-sentinel" class="border-bottom">
     <div class="container">
-      <%-- 1. 로고 영역 높이 증가: height 값을 5rem에서 7rem으로 수정 --%>
       <div class="d-flex align-items-center justify-content-between" style="height: 7rem;">
         <div>
           <h1 class="h2 fw-bold mb-0">
@@ -48,16 +47,11 @@
           </h1>
         </div>
         <div id="header-search-slot" class="d-flex">
-          <%-- 상품 검색 폼 (product-search-form)이 JS에 의해 이곳으로 이동됩니다. --%>
         </div>
       </div>
     </div>
   </div>
 
-  <%-- 
-    2 & 3. 검색란/버튼 높이 축소 및 결합 CSS 
-    - JS에 의해 제어되는 #product-search-form 요소에 스타일을 적용합니다.
-  --%>
   <style>
     /* #product-search-form 내부의 입력창과 버튼의 높이를 
       Bootstrap의 small(sm) 크기와 유사하게 조정합니다. 
@@ -82,7 +76,6 @@
   </style>
 </header>
 
-<%-- 헤더의 고정 스크롤을 위한 공간 확보 --%>
 <div id="header-placeholder" class="d-none"></div>
 
 <script>

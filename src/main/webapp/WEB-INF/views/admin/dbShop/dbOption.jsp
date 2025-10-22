@@ -56,25 +56,43 @@
     		alert("상품 옵션이름을 등록하세요");
     		return false;
     	}
-    	else if(document.getElementById("optionPrice").value=="") {
+    	if(document.getElementById("optionPrice").value=="") {
     		alert("상품 옵션가격을 등록하세요");
     		return false;
     	}
-    	else if(document.getElementById("productName").value=="") {
+    	if(document.getElementById("productName").value=="") {
     		alert("상품명을 선택하세요");
     		return false;
     	}
-    	else {
-    		let formData = $("#myForm").serialize();	// 폼 안의 모든 입력 데이터를 전송 가능한 형태로 만듦
-    		
-    		$.ajax({
-    			type	: "post",
-    			url		:	"${ctp}/dbShop/dbOption",
-    			data	: formData,
-    			
-    			
-    		});
+    	
+    	let productIdx = document.myform.productIdx.value;
+    	if(productIdx === "" || productIdx === "0") {
+    		alert("상품 정보가 올바르지 않습니다. 상품을 다시 선택해주세요.");
+    		return false;
     	}
+    	
+			let formData = $("#myForm").serialize();	// 폼 안의 모든 입력 데이터를 전송 가능한 형태로 만듦
+    		
+  		$.ajax({
+    		type	: "post",
+    		url		:	"${ctp}/dbShop/dbOption",
+    		data	: formData,
+    		success:function(data) {
+      
+   				if(data === "1") {
+   					alert("옵션이 등록되었습니다.");
+
+   					location.reload(); 
+   				} else {
+   					alert("옵션 등록에 실패했거나, 이미 등록된 옵션입니다.");
+   				}
+   			},
+
+   			error: function(xhr, status, error) {
+   				console.log("AJAX Error:", error);
+   				alert("서버와 통신 중 오류가 발생했습니다. 다시 시도해 주세요.");
+   			}
+	 		});
     }
     
     // 상품 입력창에서 대분류 선택(Change)시 중분류가져와서 중분류 선택박스에 뿌리기

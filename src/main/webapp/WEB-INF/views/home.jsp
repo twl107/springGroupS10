@@ -30,14 +30,7 @@
 <main>
 	<!-- Hero Section (메인 배너) -->
 	<div class="position-relative bg-dark text-white text-center" style="height: 500px; overflow: hidden;">
-		<img src="https://placehold.co/1600x600/334155/e2e8f0?text=Main+Banner+Image" class="position-absolute top-0 start-0 hero-img" alt="Main Banner">
-		<div class="position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(0, 0, 0, 0.5);"></div>
-		<div class="position-relative d-flex align-items-center justify-content-center h-100">
-			<div class="px-4">
-				<h1 class="display-4 fw-bold">당신의 목소리만 남기다<br>KDT3000</h1>
-				<p class="lead my-3">런칭 기념 20% 세일!</p>
-			</div>
-		</div>
+		<img src="${ctp}/images/banner1.jpg" class="position-absolute top-0 start-0 hero-img" alt="Main Banner">
 	</div>
 		
 		<!-- 상품 목록 영역 -->

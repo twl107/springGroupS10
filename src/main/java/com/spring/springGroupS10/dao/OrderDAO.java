@@ -23,4 +23,12 @@ public interface OrderDAO {
 
 	List<OrderDetailVO> getOrderDetailItems(@Param("orderIdx") long orderIdx);
 
+	int getAdminOrderTotalCnt(@Param("status") String status);
+
+	List<OrderVO> getAdminOrderList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("startJumun") String startJumun, 
+			@Param("endJumun") String endJumun, @Param("orderStatus") String orderStatus);
+
+	int setUpdateStatus(@Param("orderId") String orderId, @Param("orderStatus") String orderStatus);
+
+
 }

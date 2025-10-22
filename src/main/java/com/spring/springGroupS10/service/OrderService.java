@@ -17,4 +17,11 @@ public interface OrderService {
 
 	List<OrderDetailVO> getOrderDetailItems(long orderIdx);
 
+	int getAdminOrderTotalCnt(String status);
+
+	List<OrderVO> getAdminOrderList(int startIndexNo, int pageSize, String startJumun, String endJumun, String orderStatus);
+
+	int setUpdateStatus(String orderId, String orderStatus);
+
+
 }

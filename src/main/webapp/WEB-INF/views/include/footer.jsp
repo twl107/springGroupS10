@@ -1,4 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<c:set var="ctp" value="${pageContext.request.contextPath}" />
+
 <footer class="bg-dark text-white pt-5 pb-4">
   <div class="container">
     <div class="row">
@@ -13,9 +16,9 @@
           <div class="col-md-4 mb-4">
             <h5 class="text-uppercase fw-bold small">고객센터</h5>
             <ul class="list-unstyled mt-3">
-              <li><a href="#" class="text-decoration-none">공지사항</a></li>
-              <li class="mt-2"><a href="#" class="text-decoration-none">자주묻는 질문</a></li>
-              <li class="mt-2"><a href="#" class="text-decoration-none">1:1 문의</a></li>
+              <li><a href="${ctp}/notice/noticeList" class="text-decoration-none">공지사항</a></li>
+              <li class="mt-2"><a href="${ctp}/pds/pdsList" class="text-decoration-none">자료실</a></li>
+              <li class="mt-2"><a href="${ctp}/inquiry/inquiryList" class="text-decoration-none">1:1 문의</a></li>
             </ul>
           </div>
           <div class="col-md-4 mb-4">

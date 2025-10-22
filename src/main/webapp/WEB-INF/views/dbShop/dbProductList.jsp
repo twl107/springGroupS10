@@ -36,9 +36,6 @@
           "<span class="text-primary">${keyword}</span>" 검색 결과
         </h2>
       </c:when>
-      <c:otherwise>
-        <h2 class="fw-bold">전체 상품 목록</h2>
-      </c:otherwise>
     </c:choose>
   </div>
 

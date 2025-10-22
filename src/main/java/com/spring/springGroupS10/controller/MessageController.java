@@ -71,13 +71,6 @@ public class MessageController {
 			model.addAttribute("url", "/member/memberLogin");
 		}
 		
-		
-		
-		
-		
-		
-		
-		
 		else if(msgFlag.equals("dbProductInputOk")) {
 			model.addAttribute("message", "상품이 등록되었습니다.");
 			model.addAttribute("url", "/dbShop/dbShopList");
@@ -178,6 +171,19 @@ public class MessageController {
 			model.addAttribute("message", "1:1 문의 원본글(+답변글)이 삭제 되었습니다.");
 			model.addAttribute("url", "/admin/inquiry/adInquiryList");
 		}
+		else if(msgFlag.equals("useLogin")) {
+			model.addAttribute("message", "로그인 후 이용해주세요.");
+			model.addAttribute("url", "/member/memberLogin");
+		}
+		else if(msgFlag.equals("productNotFound")) {
+			model.addAttribute("message", "잘못된 접근입니다.(productNotFound)");
+			model.addAttribute("url", "/dbShop/dbProductList");
+		}
+		else if(msgFlag.equals("optionNotFound")) {
+			model.addAttribute("message", "잘못된 접근입니다.(optionNotFound)");
+			model.addAttribute("url", "/dbShop/dbProductList");
+		}
+		
 		
 		
 		

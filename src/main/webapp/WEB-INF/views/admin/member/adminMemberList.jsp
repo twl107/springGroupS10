@@ -119,19 +119,21 @@
   </table>
 
   <!-- 페이지네이션 (level 파라미터 및 '/admin' 경로 확인) -->
-  <div class="d-flex justify-content-center">
+  <%-- <div class="d-flex justify-content-center">
     <ul class="pagination">
-      <c:if test="${pageVO.pag > 1}"><li class="page-item"><a class="page-link" href="${ctp}/admin/member/adminMemberList?pag=1&level=${pageVO.level}">첫페이지</a></li></c:if>
-      <c:if test="${pageVO.curBlock > 0}"><li class="page-item"><a class="page-link" href="${ctp}/admin/member/adminMemberList?pag=${(pageVO.curBlock-1)*pageVO.blockSize+1}&level=${pageVO.level}">이전블록</a></li></c:if>
-      <c:forEach var="i" begin="${(pageVO.curBlock*pageVO.blockSize)+1}" end="${(pageVO.curBlock*pageVO.blockSize)+pageVO.blockSize}" varStatus="st">
-        <c:if test="${i <= pageVO.totPage}">
-          <li class="page-item ${i == pageVO.pag ? 'active' : ''}"><a class="page-link" href="${ctp}/admin/member/adminMemberList?pag=${i}&level=${pageVO.level}">${i}</a></li>
-        </c:if>
-      </c:forEach>
-      <c:if test="${pageVO.curBlock < pageVO.lastBlock}"><li class="page-item"><a class="page-link" href="${ctp}/admin/member/adminMemberList?pag=${(pageVO.curBlock+1)*pageVO.blockSize+1}&level=${pageVO.level}">다음블록</a></li></c:if>
-      <c:if test="${pageVO.pag < pageVO.totPage}"><li class="page-item"><a class="page-link" href="${ctp}/admin/member/adminMemberList?pag=${pageVO.totPage}&level=${pageVO.level}">마지막페이지</a></li></c:if>
-    </ul>
-  </div>
+	    <c:if test="${pageVO.pag > 1}"><li class="page-item"><a class="page-link" href="${ctp}/admin/dbShop/adminOrderList?status=${status}&pag=1&pageSize=${pageVO.pageSize}">처음</a></li></c:if>
+	    <c:if test="${pageVO.curBlock > 0}"><li class="page-item"><a class="page-link" href="${ctp}/admin/dbShop/adminOrderList?status=${status}&pag=${(pageVO.curBlock-1) * pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">이전</a></li></c:if>
+	    <c:forEach var="i" begin="${(pageVO.curBlock * pageVO.blockSize) + 1}" end="${(pageVO.curBlock * pageVO.blockSize) + pageVO.blockSize}" varStatus="st">
+	      <c:if test="${i <= pageVO.totPage}">
+	        <li class="page-item ${i == pageVO.pag ? 'active' : ''}">
+	        	<a class="page-link" href="${ctp}/admin/dbShop/adminOrderList?status=${status}&pag=${i}&pageSize=${pageVO.pageSize}">${i}</a>
+	        </li>
+	      </c:if>
+	    </c:forEach>
+	    <c:if test="${pageVO.curBlock < pageVO.lastBlock}"><li class="page-item"><a class="page-link" href="${ctp}/admin/dbShop/adminOrderList?status=${status}&pag=${(pageVO.curBlock+1) * pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">다음</a></li></c:if>
+	    <c:if test="${pageVO.pag < pageVO.totPage}"><li class="page-item"><a class="page-link" href="${ctp}/admin/dbShop/adminOrderList?status=${status}&pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">마지막</a></li></c:if>
+	  </ul>
+  </div> --%>
 </div>
 <p><br/></p>
 </body>

@@ -207,6 +207,11 @@ public class DbShopServiceImpl implements DbShopService {
 		return dbShopDAO.getProductSearch(keyword);
 	}
 
+	@Override
+	public DbOptionVO getDbShopOptionOne(int optionIdx) {
+		return dbShopDAO.getDbShopOptionOne(optionIdx);
+	}
+
 		
 		
 		

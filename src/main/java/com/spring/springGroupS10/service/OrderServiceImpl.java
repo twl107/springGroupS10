@@ -60,6 +60,22 @@ public class OrderServiceImpl implements OrderService {
 	public List<OrderDetailVO> getOrderDetailItems(long orderIdx) {
 		return orderDAO.getOrderDetailItems(orderIdx);
 	}
+
+	@Override
+	public int getAdminOrderTotalCnt(String status) {
+		return orderDAO.getAdminOrderTotalCnt(status);
+	}
+
+	@Override
+	public List<OrderVO> getAdminOrderList(int startIndexNo, int pageSize, String startJumun, String endJumun, String orderStatus) {
+		return orderDAO.getAdminOrderList(startIndexNo, pageSize, startJumun, endJumun, orderStatus);
+	}
+
+	@Override
+	public int setUpdateStatus(String orderId, String orderStatus) {
+		return orderDAO.setUpdateStatus(orderId, orderStatus);
+	}
+
 	
 	
 	

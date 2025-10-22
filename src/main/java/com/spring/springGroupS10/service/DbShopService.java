@@ -63,6 +63,8 @@ public interface DbShopService {
 
 	List<DbProductVO> getProductSearch(String keyword);
 
+	DbOptionVO getDbShopOptionOne(int optionIdx);
+
 
 
 

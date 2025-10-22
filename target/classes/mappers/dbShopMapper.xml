@@ -123,6 +123,10 @@
 		select * from dbProduct where productName like concat('%', #{keyword}, '%') order by idx desc;
 	</select>
 	
+	<select id="getDbShopOptionOne" resultType="com.spring.springGroupS10.vo.DbProductVO" parameterType="int">
+		select * from dbOption where idx = #{optionIdx};
+	</select>
+	
 	
 	
 	

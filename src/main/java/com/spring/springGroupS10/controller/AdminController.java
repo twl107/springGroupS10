@@ -1,6 +1,8 @@
 package com.spring.springGroupS10.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.spring.springGroupS10.common.Pagination;
 import com.spring.springGroupS10.service.AdminService;
 import com.spring.springGroupS10.service.MemberService;
+import com.spring.springGroupS10.service.OrderService;
 import com.spring.springGroupS10.vo.InquiryReplyVO;
 import com.spring.springGroupS10.vo.InquiryVO;
 import com.spring.springGroupS10.vo.MemberVO;
+import com.spring.springGroupS10.vo.OrderVO;
 import com.spring.springGroupS10.vo.PageVO;
 
 @Controller
@@ -34,6 +38,9 @@ public class AdminController {
 	
 	@Autowired
 	Pagination pagination;
+	
+	@Autowired
+	OrderService orderService;
 	
 	
 	@GetMapping("/adminMain")
@@ -51,12 +58,11 @@ public class AdminController {
 		return "/admin/adminContent";
 	}
 	
-	// 관리자 회원리스트 조회
   @GetMapping("/member/adminMemberList")
   public String adminMemberListGet(Model model, PageVO pageVO,
       @RequestParam(name="level", defaultValue="99", required=false) int level) {
     
-    pageVO.setLevel(level); // 파라미터로 받은 level 값을 pageVO에 설정하여 기본값을 보장
+    pageVO.setLevel(level);
     pageVO.setSection("member");
     pageVO = pagination.pagination(pageVO);
     
@@ -68,7 +74,6 @@ public class AdminController {
     return "admin/member/adminMemberList";
   }
 	
-  // AJAX를 통한 회원 등급 변경 처리
   @ResponseBody
   @PostMapping("/member/updateLevel")
   public int memberUpdateLevelPost(	int idx, int level) {
@@ -117,7 +122,6 @@ public class AdminController {
 		return "admin/inquiry/adInquiryReply";
 	}
 	
-	// 관리자 답변 저장
 	@Transactional
 	@ResponseBody
 	@PostMapping("/inquiry/adInquiryReplyInput")
@@ -129,17 +133,15 @@ public class AdminController {
 		return res;
 	}
 	
-	// 관리자 답변 수정
 	@PostMapping("/inquiry/adInquiryReply")
 	public String adInquiryReplyUpdatePost(InquiryReplyVO reVO) {
-		int res = adminService.setInquiryReplyUpdate(reVO);	// 관리자가 답변글을 수정했을 때 처리 루틴
+		int res = adminService.setInquiryReplyUpdate(reVO);
 		
 		System.out.println("res : " + res);
 		if(res != 0) return "redirect:/message/adInquiryReplyUpdateOk?idx="+reVO.getInquiryIdx();
 		return "redirect:/message/adInquiryReplyUpdateNo?idx="+reVO.getInquiryIdx();
 	}
 	
-	// 답변글만 삭제하기(답변글을 삭제처리하면 원본글의 '상태'는 '답변대기중'으로 수정해준다.
 	@Transactional
 	@ResponseBody
 	@PostMapping("/inquiry/adInquiryReplyDelete")
@@ -148,22 +150,59 @@ public class AdminController {
 		return adminService.setInquiryReplyStatusUpdate(inquiryIdx);
 	}
 	
-	// 관리자 원본글과 답변글 삭제처리(답변글이 있을경우는 답변글 먼저 삭제후 원본글을 삭제처리한다.)
 	@Transactional
 	@RequestMapping(value="/inquiry/adInquiryDelete", method = RequestMethod.GET)
 	public String adInquiryDeleteGet(Model model, int idx, String fSName, int reIdx, int pag) {
-		//adminService.setAdInquiryReplyDelete(reIdx);	// 관리자가 현재글을 삭제했을때 먼저 답변글을 삭제처리해준다.
-		adminService.setAdInquiryDelete(idx, fSName, reIdx); // 답변글 삭제처리가 끝나면 원본글을 삭제처리해준다. (답변글삭제와 원본글 삭제를 동시에 처리한다.)
+		adminService.setAdInquiryDelete(idx, fSName, reIdx);
 		model.addAttribute("pag", pag);
 		return "redirect:/message/adInquiryDeleteOk";
+	}
+	
+	@GetMapping("/dbShop/adminOrderList")
+	public String adminOrderListGet(Model model, PageVO pageVO,
+			@RequestParam(name = "orderStatus", defaultValue = "전체", required = false) String orderStatus,
+			@RequestParam(name="startJumun", defaultValue="", required=false) String startJumun,
+	    @RequestParam(name="endJumun", defaultValue="", required=false) String endJumun
+		) {
+		
+		String strNow = "";
+		if(startJumun.equals("")) {
+			Date now = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			strNow = sdf.format(now);
+			
+			startJumun = strNow;
+			endJumun = strNow;
+		}
+		
+		String strOrderStatus = startJumun + "@" + endJumun + "@" + orderStatus;
+		pageVO.setSection("adminOrder");
+		pageVO.setSearchString(strOrderStatus);
+		pageVO = pagination.pagination(pageVO);
+		
+		List<OrderVO> vos = orderService.getAdminOrderList(pageVO.getStartIndexNo(), pageVO.getPageSize(), startJumun, endJumun, orderStatus);
+		
+		model.addAttribute("startJumun", startJumun);
+		model.addAttribute("endJumun", endJumun);
+		model.addAttribute("orderStatus", orderStatus);
+		model.addAttribute("vos", vos);
+		model.addAttribute("pageVO", pageVO);
+		
+		return "admin/dbShop/adminOrderList";
+	}
+	
+	@ResponseBody
+	@PostMapping("/dbShop/updateStatus")
+	public String adminOrderUpdateStatusPost(String orderId, String orderStatus) {
+		
+		int res = orderService.setUpdateStatus(orderId, orderStatus);
+		
+		if(res != 0) return "OK";
+		else return "Status Update Failed";
 	}
 	
 	
 	
 	
-	
-	
-	
-	
-	
+		
 }

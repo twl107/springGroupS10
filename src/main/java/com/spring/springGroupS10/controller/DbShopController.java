@@ -1,17 +1,15 @@
 package com.spring.springGroupS10.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,17 +43,7 @@ public class DbShopController {
 	
 	@Autowired
 	OrderService orderService;
-	
-	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-		// true 파라미터: 빈 문자열("")을 null로 변환하도록 허용
-		
-		// Integer 타입 필드(예: optionIdx)에 대한 설정
-		binder.registerCustomEditor(Integer.class, new CustomNumberEditor(Integer.class, true));
-		
-		// Long 타입 필드(예: cartIdxs)에 대한 설정 (보험용)
-		binder.registerCustomEditor(Long.class, new CustomNumberEditor(Long.class, true));
-	}
+
 	
 	// 상품 카테고리 등록폼/리스트 출력
 	@GetMapping("/dbCategory")
@@ -221,6 +209,10 @@ public class DbShopController {
 	@ResponseBody
 	@PostMapping("/dbOption")
 	public String dbOptionPost(Model model, DbOptionVO vo, String[] optionName, int[] optionPrice) {
+		if(optionName == null) {
+			return "0";
+		}
+		
 		int res = 0;
 		boolean isSuccess = false;
 		
@@ -332,7 +324,7 @@ public class DbShopController {
 	
 	@PostMapping("/orderForm")
   public String dbShopOrderFormPost(
-	    @RequestParam("cartIdxs") List<Long> cartIdxs, // 1. JS에서 보낸 cartIdx 목록
+	    @RequestParam("cartIdxs") List<Long> cartIdxs, 
 	    HttpSession session,
 	    Model model
     ) {
@@ -340,12 +332,10 @@ public class DbShopController {
 	  // 2. 로그인 회원 정보 조회
 	  String sUserId = (String) session.getAttribute("sUserId");
 	  if (sUserId == null) {
-	      return "redirect:/member/memberLogin"; // 로그인이 안됐으면 로그인 페이지로
+	      return "redirect:/member/memberLogin";
 	  }
 	  MemberVO memberVO = memberService.getMemberByUserId(sUserId);
 	  
-	  // 3. 주문할 상품 정보 조회 (cartIdxs 목록 기준)
-	  //    (CartService/DAO/Mapper에 새로운 메소드 필요)
 	  List<CartVO> orderItems = cartService.getCartListByIdxs(cartIdxs);
 	  
 	  // 4. 주문 총액 계산
@@ -363,6 +353,69 @@ public class DbShopController {
 	  // 6. 주문서 작성 페이지로 이동
 	  return "dbShop/orderForm";
   }
+	
+	@PostMapping("/orderFormOne")
+	public String orderFormOnePost(Model model, HttpSession session,
+			@RequestParam("productIdx") int productIdx,
+			@RequestParam(name = "optionIdx", defaultValue = "0") int optionIdx,
+			@RequestParam("quantity") int quantity
+		) {
+		
+		String sUserId = (String) session.getAttribute("sUserId");
+		if (sUserId == null) {
+			return "redirect:/message/useLogin";
+		}
+		
+		MemberVO memberVO = memberService.getMemberByUserId(sUserId);
+		
+		DbProductVO productVO = dbShopService.getDbShopProduct(productIdx);
+		if(productVO == null) {
+			return "redirect:/message/productNotFound";
+		}
+		
+		List<CartVO> orderItems = new ArrayList<>();
+		CartVO orderItem = new CartVO();
+		
+		int totalOrderPrice = 0;
+		int basePrice = productVO.getMainPrice();
+		
+		if(optionIdx != 0) {
+			DbOptionVO optionVO = dbShopService.getDbShopOptionOne(optionIdx);
+			if(optionVO == null) {
+				return "redirect:/message/optionNotFound";
+			}
+			
+			orderItem.setOptionIdx(optionIdx);
+			orderItem.setOptionName(optionVO.getOptionName());
+			orderItem.setOptionPrice(optionVO.getOptionPrice());
+			
+			totalOrderPrice = (basePrice + optionVO.getOptionPrice()) * quantity;
+		}
+		else totalOrderPrice = basePrice * quantity;
+		
+		orderItem.setMemberIdx(memberVO.getIdx());
+		orderItem.setProductIdx(productIdx);
+		orderItem.setProductName(productVO.getProductName());
+		orderItem.setMainPrice(basePrice);
+		orderItem.setQuantity(quantity);
+		orderItem.setTotalPrice(totalOrderPrice);
+		
+		if(productVO.getFSName() != null && !productVO.getFSName().isEmpty()) {
+			orderItem.setFSName(productVO.getFSName().split("/")[0]);
+		}
+		
+		orderItems.add(orderItem);
+		
+		model.addAttribute(memberVO);
+		model.addAttribute("orderItems", orderItems);
+		model.addAttribute("totalOrderPrice", totalOrderPrice);
+		
+		System.out.println("memberVO : " + memberVO);
+		System.out.println("orderItems : " + orderItems);
+		System.out.println("totalOrderPrice : " + totalOrderPrice);
+		
+		return "dbShop/orderForm";
+	}
 	
 	@PostMapping("/createOrder")
 	public String createOrderPost(
@@ -388,34 +441,25 @@ public class DbShopController {
 		return "redirect:/dbShop/orderComplete";
 	}
 	
-	/**
-	 * 주문 완료 페이지
-	 */
 	@GetMapping("/orderComplete")
 	public String orderCompleteGet(@RequestParam("orderId") String orderId, Model model) {
-		OrderVO orderVO = orderService.getOrderByOrderId(orderId); // OrdersVO -> OrderVO
-		model.addAttribute("orderVO", orderVO); // ordersVO -> orderVO
+		OrderVO orderVO = orderService.getOrderByOrderId(orderId);
+		model.addAttribute("orderVO", orderVO);
 		return "dbShop/orderComplete";
 	}
 	
-	/**
-	 * 주문 내역 목록 페이지 (마이페이지용)
-	 */
 	@GetMapping("/myOrders")
 	public String myOrdersGet(HttpSession session, Model model) {
 		String sUserId = (String) session.getAttribute("sUserId");
 		if (sUserId == null) return "redirect:/member/memberLogin";
 		
 		long memberIdx = memberService.getMemberByUserId(sUserId).getIdx();
-		List<OrderVO> orderList = orderService.getOrderListByMemberIdx(memberIdx); // OrdersVO -> OrderVO
+		List<OrderVO> orderList = orderService.getOrderListByMemberIdx(memberIdx);
 		model.addAttribute("orderList", orderList);
 		
 		return "dbShop/myOrders";
 	}
 	
-	/**
-	 * 주문 상세 내역 페이지
-	 */
 	@GetMapping("/orderDetail")
 	public String orderDetailGet(
 		@RequestParam("orderId") String orderId,
@@ -438,6 +482,9 @@ public class DbShopController {
 		
 		return "dbShop/orderDetail";
 	}
+	
+	
+	
 	
 	
 	
