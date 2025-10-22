@@ -201,7 +201,7 @@ public class DbShopController {
 	// 옵션보기에서 옵션보기 버튼 클릭 시 해당 상품의 옵션리스트를 보여준다.
 	@ResponseBody
 	@PostMapping("/getOptionList")
-	public List<DbProductVO> getOptionListPost(int productIdx) {
+	public List<DbOptionVO> getOptionListPost(int productIdx) {
 		return dbShopService.getOptionList(productIdx);
 	}
 	
@@ -241,25 +241,39 @@ public class DbShopController {
 	
 	// 전체 상품 리스트 출력
 	@GetMapping("/dbProductList")
-	public String dbProductListGet(Model model) {
-		List<DbProductVO> vos = dbShopService.getDbProductList();
-		model.addAttribute("vos", vos);
-		return "dbShop/dbProductList";
-	}
-	
-	@GetMapping("/productSearch")
-	public String dbProductSearchGet(Model model, 
-			@RequestParam(name = "keyword", defaultValue = "", required = false) String keyword
+	public String dbProductListGet(Model model,
+			@RequestParam(name = "mainCategory", required = false) String mainCategoryCode,
+			@RequestParam(name = "keyWord", required = false) String keyword
+			
 		) {
+		List<DbProductVO> vos;
 		
-		List<DbProductVO> vos = dbShopService.getProductSearch(keyword);
+		if(keyword != null && !keyword.trim().isEmpty()) {
+			vos = dbShopService.getProductSearch(keyword);
+			model.addAttribute("keyword", keyword);
+		}
+		else if(mainCategoryCode != null && !mainCategoryCode.trim().isEmpty()) {
+			vos = dbShopService.getProductByMainCategory(mainCategoryCode);
+		}
+		else vos = dbShopService.getDbProductList();
 		
 		model.addAttribute("vos", vos);
-		model.addAttribute("keyword", keyword);
 		
 		return "dbShop/dbProductList";
 	}
-	
+
+	/*
+	 * @GetMapping("/productSearch") public String dbProductSearchGet(Model model,
+	 * 
+	 * @RequestParam(name = "keyword", defaultValue = "", required = false) String
+	 * keyword ) {
+	 * 
+	 * List<DbProductVO> vos = dbShopService.getProductSearch(keyword);
+	 * 
+	 * model.addAttribute("vos", vos); model.addAttribute("keyword", keyword);
+	 * 
+	 * return "dbShop/dbProductList"; }
+	 */
 	
 	// 상품 상세 정보 출력
 	@GetMapping("/dbProductContent")

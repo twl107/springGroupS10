@@ -156,7 +156,8 @@
       });
       
       // 배송비 계산 (예: 5만원 이상 무료배송)
-      const shippingFee = totalProductsPrice >= 50000 || totalProductsPrice === 0 ? 0 : 3000;
+      //const shippingFee = totalProductsPrice >= 50000 || totalProductsPrice === 0 ? 0 : 3000;
+      const shippingFee = 0;
       
       const grandTotal = totalProductsPrice + shippingFee;
       

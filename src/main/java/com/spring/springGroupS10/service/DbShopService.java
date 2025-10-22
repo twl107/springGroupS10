@@ -51,7 +51,7 @@ public interface DbShopService {
 
 	DbProductVO getProductInfor(String productName);
 
-	List<DbProductVO> getOptionList(int productIdx);
+	List<DbOptionVO> getOptionList(int productIdx);
 
 	int getOptionSame(int productIdx, String optionName);
 
@@ -64,6 +64,8 @@ public interface DbShopService {
 	List<DbProductVO> getProductSearch(String keyword);
 
 	DbOptionVO getDbShopOptionOne(int optionIdx);
+
+	List<DbProductVO> getProductByMainCategory(String mainCategoryCode);
 
 
 

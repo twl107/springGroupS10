@@ -12,11 +12,11 @@
       
       <ul class="navbar-nav mb-2 mb-lg-0">
         <li class="nav-item"><a class="nav-link active" aria-current="page" href="${ctp}/dbShop/dbProductList">상품 전체보기</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">헤드폰</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">이어폰</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">DAC/AMP</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">커스텀 케이블</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">액세서리</a></li>
+        <li class="nav-item"><a class="nav-link" href="${ctp}/dbShop/dbProductList?mainCategory=A">헤드폰</a></li>
+        <li class="nav-item"><a class="nav-link" href="${ctp}/dbShop/dbProductList?mainCategory=B">이어폰</a></li>
+        <li class="nav-item"><a class="nav-link" href="${ctp}/dbShop/dbProductList?mainCategory=C">DAC/AMP</a></li>
+        <li class="nav-item"><a class="nav-link" href="${ctp}/dbShop/dbProductList?mainCategory=D">커스텀 케이블</a></li>
+        <li class="nav-item"><a class="nav-link" href="${ctp}/dbShop/dbProductList?mainCategory=E">액세서리</a></li>
       </ul>
       
       <div class="d-flex align-items-center">
@@ -27,7 +27,7 @@
           <li class="nav-item"><a class="nav-link" href="${ctp}/inquiry/inquiryList">1:1문의</a></li>
         </ul>
         
-        <form id="product-search-form" class="d-flex mb-2 mb-lg-0 ms-lg-3" method="get" action="${ctp}/dbShop/productSearch">
+        <form id="product-search-form" class="d-flex mb-2 mb-lg-0 ms-lg-3" method="get" action="${ctp}/dbShop/dbProductList">
           <input class="form-control" type="search" name="keyword" placeholder="상품 검색" aria-label="Search" style="min-width: 200px;">
           <button class="btn btn-outline-secondary" type="submit">검색</button>
         </form>

@@ -18,12 +18,12 @@
     	let strOption = "";
     	let test = "t" + cnt; 
     	
-    	strOption += '<div id="'+test+'"><hr class="border-1 border-dark">';
+    	strOption += '<div id="'+test+'" class="option-group"><hr class="border-1 border-dark">';
     	strOption += '<font size="4"><b class="mb-2">상품옵션등록</b></font>&nbsp;&nbsp;';
     	strOption += '<div class="input-group mb-2">';
     	strOption += '<div class="input-group-text">상품옵션이름</div>';
     	strOption += '<input type="text" name="optionName" id="optionName'+cnt+'" class="form-control"/>';
-    	strOption += '<input type="button" value="옵션삭제" class="btn btn-outline-danger btn-sm" onclick="removeOption('+test+')"/>'
+    	strOption += '<input type="button" value="옵션삭제" class="btn btn-outline-danger btn-sm remove-option-btn"/>';
     	strOption += '</div>';
     	strOption += '<div class="input-group mb-2">';
     	strOption += '<div class="input-group-text">상품옵션가격</div>';
@@ -34,11 +34,13 @@
     	cnt++;
     }
     
-    // 옵션항목 삭제
-    function removeOption(test) {
-    	/* $("#"+test).remove(); */
-    	$("#"+test.id).remove();
-    }
+    $(document).ready(function() {
+  	  // 옵션 그룹을 담는 부모 요소에 이벤트 핸들러를 위임
+  	  $('#optionType').on('click', '.remove-option-btn', function() {
+  	    // 클릭된 버튼에서 가장 가까운.option-group 클래스를 가진 부모 요소를 찾아 제거
+  	    $(this).closest('.option-group').remove();
+  	  });
+  	});
     
     // 옵션 입력후 등록전송
     function fCheck() {
@@ -52,6 +54,8 @@
     			return false;
     		}
     	}
+    	
+    	
     	if(document.getElementById("optionName").value=="") {
     		alert("상품 옵션이름을 등록하세요");
     		return false;
@@ -239,7 +243,7 @@
 <p><br/></p>
 <div class="container">
   <h2>상품에 따른 옵션 등록</h2>
-  <form name="myform" method="post">
+  <form name="myform" id="myForm" method="post">
     <div class="input-group mb-2">
       <label for="categoryMainCode" class="input-group-text">대분류</label>
       <select id="categoryMainCode" name="categoryMainCode" class="form-select" onchange="categoryMainChange()">

@@ -53,7 +53,7 @@ public interface DbShopDAO {
 
 	DbProductVO getProductInfor(@Param("productName") String productName);
 
-	List<DbProductVO> getOptionList(@Param("productIdx") int productIdx);
+	List<DbOptionVO> getOptionList(@Param("productIdx") int productIdx);
 
 	int getOptionSame(@Param("productIdx") int productIdx, @Param("optionName") String optionName);
 
@@ -66,6 +66,8 @@ public interface DbShopDAO {
 	List<DbProductVO> getProductSearch(@Param("keyword") String keyword);
 
 	DbOptionVO getDbShopOptionOne(@Param("optionIdx") int optionIdx);
+
+	List<DbProductVO> getProductByMainCategory(@Param("mainCategoryCode") String mainCategoryCode);
 
 
 

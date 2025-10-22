@@ -178,7 +178,7 @@ public class DbShopServiceImpl implements DbShopService {
 	}
 
 	@Override
-	public List<DbProductVO> getOptionList(int productIdx) {
+	public List<DbOptionVO> getOptionList(int productIdx) {
 		return dbShopDAO.getOptionList(productIdx);
 	}
 
@@ -210,6 +210,11 @@ public class DbShopServiceImpl implements DbShopService {
 	@Override
 	public DbOptionVO getDbShopOptionOne(int optionIdx) {
 		return dbShopDAO.getDbShopOptionOne(optionIdx);
+	}
+
+	@Override
+	public List<DbProductVO> getProductByMainCategory(String mainCategoryCode) {
+		return dbShopDAO.getProductByMainCategory(mainCategoryCode);
 	}
 
 		

@@ -22,7 +22,7 @@
 			query += "&startJumun=" + encodeURIComponent(startJumun);
 			query += "&endJumun=" + encodeURIComponent(endJumun);
 			
-			location.href = "${ctp}/admin/dbShop/adminOrderList?" + query;
+			location.href = "${ctp}/dbShop/myOrders?" + query;
 		}
 	</script>
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
