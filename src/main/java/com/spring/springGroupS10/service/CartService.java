@@ -16,4 +16,8 @@ public interface CartService {
 
 	List<CartVO> getCartListByIdxs(List<Long> cartIdxs);
 
+	List<CartVO> getRecentCartList(Long memberIdx, int i);
+
+	//List<CartVO> getRecentCartList(Long memberIdx, int i);
+
 }

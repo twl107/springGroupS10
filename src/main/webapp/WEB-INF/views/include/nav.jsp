@@ -29,7 +29,7 @@
         
         <form id="product-search-form" class="d-flex mb-2 mb-lg-0 ms-lg-3" method="get" action="${ctp}/dbShop/dbProductList">
           <input class="form-control" type="search" name="keyword" placeholder="상품 검색" aria-label="Search" style="min-width: 200px;">
-          <button class="btn btn-outline-secondary" type="submit">검색</button>
+          <button class="btn btn-outline-secondary" type="submit">🔍</button>
         </form>
         
       </div>

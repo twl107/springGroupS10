@@ -3,7 +3,6 @@
 <c:set var="ctp" value="${pageContext.request.contextPath}" />
 
 <header class="bg-white">
-  <%-- Top utility bar --%>
   <div class="bg-light border-bottom">
     <div class="container d-flex justify-content-end align-items-center" style="height: 2.5rem;">
       <div class="small">
@@ -53,14 +52,11 @@
   </div>
 
   <style>
-    /* #product-search-form 내부의 입력창과 버튼의 높이를 
-      Bootstrap의 small(sm) 크기와 유사하게 조정합니다. 
-    */
     #product-search-form .form-control,
     #product-search-form .btn {
-      padding: 0.25rem 0.5rem; /* 상하 여백 축소 */
-      font-size: 0.875rem;   /* 폰트 크기 축소 */
-      line-height: 1.5;      /* 줄 높이 설정 */
+      padding: 0.25rem 0.5rem; 
+      font-size: 0.875rem;
+      line-height: 1.5;
     }
 
     #product-search-form.d-flex .form-control {

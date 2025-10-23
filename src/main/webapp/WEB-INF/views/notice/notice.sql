@@ -12,3 +12,5 @@ create table notice(
 	
 	foreign key (memberIdx) references member (idx) on delete cascade
 );
+
+drop table notice;

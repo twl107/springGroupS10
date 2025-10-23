@@ -22,4 +22,6 @@ public interface NoticeDAO {
 	
 	int setViewCntUpdate(@Param("idx") int idx);
 
+
+
 }

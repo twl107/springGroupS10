@@ -67,6 +67,10 @@ public interface DbShopService {
 
 	List<DbProductVO> getProductByMainCategory(String mainCategoryCode);
 
+	List<String> getMiddleCategoryNamesByCodes(List<String> middleCategories);
+
+	List<DbProductVO> getProductsByProductNames(List<String> middleCategoryNames);
+
 
 
 

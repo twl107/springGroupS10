@@ -53,4 +53,9 @@ public class CartServiceImpl implements CartService {
 		return cartDAO.getCartListByIdxs(cartIdxs);
 	}
 
+	@Override
+	public List<CartVO> getRecentCartList(Long memberIdx, int i) {
+		return cartDAO.getRecentCartList(memberIdx, i);
+	}
+
 }

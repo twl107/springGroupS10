@@ -131,7 +131,27 @@
 		select * from dbOption where idx = #{optionIdx};
 	</select>
 	
+	<select id="getMiddleCategoryNamesByCodes" resultType="String">
+	SELECT categoryMiddleName FROM categoryMiddle
+	WHERE categoryMiddleCode IN
+	  <foreach collection="middleCategories" item="code" open="(" separator="," close=")">
+	    #{code}
+	  </foreach>
+	</select>
 	
+	<select id="getProductsByProductNames" resultType="com.spring.springGroupS10.vo.DbProductVO">
+	SELECT * FROM dbProduct
+	<where>
+	  <if test="middleCategoryNames != null and !middleCategoryNames.isEmpty()">
+	    <foreach collection="middleCategoryNames" item="name" separator=" OR ">
+	      productName LIKE CONCAT('%', #{name}, '%')
+	    </foreach>
+	  </if>
+	  <if test="middleCategoryNames == null or middleCategoryNames.isEmpty()">
+	    1 = 0
+	  </if>
+	</where>
+	</select>
 	
 	
 	

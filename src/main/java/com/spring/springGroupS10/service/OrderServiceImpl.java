@@ -76,6 +76,11 @@ public class OrderServiceImpl implements OrderService {
 		return orderDAO.setUpdateStatus(orderId, orderStatus);
 	}
 
+	@Override
+	public List<OrderVO> getRecentOrderList(Long memberIdx, int i) {
+		return orderDAO.getRecentOrderList(memberIdx, i);
+	}
+
 	
 	
 	

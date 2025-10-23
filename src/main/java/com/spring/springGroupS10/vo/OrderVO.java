@@ -25,8 +25,9 @@ public class OrderVO {
 	private String shippingMessage;
 	
 	private String orderStatus;
-	
 	private String imp_uid;
-
+	private String mainProductName;
+	private int itemCount;
+	
 	private List<OrderDetailVO> orderDetails = new ArrayList<OrderDetailVO>();
 }

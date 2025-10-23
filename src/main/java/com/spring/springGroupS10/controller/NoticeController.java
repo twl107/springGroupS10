@@ -2,6 +2,7 @@ package com.spring.springGroupS10.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.springGroupS10.common.Pagination;
 import com.spring.springGroupS10.service.MemberService;
@@ -77,17 +79,20 @@ public class NoticeController {
 
   // 공지사항 등록 처리 (관리자만 처리)
   @PostMapping("/noticeInput")
-  public String noticeInputPost(NoticeVO vo, HttpSession session) {
+  public String noticeInputPost(NoticeVO vo, HttpSession session,
+  		MultipartFile file, HttpServletRequest request
+		) {
     Integer sLevel = (Integer) session.getAttribute("sLevel");
     if (sLevel == null || sLevel != 0) {
         return "redirect:/message/noPermission";
     }
+    Long sMemberIdx = (Long) session.getAttribute("sMemberIdx");
+    if(sMemberIdx == null) {
+    	return "redirect:/message/useLogin";
+    }
     
-    // 세션에서 관리자 memberIdx를 가져와 vo에 저장
-    long sMemberIdx = (long) session.getAttribute("sMemberIdx");
-    vo.setMemberIdx(sMemberIdx);
+    int res = noticeService.noticeImgSave(file, vo, sMemberIdx);
     
-    int res = noticeService.setNoticeInput(vo);
     if (res != 0) return "redirect:/message/noticeInputOk";
     else return "redirect:/message/noticeInputNo";
   }
@@ -100,7 +105,7 @@ public class NoticeController {
         return "redirect:/message/noPermission";
     }
 
-    NoticeVO vo = noticeService.getNoticeContent(idx); // 조회수 증가 없는 메소드 필요 시 서비스에 추가
+    NoticeVO vo = noticeService.getNoticeContent(idx);
     model.addAttribute("vo", vo);
     model.addAttribute("pageVO", pageVO);
     return "notice/noticeUpdate";
@@ -108,13 +113,13 @@ public class NoticeController {
   
   // 공지사항 수정 처리 (관리자만 처리)
   @PostMapping("/noticeUpdate")
-  public String noticeUpdatePost(NoticeVO vo, HttpSession session) {
+  public String noticeUpdatePost(NoticeVO vo, HttpSession session, MultipartFile file, HttpServletRequest request) {
     Integer sLevel = (Integer) session.getAttribute("sLevel");
     if (sLevel == null || sLevel != 0) {
         return "redirect:/message/noPermission";
     }
 
-    int res = noticeService.setNoticeUpdate(vo);
+    int res = noticeService.setNoticeUpdate(file, vo, request);
     if (res != 0) return "redirect:/message/noticeUpdateOk?idx=" + vo.getIdx();
     else return "redirect:/message/noticeUpdateNo?idx=" + vo.getIdx();
   }

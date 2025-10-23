@@ -6,7 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -120,6 +124,22 @@ public class ProjectProvide {
 	}
 	
 	
+	public List<String> extractImageFileNames(String content, String directory) {
+		List<String> fileNames = new ArrayList<>();
+		if (content == null || content.isEmpty()) {
+			return fileNames;
+		}
+		
+		// "src="/springGroupS10/data/notice/([^\"]+)" 와 같은 형태의 정규식 생성
+		Pattern pattern = Pattern.compile("src=\"/springGroupS10/data/" + Pattern.quote(directory) + "/([^\"]+)\"");
+		Matcher matcher = pattern.matcher(content);
+		
+		while(matcher.find()) {
+			fileNames.add(matcher.group(1)); // 괄호 ( ) 안에 매칭된 파일명만 추출
+		}
+		
+		return fileNames;
+	}
 	
 	
 	

@@ -30,5 +30,7 @@ public interface OrderDAO {
 
 	int setUpdateStatus(@Param("orderId") String orderId, @Param("orderStatus") String orderStatus);
 
+	List<OrderVO> getRecentOrderList(@Param("memberIdx") Long memberIdx, @Param("i") int i);
+
 
 }

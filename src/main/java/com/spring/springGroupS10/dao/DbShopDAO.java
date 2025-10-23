@@ -69,6 +69,10 @@ public interface DbShopDAO {
 
 	List<DbProductVO> getProductByMainCategory(@Param("mainCategoryCode") String mainCategoryCode);
 
+	List<String> getMiddleCategoryNamesByCodes(@Param("middleCategories") List<String> middleCategories);
+
+	List<DbProductVO> getProductsByProductNames(@Param("middleCategoryNames") List<String> middleCategoryNames);
+
 
 
 

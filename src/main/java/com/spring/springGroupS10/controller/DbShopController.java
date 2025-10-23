@@ -1,6 +1,7 @@
 package com.spring.springGroupS10.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -149,9 +150,29 @@ public class DbShopController {
 	  model.addAttribute("selectedMainCodes", mainCategories);
 	  model.addAttribute("selectedMiddleCodes", middleCategories);
 	  
+
 	  // 선택된 카테고리 목록에 해당하는 상품 목록을 가져옵니다.
-	  List<DbProductVO> productVOS = dbShopService.getDbShopList(mainCategories, middleCategories);
+	  List<DbProductVO> productVOS = null;
+	  
+	  boolean mainIsEmpty = (mainCategories == null || mainCategories.isEmpty());
+	  boolean middleIsNotEmpty = (middleCategories != null && !middleCategories.isEmpty());
+	  
+	  if (mainIsEmpty && middleIsNotEmpty) {
+			
+			List<String> middleCategoryNames = dbShopService.getMiddleCategoryNamesByCodes(middleCategories);
+			
+			if (middleCategoryNames != null && !middleCategoryNames.isEmpty()) {
+				productVOS = dbShopService.getProductsByProductNames(middleCategoryNames);
+				
+				model.addAttribute("selectedMiddleName", String.join(", ", middleCategoryNames) + " (제품명 검색)");
+			} 
+			else productVOS = Collections.emptyList();
+		}
+	  else productVOS = dbShopService.getDbShopList(mainCategories, middleCategories);
+	  
 	  model.addAttribute("productVOS", productVOS);
+	  
+	  System.out.println("productVOS" + productVOS);
 	  
 	  return "admin/dbShop/dbShopList";
 	}
@@ -243,7 +264,7 @@ public class DbShopController {
 	@GetMapping("/dbProductList")
 	public String dbProductListGet(Model model,
 			@RequestParam(name = "mainCategory", required = false) String mainCategoryCode,
-			@RequestParam(name = "keyWord", required = false) String keyword
+			@RequestParam(name = "keyword", required = false) String keyword
 			
 		) {
 		List<DbProductVO> vos;
@@ -262,19 +283,6 @@ public class DbShopController {
 		return "dbShop/dbProductList";
 	}
 
-	/*
-	 * @GetMapping("/productSearch") public String dbProductSearchGet(Model model,
-	 * 
-	 * @RequestParam(name = "keyword", defaultValue = "", required = false) String
-	 * keyword ) {
-	 * 
-	 * List<DbProductVO> vos = dbShopService.getProductSearch(keyword);
-	 * 
-	 * model.addAttribute("vos", vos); model.addAttribute("keyword", keyword);
-	 * 
-	 * return "dbShop/dbProductList"; }
-	 */
-	
 	// 상품 상세 정보 출력
 	@GetMapping("/dbProductContent")
 	public String dbProductContentGet(int idx, Model model) {

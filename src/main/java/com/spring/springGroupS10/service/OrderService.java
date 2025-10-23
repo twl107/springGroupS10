@@ -23,5 +23,7 @@ public interface OrderService {
 
 	int setUpdateStatus(String orderId, String orderStatus);
 
+	List<OrderVO> getRecentOrderList(Long memberIdx, int i);
+
 
 }

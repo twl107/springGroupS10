@@ -217,6 +217,16 @@ public class DbShopServiceImpl implements DbShopService {
 		return dbShopDAO.getProductByMainCategory(mainCategoryCode);
 	}
 
+	@Override
+	public List<String> getMiddleCategoryNamesByCodes(List<String> middleCategories) {
+		return dbShopDAO.getMiddleCategoryNamesByCodes(middleCategories);
+	}
+
+	@Override
+	public List<DbProductVO> getProductsByProductNames(List<String> middleCategoryNames) {
+		return dbShopDAO.getProductsByProductNames(middleCategoryNames);
+	}
+
 		
 		
 		

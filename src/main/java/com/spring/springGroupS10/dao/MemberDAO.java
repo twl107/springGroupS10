@@ -8,7 +8,6 @@ import com.spring.springGroupS10.vo.MemberVO;
 
 public interface MemberDAO {
 
-	// 메소드명과 @Param 값, 파라미터 변수명 모두 camelCase로 수정
 	MemberVO getMemberByUserId(@Param("userId") String userId);
 
 	int setMemberJoin(@Param("vo") MemberVO vo);

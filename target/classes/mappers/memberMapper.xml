@@ -2,12 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.springGroupS10.dao.MemberDAO">
 
-	<!-- DB 컬럼명이 camelCase(userId)로 변경되어 수정 -->
 	<select id="getMemberByUserId" resultType="com.spring.springGroupS10.vo.MemberVO">
 		select * from member where userId = #{userId}
 	</select>
 	
-	<!-- DB 컬럼명이 camelCase(nickName)로 변경되어 수정 -->
 	<select id="getMemberByNickName" resultType="com.spring.springGroupS10.vo.MemberVO">
 		select * from member where nickName = #{nickName}
 	</select>
@@ -19,7 +17,6 @@
 	  </if>
 	</select>
 	
-	<!-- DB 컬럼명이 camelCase(deletedAt)로 변경되어 수정 -->
 	<select id="getMemberList" resultType="com.spring.springGroupS10.vo.MemberVO">
 	  select *, timestampdiff(day, deletedAt, now()) as deleteDiff from member
 	  <if test="level != 99">
@@ -42,7 +39,6 @@
 	
 	
 	
-	<!-- DB 컬럼명이 camelCase로 변경되어 수정 -->
 	<insert id="setMemberJoin">
 		insert into member (userId, password, nickName, name, email, tel, birthday, gender, postCode, address1, address2) 
 		values (#{vo.userId}, #{vo.password}, #{vo.nickName}, #{vo.name}, #{vo.email}, #{vo.tel}, #{vo.birthday}, #{vo.gender}, #{vo.postCode}, #{vo.address1}, #{vo.address2})
@@ -52,12 +48,10 @@
 		update member set level = 2 where userId = #{userId}
 	</update>
 	
-	<!-- DB 컬럼명이 camelCase(todayCnt, userId)로 변경되어 수정 -->
 	<update id="setMemberTodayCntClear">
 		update member set todayCnt = 0 where userId = #{userId}
 	</update>
 	
-	<!-- DB 컬럼명이 camelCase로 변경되어 수정 -->
 	<update id="setMemberInforUpdate">
 		update member set visitCnt=visitCnt+1, lastLoginAt=now(), todayCnt=todayCnt+1, point=point+#{point} where userId = #{userId}
 	</update>
@@ -74,7 +68,6 @@
 	
 	
 	
-  <!-- DB 컬럼명이 camelCase(isDeleted, deletedAt)로 변경되어 수정 -->
   <delete id="deleteExpiredMembers">
     delete from member where isDeleted = true and timestampdiff(day, deletedAt, now()) >= 30
   </delete>

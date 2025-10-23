@@ -21,8 +21,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.springGroupS10.common.ProjectProvide;
+import com.spring.springGroupS10.service.CartService;
+import com.spring.springGroupS10.service.InquiryService;
 import com.spring.springGroupS10.service.MemberService;
+import com.spring.springGroupS10.service.OrderService;
+import com.spring.springGroupS10.vo.CartVO;
+import com.spring.springGroupS10.vo.InquiryVO;
 import com.spring.springGroupS10.vo.MemberVO;
+import com.spring.springGroupS10.vo.OrderVO;
 
 @Controller
 @RequestMapping("/member")
@@ -32,10 +38,21 @@ public class MemberController {
 	MemberService memberService;
 	
 	@Autowired
+	OrderService orderService;
+	
+	@Autowired
+	CartService cartService;
+	
+	@Autowired
+	InquiryService inquiryService;
+	
+	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
 	ProjectProvide projectProvide;
+	
+	
 	
 	
 	@GetMapping("/memberLogin")
@@ -111,7 +128,7 @@ public class MemberController {
 			}
 			
 			if(vo.getLevel() < 3) {
-				int point = vo.getTodayCnt() < 5 ? 10 : 0;
+				int point = vo.getTodayCnt() < 6 ? 10 : 0;
 				memberService.setMemberInforUpdate(userId, point);
 			}
 			else memberService.setMemberInforUpdate(userId, 0);
@@ -182,8 +199,20 @@ public class MemberController {
 	public String memberMainGet(Model model, HttpSession session) {
 		String userId = (String) session.getAttribute("sUserId");
 		MemberVO vo = memberService.getMemberByUserId(userId);
-		
 		model.addAttribute("memberVO", vo);
+		
+		// 최근 주문 내역
+		Long memberIdx = vo.getIdx();
+		List<OrderVO> myOrderList = orderService.getRecentOrderList(memberIdx, 4);
+		model.addAttribute("myOrderList", myOrderList);
+		
+		// 장바구니 내역
+		List<CartVO> myCartList = cartService.getRecentCartList(memberIdx, 4);
+		model.addAttribute("myCartList", myCartList);
+		
+		// 문의 내역
+		//List<InquiryVO> myInquiryList = inquiryService.getRecntInquiryList(userId, 4);
+		//model.addAttribute("myInquiryList", myInquiryList);
 		
 		return "/member/memberMain";
 	}
@@ -330,8 +359,9 @@ public class MemberController {
   
    /* 비밀번호 재설정 처리 */
 	@PostMapping("/memberPwdReset")
-  public String resetPasswordPost(String userId, String newPassword, String newPasswordCheck, 
-                                  HttpSession session, HttpServletRequest request) {
+  public String resetPasswordPost(String userId, String newPassword, String newPasswordCheck,
+  			HttpSession session, HttpServletRequest request
+			) {
     
     String pwResetUserId = (String) session.getAttribute("pwResetUserId");
     

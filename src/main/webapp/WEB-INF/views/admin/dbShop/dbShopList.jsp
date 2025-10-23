@@ -95,7 +95,7 @@
         </div>
       </div>
       <c:set var="cnt" value="${cnt+1}"/>
-      <c:if test="${cnt % 3 == 0}">
+      <c:if test="${cnt % 4 == 0}">
         </div>
         <div class="row mt-5">
       </c:if>

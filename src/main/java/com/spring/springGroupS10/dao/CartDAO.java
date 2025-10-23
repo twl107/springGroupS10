@@ -22,4 +22,6 @@ public interface CartDAO {
 
 	List<CartVO> getCartListByIdxs(@Param("list") List<Long> cartIdxs);
 
+	List<CartVO> getRecentCartList(@Param("memberIdx") Long memberIdx, @Param("i") int i);
+
 }

@@ -42,7 +42,16 @@
 		</if>
 	</select>
 
-
+	<select id="getRecentOrderList" resultType="com.spring.springGroupS10.vo.OrderVO">
+		SELECT 
+	    o.orderId, o.orderDate, o.totalPrice, o.orderStatus,
+	    (SELECT p.productName FROM orderDetails od JOIN dbProduct p ON od.productIdx = p.idx WHERE od.orderIdx = o.idx LIMIT 1) AS mainProductName,
+	    (SELECT COUNT(*) FROM orderDetails od WHERE od.orderIdx = o.idx) AS itemCount
+		FROM orders o
+		WHERE o.memberIdx = #{memberIdx}
+		ORDER BY o.orderDate DESC
+		LIMIT #{i};
+	</select>
 
 
 
