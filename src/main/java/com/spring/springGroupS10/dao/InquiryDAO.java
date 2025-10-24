@@ -26,5 +26,7 @@ public interface InquiryDAO {
 
 	int getTotRecCntAdmin(@Param("part") String part);
 
+	List<InquiryVO> getRecntInquiryList(@Param("userId") String userId, @Param("i") int i);
+
 
 }

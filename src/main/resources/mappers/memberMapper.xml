@@ -64,6 +64,11 @@
   	update member set password = #{encodedPassword} where userId = #{userId}
   </update>	
 	
+	<update id="updateMemberDelete">
+		update member set isDeleted = true, deletedAt = now() where userId = #{userId};
+	</update>
+	
+	
 	
 	
 	

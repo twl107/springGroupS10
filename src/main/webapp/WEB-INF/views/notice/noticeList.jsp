@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <c:set var="ctp" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
@@ -44,14 +45,32 @@
             <a href="${ctp}/notice/noticeContent?idx=${vo.idx}&pag=${pageVO.pag}" class="text-decoration-none text-dark">${vo.title}</a>
           </td>
           <td>${vo.nickName}</td>
-          <td>${vo.WDate}</td>
+          <td>${fn:substring(vo.WDate,0,10)}</td>
           <td>${vo.viewCnt}</td>
         </tr>
       </c:forEach>
     </tbody>
   </table>
-
-  <!-- 페이징 블록 (생략) -->
+  
+  <div class="d-flex justify-content-center mt-4">
+    <ul class="pagination">
+      <c:if test="${pageVO.pag > 1}">
+        <li class="page-item"><a class="page-link" href="${ctp}/notice/noticeList?pag=1&pageSize=${pageVO.pageSize}">처음</a></li>
+      </c:if>
+      <c:if test="${pageVO.curBlock > 0}">
+        <li class="page-item"><a class="page-link" href="${ctp}/notice/noticeList?pag=${(pageVO.curBlock-1) * pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">이전</a></li>
+      </c:if>
+      
+      <c:forEach var="i" begin="${(pageVO.curBlock * pageVO.blockSize) + 1}" end="${(pageVO.curBlock * pageVO.blockSize) + pageVO.blockSize}" varStatus="st"><c:if test="${i <= pageVO.totPage}"><li class="page-item ${i == pageVO.pag ? 'active' : ''}"><a class="page-link" href="${ctp}/notice/noticeList?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li></c:if></c:forEach>
+      
+      <c:if test="${pageVO.curBlock < pageVO.lastBlock}">
+        <li class="page-item"><a class="page-link" href="${ctp}/notice/noticeList?pag=${(pageVO.curBlock+1) * pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">다음</a></li>
+      </c:if>
+      <c:if test="${pageVO.pag < pageVO.totPage}">
+        <li class="page-item"><a class="page-link" href="${ctp}/notice/noticeList?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">마지막</a></li>
+      </c:if>
+    </ul>
+  </div>
 
 </div>
 

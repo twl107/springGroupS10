@@ -32,6 +32,8 @@ public interface MemberDAO {
 
 	List<String> findUserIdByEmail(@Param("email") String email);
 
+	int updateMemberDelete(@Param("userId") String userId);
+
 
 	
 	

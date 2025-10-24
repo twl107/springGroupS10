@@ -2,7 +2,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<% pageContext.setAttribute("newLine", "\n"); %>
 <c:set var="ctp" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
@@ -18,17 +17,53 @@
     }
   </script>
   <style>
-    .category-box { border: 1px solid #ddd; padding: 15px; border-radius: 5px; }
+    a { text-decoration: none; }
     
-    a  {text-decoration: none}
+    .category-box { 
+      border: 1px solid #ddd; 
+      padding: 15px; 
+      border-radius: 5px; 
+    }
+    
+    .list-title-highlight {
+      color: brown;
+      font-weight: bold;
+    }
+    
+    .product-item a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .product-item img {
+      width: 200px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+    .product-name {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #333;
+    }
+    .product-price {
+      font-size: 0.9rem;
+      color: #fd7e14;
+      font-weight: bold;
+    }
+    .product-detail {
+      font-size: 0.85rem;
+      color: #6c757d;
+    }
   </style>
 </head>
 <body>
-<p><br/></p>
-<div class="container">
+<div class="container mt-4">
   <form method="get" action="${ctp}/dbShop/dbShopList" id="filterForm">
     <div class="category-box mb-4">
-      <h5>대분류 <a href="${ctp}/dbShop/dbShopList" class="btn btn-sm btn-outline-secondary ms-2">전체보기</a></h5>
+      <h5>
+        대분류 
+        <a href="${ctp}/dbShop/dbShopList" class="btn btn-sm btn-outline-secondary ms-2">전체보기</a>
+      </h5>
       <div class="d-flex flex-wrap">
         <c:forEach var="main" items="${mainCategoryVOS}">
           <div class="form-check me-3">
@@ -62,43 +97,56 @@
   </form>
   
   <hr/>
+  
   <div class="row">
     <div class="col">
       <h4>상품 리스트 : 
-        <font color="brown"><b>
+        <span class="list-title-highlight">
           <c:choose>
             <c:when test="${not empty selectedMiddleName}">${selectedMiddleName}</c:when>
             <c:when test="${not empty selectedMainName}">${selectedMainName}</c:when>
             <c:otherwise>전체 상품</c:otherwise>
           </c:choose>
-        </b></font>
+        </span>
       </h4>
     </div>
     <div class="col text-end">
       <button type="button" class="btn btn-primary" onclick="location.href='${ctp}/dbShop/dbProduct';">상품등록</button>
     </div>
   </div>
+  
   <hr/>
   
-  <c:set var="cnt" value="0"/>
+  <c:if test="${fn:length(productVOS) == 0}">
+    <h3 class="text-center text-muted my-5">표시할 상품이 없습니다.</h3>
+  </c:if>
+  
   <div class="row mt-4">
-    <c:if test="${fn:length(productVOS) == 0}"><h3 class="text-center text-muted">표시할 상품이 없습니다.</h3></c:if>
+    <c:set var="cnt" value="0"/>
     <c:forEach var="vo" items="${productVOS}">
+      
+      <c:if test="${cnt > 0 && cnt % 3 == 0}">
+        </div> <div class="row mt-4">
+      </c:if>
+      
       <div class="col-md-4">
-        <div style="text-align:center" class="mt-1">
+        <div class="product-item text-center mb-4">
           <a href="${ctp}/dbShop/dbShopContent?idx=${vo.idx}">
-            <img src="${ctp}/resources/data/dbShop/product/${vo.FSName}" width="200px" height="180px"/>
-            <div><font size="2">${vo.productName}</font></div>
-            <div><font size="2" color="orange"><fmt:formatNumber value="${vo.mainPrice}" pattern="#,###"/>원</font></div>
-            <div><font size="2">${vo.detail}</font></div>
+            <img src="${ctp}/resources/data/dbShop/product/${vo.FSName}" class="mb-2" alt="${vo.productName}"/>
+            <div class="product-name">
+            	${vo.productName}
+            </div>
+            <div class="product-price">
+              <fmt:formatNumber value="${vo.mainPrice}" pattern="#,###"/>원
+            </div>
+            <div class="product-detail">
+              ${fn:substring(vo.detail, 0, 20)}<c:if test="${fn:length(vo.detail) > 20}">...</c:if>
+            </div>
           </a>
         </div>
       </div>
+      
       <c:set var="cnt" value="${cnt+1}"/>
-      <c:if test="${cnt % 4 == 0}">
-        </div>
-        <div class="row mt-5">
-      </c:if>
     </c:forEach>
   </div>
   <hr/>

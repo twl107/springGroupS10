@@ -27,6 +27,9 @@
     select count(*) from inquiry <if test="part != '전체'"> where reply = #{part} </if>
   </select>
 
+	<select id="getRecntInquiryList" resultType="com.spring.springGroupS10.vo.InquiryVO">
+		select * from inquiry where userId = #{userId} order by wDate desc limit #{i};
+	</select>
 
 
 

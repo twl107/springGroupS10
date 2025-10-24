@@ -183,6 +183,18 @@ public class MessageController {
 			model.addAttribute("message", "잘못된 접근입니다.(optionNotFound)");
 			model.addAttribute("url", "/dbShop/dbProductList");
 		}
+		else if(msgFlag.equals("userDeleteOk")) {
+			model.addAttribute("message", "회원 탈퇴가 정상적으로 처리되었습니다. 이용해주셔서 감사합니다.");
+			model.addAttribute("url", "/");
+		}
+		else if(msgFlag.equals("userDeleteNo")) {
+			model.addAttribute("message", "비밀번호가 일치하지 않습니다. 다시 확인해주세요.");
+			model.addAttribute("url", "/member/userDeletePwdCheck");
+		}
+		else if(msgFlag.equals("confirmRecovery")) {
+			model.addAttribute("message", "...");
+			model.addAttribute("url", "/member/userDeletePwdCheck");
+		}
 		
 		
 		

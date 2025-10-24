@@ -3,6 +3,7 @@ package com.spring.springGroupS10.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.spring.springGroupS10.dao.MemberDAO;
@@ -13,6 +14,9 @@ public class MemberServiceImpl implements MemberService {
 
 	@Autowired
 	MemberDAO memberDAO;
+	
+	@Autowired
+	BCryptPasswordEncoder passwordEncoder;
 	
 	@Override
 	public MemberVO getMemberByUserId(String userId) {
@@ -73,6 +77,19 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<String> findUserIdByEmail(String email) {
 		return memberDAO.findUserIdByEmail(email);
+	}
+
+	@Override
+	public boolean userDelete(String userId, String password) {
+		
+		MemberVO member = memberDAO.getMemberByUserId(userId);
+		
+		if(member != null && passwordEncoder.matches(password, member.getPassword())) {
+			int result = memberDAO.updateMemberDelete(userId);
+			
+			return result > 0;
+		}
+		else return false;
 	}
 
 	

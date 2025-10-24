@@ -7,6 +7,7 @@ import com.spring.springGroupS10.service.AdminService;
 import com.spring.springGroupS10.service.InquiryService;
 import com.spring.springGroupS10.service.MemberService;
 import com.spring.springGroupS10.service.NoticeService;
+import com.spring.springGroupS10.service.OrderService;
 import com.spring.springGroupS10.service.PdsService;
 import com.spring.springGroupS10.vo.PageVO;
 
@@ -28,10 +29,13 @@ public class Pagination {
 	@Autowired
 	InquiryService inquiryService;
 	
+	@Autowired
+	OrderService orderService;
+	
 	
   public PageVO pagination(PageVO pageVO) {
     int pag = pageVO.getPag() == 0 ? 1 : pageVO.getPag();
-    int pageSize = pageVO.getPageSize() == 0 ? 5 : pageVO.getPageSize();
+    int pageSize = pageVO.getPageSize() == 0 ? 15 : pageVO.getPageSize();
     String part = pageVO.getPart() == null ? "" : pageVO.getPart();
     
     int totRecCnt = 0;
@@ -50,6 +54,25 @@ public class Pagination {
     }
     else if(pageVO.getSection().equals("adInquiry")) {
     	totRecCnt = inquiryService.getTotRecCntAdmin(part);
+    }
+    else if(pageVO.getSection().equals("adminOrder")) {
+    	String[] searchData = pageVO.getSearchString().split("@");
+    	
+    	String startJumun = searchData[0];
+    	String endJumun = searchData[1];
+    	String orderStatus = searchData[2];
+    	
+    	totRecCnt = orderService.getTotRecCntAdminOrder(startJumun, endJumun, orderStatus);
+    }
+    else if(pageVO.getSection().equals("myOrders")) {
+      String[] searchData = pageVO.getSearchString().split("@");
+      
+      int memberIdx = Integer.parseInt(searchData[0]);
+      String startJumun = searchData[1];
+      String endJumun = searchData[2];
+      String orderStatus = searchData[3];
+
+      totRecCnt = orderService.getMyOrdersTotRecCnt(memberIdx, startJumun, endJumun, orderStatus);
     }
     
     

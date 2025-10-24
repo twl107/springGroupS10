@@ -1,7 +1,9 @@
 package com.spring.springGroupS10.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.spring.springGroupS10.common.Pagination;
 import com.spring.springGroupS10.service.CartService;
 import com.spring.springGroupS10.service.DbShopService;
 import com.spring.springGroupS10.service.MemberService;
@@ -28,6 +31,7 @@ import com.spring.springGroupS10.vo.DbProductVO;
 import com.spring.springGroupS10.vo.MemberVO;
 import com.spring.springGroupS10.vo.OrderDetailVO;
 import com.spring.springGroupS10.vo.OrderVO;
+import com.spring.springGroupS10.vo.PageVO;
 
 @Controller
 @RequestMapping("/dbShop")
@@ -44,6 +48,9 @@ public class DbShopController {
 	
 	@Autowired
 	OrderService orderService;
+	
+	@Autowired
+	Pagination pagination;
 
 	
 	// 상품 카테고리 등록폼/리스트 출력
@@ -471,13 +478,40 @@ public class DbShopController {
 	}
 	
 	@GetMapping("/myOrders")
-	public String myOrdersGet(HttpSession session, Model model) {
-		String sUserId = (String) session.getAttribute("sUserId");
-		if (sUserId == null) return "redirect:/member/memberLogin";
+	public String myOrdersGet(HttpSession session, Model model, PageVO pageVO,
+			@RequestParam(name = "orderStatus", defaultValue = "전체", required = false) String orderStatus,
+			@RequestParam(name = "startJumun", defaultValue = "", required = false) String startJumun,
+			@RequestParam(name = "endJumun", defaultValue = "", required = false) String endJumun
+		) {
 		
+		String strNow = "";
+		if(startJumun.equals("")) {
+			Date now = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			strNow = sdf.format(now);
+			
+			startJumun = strNow;
+			endJumun = strNow;
+		}
+		
+		String sUserId = (String) session.getAttribute("sUserId");
 		long memberIdx = memberService.getMemberByUserId(sUserId).getIdx();
-		List<OrderVO> orderList = orderService.getOrderListByMemberIdx(memberIdx);
-		model.addAttribute("orderList", orderList);
+		
+		pageVO.setPageSize(5);
+		pageVO.setSection("myOrders");
+		
+		String strOrderStatus = memberIdx + "@" + startJumun + "@" + endJumun + "@" + orderStatus;
+		pageVO.setSearchString(strOrderStatus);
+		
+		pageVO = pagination.pagination(pageVO);
+		
+		List<OrderVO> orderList = orderService.getMyOrderList(pageVO.getStartIndexNo(), pageVO.getPageSize(), memberIdx, startJumun, endJumun, orderStatus);
+
+		model.addAttribute("startJumun", startJumun);
+    model.addAttribute("endJumun", endJumun);
+    model.addAttribute("orderStatus", orderStatus);
+    model.addAttribute("orderList", orderList);
+    model.addAttribute("pageVO", pageVO);
 		
 		return "dbShop/myOrders";
 	}

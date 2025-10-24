@@ -3,13 +3,12 @@
 <mapper namespace="com.spring.springGroupS10.dao.PdsDAO">
 	
 	<select id="getTotRecCnt" resultType="int">
-		select ifnull(count(*), 0) from pds <if test='part != ""'> where part = #{part} </if>
+		select ifnull(count(*), 0) from pds <if test='part != null and part != ""'> where part = #{part} </if>
 	</select>
 	
 	<select id="getPdsList" resultType="com.spring.springGroupS10.vo.PdsVO">
-		select p.*, m.nickName 
-		from pds p
-		join member m on p.memberIdx = m.idx
+		select p.*, m.nickName from pds p join member m on p.memberIdx = m.idx
+		<if test='part != null and part != ""'> where p.part = #{part} </if>
 		order by p.idx desc
 		limit #{startIndexNo}, #{pageSize};
 	</select>

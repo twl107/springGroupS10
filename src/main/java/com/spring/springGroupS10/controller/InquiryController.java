@@ -66,15 +66,13 @@ public class InquiryController {
 	}
 	
 	@GetMapping("/inquiryContent")
-	public String inquiryContentGet(Model model, int idx,
-			@RequestParam(name = "pag", defaultValue = "1", required = false) int pag
-		) {
+	public String inquiryContentGet(Model model, int idx, PageVO pageVO) {
 		InquiryVO vo = inquiryService.getInquiryContent(idx);
 		InquiryReplyVO reVO = inquiryService.getInquiryReply(idx);
 		
 		model.addAttribute("vo", vo);
 		model.addAttribute("reVO", reVO);
-		model.addAttribute("pag", pag);
+		model.addAttribute("pageVO", pageVO);
 		
 		return "inquiry/inquiryContent";
 	}

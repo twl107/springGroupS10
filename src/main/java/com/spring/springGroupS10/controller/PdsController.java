@@ -94,18 +94,16 @@ public class PdsController {
 	}
 	
 	@GetMapping("/pdsContent")
-	public String pdsContentGet(Model model,
+	public String pdsContentGet(Model model, PageVO pageVO,
 			@RequestParam(name = "idx", defaultValue = "0") int idx
 		) {
 		
-		// 1. idx로 상세 정보를 DB에서 가져옵니다.
 		PdsVO vo = pdsService.getPdsContent(idx);
 		
 		if(vo != null) {
 			vo.setFormattedFSize(projectProvide.formatFileSize(vo.getFSize()));
 		}
 		
-		// 2. '/'로 묶인 파일명들을 분리해서 List로 만듦
 		if(vo != null && vo.getFName() != null) {
 			String[] fNames = vo.getFName().split("/");
 			String[] fSNames = vo.getFSName().split("/");
@@ -114,10 +112,11 @@ public class PdsController {
 		}
 		
 		model.addAttribute("vo", vo);
+		model.addAttribute("pageVO", pageVO);
+		
 		return "pds/pdsContent";
 	}
 	
-	// 파일 개별 다운로드
 	@GetMapping("/pdsDownload")
 	public void pdsDownloadGet(HttpServletRequest request, HttpServletResponse response, 
 			@RequestParam("idx") int idx,
@@ -191,18 +190,14 @@ public class PdsController {
 			HttpServletRequest request
 		) {
 		
-		// 1. 기존 파일 중 삭제를 선택한 파일들을 서버에서 먼저 삭제
 		if(deleteFiles != null) {
 			pdsService.deletedPdsFiles(deleteFiles, request);
 		}
 		
-		// 2. 새로운 파일을 업로드하고, 서버에 저장된 파일명을 받아옴
 		Map<String, String> newFilesMap = pdsService.uploadNewPdsFiles(newFiles, request);
 		
-		// 3. 기존에 남아있는 파일과 새로 업로드된 파일 정보를 합쳐서 VO에 업데이트
 		pdsService.updatePdsVO(vo, deleteFiles, newFilesMap, request);
 		
-		// 4. 최종적으로 DB에 업데이트
 		int res = pdsService.pdsUpdate(vo);
 		
 		if(res != 0) return "redirect:/message/pdsUpdateOk?idx=" + vo.getIdx();

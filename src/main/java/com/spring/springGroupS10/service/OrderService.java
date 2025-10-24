@@ -11,8 +11,6 @@ public interface OrderService {
 
 	OrderVO getOrderByOrderId(String orderId);
 
-	List<OrderVO> getOrderListByMemberIdx(long memberIdx);
-
 	OrderVO getOrderByOrderIdAndMember(String orderId, long memberIdx);
 
 	List<OrderDetailVO> getOrderDetailItems(long orderIdx);
@@ -24,6 +22,13 @@ public interface OrderService {
 	int setUpdateStatus(String orderId, String orderStatus);
 
 	List<OrderVO> getRecentOrderList(Long memberIdx, int i);
+
+	int getTotRecCntAdminOrder(String startJumun, String endJumun, String orderStatus);
+
+	List<OrderVO> getMyOrderList(int startIndexNo, int pageSize, long memberIdx, String startJumun, String endJumun,
+			String orderStatus);
+
+	int getMyOrdersTotRecCnt(int memberIdx, String startJumun, String endJumun, String orderStatus);
 
 
 }

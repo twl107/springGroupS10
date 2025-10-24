@@ -30,6 +30,8 @@ public interface MemberService {
 
 	List<String> findUserIdByEmail(String email);
 
+	boolean userDelete(String userId, String password);
+
 
 }
 

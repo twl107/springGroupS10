@@ -6,10 +6,6 @@
 		SELECT * FROM orders WHERE orderId = #{orderId}
 	</select>
 	
-	<select id="getOrderListByMemberIdx" resultType="com.spring.springGroupS10.vo.OrderVO">
-		SELECT * FROM orders WHERE memberIdx = #{memberIdx} ORDER BY orderDate DESC
-	</select>
-	
 	<select id="getOrderByOrderIdAndMember" resultType="com.spring.springGroupS10.vo.OrderVO">
 		SELECT * FROM orders WHERE orderId = #{orderId} AND memberIdx = #{memberIdx}
 	</select>
@@ -51,6 +47,55 @@
 		WHERE o.memberIdx = #{memberIdx}
 		ORDER BY o.orderDate DESC
 		LIMIT #{i};
+	</select>
+
+	<select id="getTotRecCntAdminOrder" resultType="int">
+		<if test="orderStatus == '전체'">
+			select count(*) from orders <![CDATA[ where date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) ]]>
+		</if>
+		<if test="orderStatus != '전체'">
+        select count(*) from orders <![CDATA[ where date(orderDate) >= date(#{startJumun}) and date(orderDate) <= date(#{endJumun}) and orderStatus=#{orderStatus} ]]>
+    </if>
+	</select>
+
+	<select id="getMyOrderList" resultType="com.spring.springGroupS10.vo.OrderVO">
+	  SELECT 
+	    o.*, 
+	    (SELECT 
+	       CASE 
+	         WHEN COUNT(od.idx) = 1 THEN p.productName
+	         ELSE CONCAT(p.productName, ' 외 ', COUNT(od.idx) - 1, '건') 
+	       END
+	     FROM orderDetails od  
+	     JOIN dbProduct p ON od.productIdx = p.idx
+	     WHERE od.orderIdx = o.idx 
+	     GROUP BY od.orderIdx
+	     ORDER BY od.idx ASC 
+	     LIMIT 1
+	     ) AS mainProductName
+	  FROM orders o
+	  WHERE o.memberIdx = #{memberIdx}
+	  <![CDATA[ 
+	    and date(o.orderDate) >= date(#{startJumun}) 
+	    and date(o.orderDate) <= date(#{endJumun}) 
+	  ]]>
+	  <if test="orderStatus != '전체'">
+	    and o.orderStatus = #{orderStatus}
+	  </if>
+	  ORDER BY o.orderDate DESC
+	  LIMIT #{startIndexNo}, #{pageSize};
+	</select>
+
+	<select id="getMyOrdersTotRecCnt" resultType="int">
+	  select count(*) from orders
+	  where memberIdx = #{memberIdx}
+	  <![CDATA[ 
+	    and date(orderDate) >= date(#{startJumun}) 
+	    and date(orderDate) <= date(#{endJumun}) 
+	  ]]>
+	  <if test="orderStatus != '전체'">
+	    and orderStatus = #{orderStatus}
+	  </if>
 	</select>
 
 

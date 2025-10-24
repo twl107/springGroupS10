@@ -47,11 +47,6 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public List<OrderVO> getOrderListByMemberIdx(long memberIdx) {
-		return orderDAO.getOrderListByMemberIdx(memberIdx);
-	}
-
-	@Override
 	public OrderVO getOrderByOrderIdAndMember(String orderId, long memberIdx) {
 		return orderDAO.getOrderByOrderIdAndMember(orderId, memberIdx);
 	}
@@ -79,6 +74,23 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public List<OrderVO> getRecentOrderList(Long memberIdx, int i) {
 		return orderDAO.getRecentOrderList(memberIdx, i);
+	}
+
+	@Override
+	public int getTotRecCntAdminOrder(String startJumun, String endJumun, String orderStatus) {
+		return orderDAO.getTotRecCntAdminOrder(startJumun, endJumun, orderStatus);
+	}
+
+	@Override
+	public List<OrderVO> getMyOrderList(int startIndexNo, int pageSize, long memberIdx, String startJumun,
+			String endJumun, String orderStatus) {
+		return orderDAO.getMyOrderList(startIndexNo, pageSize, memberIdx, startJumun,
+				endJumun, orderStatus);
+	}
+
+	@Override
+	public int getMyOrdersTotRecCnt(int memberIdx, String startJumun, String endJumun, String orderStatus) {
+		return orderDAO.getMyOrdersTotRecCnt(memberIdx, startJumun, endJumun, orderStatus);
 	}
 
 	

@@ -107,6 +107,11 @@ public class InquiryServiceImpl implements InquiryService {
 	public int getTotRecCntAdmin(String part) {
 		return inquiryDAO.getTotRecCntAdmin(part);
 	}
+
+	@Override
+	public List<InquiryVO> getRecntInquiryList(String userId, int i) {
+		return inquiryDAO.getRecntInquiryList(userId, i);
+	}
 	
 
 	

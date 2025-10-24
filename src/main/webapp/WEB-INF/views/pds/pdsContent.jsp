@@ -13,23 +13,21 @@
 	<script>
 	  'use strict';
 	  
-	  // 다운로드 수 증가
 	  function downNumCheck(idx) {
-		  $.ajax({
-				url 	: '${ctp}/pds/pdsDownNumCheck',
-				type	: 'post',
-				data	: {idx : idx},
-				success	: () => location.reload(),
-				error	: () => alert('전송오류')
-		  });
+	    $.ajax({
+	        url: '${ctp}/pds/pdsDownNumCheck',
+	        type: 'post',
+	        data: {idx : idx},
+	        success: () => console.log("다운로드 카운트 증가 완료"),
+	        error: () => alert('전송오류')
+	    });
+	    return true; 
 	  }
 	  
-	  
-	  // 게시글 삭제 함수
 	  function pdsDelete() {
 	    let ans = confirm("현재 게시글을 삭제하시겠습니까?");
 	    if (ans) {
-        location.href = '${ctp}/pds/pdsDelete?idx=${vo.idx}';
+	      location.href = '${ctp}/pds/pdsDelete?idx=${vo.idx}';
 	    }
 	  }
 	</script>
@@ -38,61 +36,81 @@
 <jsp:include page="/WEB-INF/views/include/header.jsp" />
 <jsp:include page="/WEB-INF/views/include/nav.jsp" />
 
-<div class="container my-4">
-	<h2 class="text-center mb-4">자료실 상세 내용</h2>
-	
-	<table class="table table-bordered">
-	  <tr>
-	    <th style="width:15%;" class="text-center table-secondary">글 제목</th>
-	    <td colspan="3">${vo.title}</td>
-	  </tr>
-	  <tr>
-	    <th class="text-center table-secondary">작성자</th>
-	    <td style="width:35%;">${vo.nickName}</td>
-	    <th style="width:15%;" class="text-center table-secondary">작성일</th>
-	    <td style="width:35%;"><fmt:formatDate value="${vo.createdAt}" pattern="yyyy-MM-dd HH:mm"/></td>
-	  </tr>
-	  <tr>
-      <th class="text-center table-secondary">다운로드 횟수</th>
-      <td>${vo.downNum}</td>
-      <th class="text-center table-secondary">총 파일 크기</th>
-      <td>${vo.formattedFSize}</td>
-	  </tr>
-	  <tr>
-      <th class="text-center table-secondary">공개 여부</th>
-      <td colspan="3">${vo.openSw}</td>
-	  </tr>
-	  <tr>
-	    <th class="text-center table-secondary">첨부 파일</th>
-	    <td colspan="3">
-	      <c:if test="${empty fNames}">- 첨부 파일 없음 -</c:if>
-	      <c:if test="${!empty fNames}">
-          <c:forEach var="fName" items="${fNames}" varStatus="st">
-            <p class="my-1">
-            	<a href="${ctp}/pds/pdsDownload?idx=${vo.idx}&fName=${fName}&fSName=${fSNames[st.index]}" onclick="downNumCheck(${vo.idx})">${fName}</a>
-            </p>
-          </c:forEach>
-	      </c:if>
-	    </td>
-	  </tr>
-	  <tr>
-	    <td colspan="4" style="height:200px;" class="p-3">
-	      <%-- JSTL의 c:out을 사용하면 HTML 태그가 그대로 출력됩니다. 만약 에디터를 사용했다면 vo.content를 그대로 출력해야 합니다. --%>
-	      ${vo.content.replace("<p>", "").replace("</p>", "<br/>")}
-	    </td>
-	  </tr>
-	</table>
-	
-	<div class="text-center">
-	  <button type="button" class="btn btn-secondary" onclick="location.href='${ctp}/pds/pdsList';">목록으로</button>
-	  
-	  <%-- 로그인한 사용자가 글 작성자이거나, 관리자(예: level 0)일 경우에만 수정/삭제 버튼을 보여줍니다. --%>
-	  <c:if test="${sMemberIdx == vo.memberIdx || sLevel == 0}">
-	    <button type="button" class="btn btn-primary" onclick="location.href='${ctp}/pds/pdsUpdate?idx=${vo.idx}';">수정</button>
-	    <button type="button" class="btn btn-danger" onclick="pdsDelete()">삭제</button>
-	  </c:if>
-	</div>
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+          <h2 class="card-title fw-bold border-bottom p-3 mb-4 bg-light rounded">${vo.title}</h2>
+          
+          <div class="d-flex justify-content-between align-items-center text-muted small mb-2">
+            <div>
+              <span class="fw-bold">작성자:</span>
+              <span>${vo.nickName}</span>
+            </div>
+            <div>
+              <span class="me-3">
+                <span class="fw-bold">작성일:</span>
+                <span><fmt:formatDate value="${vo.createdAt}" pattern="yyyy-MM-dd HH:mm"/></span>
+              </span>
+              <span>
+                <span class="fw-bold">공개여부:</span>
+                <span>${vo.openSw}</span>
+              </span>
+            </div>
+          </div>
+          
+          <div class="d-flex justify-content-between align-items-center text-muted small mb-4">
+            <div>
+              <span class="fw-bold">다운로드:</span>
+              <span>${vo.downNum}</span>
+            </div>
+            <div>
+              <span>
+                <span class="fw-bold">파일 크기:</span>
+                <span>${vo.formattedFSize}</span>
+              </span>
+            </div>
+          </div>
+          
+          <div class="border rounded p-3 mb-4">
+            <h6 class="mb-3">첨부 파일</h6>
+            <c:if test="${empty fNames}">- 첨부 파일 없음 -</c:if>
+            <c:if test="${!empty fNames}">
+              <ul class="list-unstyled mb-0">
+                <c:forEach var="fName" items="${fNames}" varStatus="st">
+                  <li class="my-1">
+                    <i class="bi bi-download me-2"></i>
+                    <a href="${ctp}/pds/pdsDownload?idx=${vo.idx}&fName=${fName}&fSName=${fSNames[st.index]}" 
+                       onclick="return downNumCheck(${vo.idx})">${fName}</a>
+                  </li>
+                </c:forEach>
+              </ul>
+            </c:if>
+          </div>
+          
+          <div class="p-3" style="min-height:200px; line-height: 1.8;">
+            ${vo.content.replace("<p>", "").replace("</p>", "<br/>")}
+          </div>
+        </div>
+        
+        <div class="card-footer bg-transparent border-0 pt-4 p-4 p-md-5">
+          <div class="d-flex justify-content-between">
+            <a href="${ctp}/pds/pdsList?pag=${pageVO.pag}&pageSize=${pageVO.pageSize}&part=${vo.part}" class="btn btn-secondary">목록으로</a>
+            
+            <c:if test="${sMemberIdx == vo.memberIdx || sLevel == 0}">
+              <div>
+                <a href="${ctp}/pds/pdsUpdate?idx=${vo.idx}" class="btn btn-info">수정</a>
+                <button type="button" class="btn btn-danger" onclick="pdsDelete()">삭제</button>
+              </div>
+            </c:if>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />
 </body>
 </html>

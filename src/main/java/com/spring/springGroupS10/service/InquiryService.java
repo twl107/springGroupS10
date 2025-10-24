@@ -27,6 +27,7 @@ public interface InquiryService {
 
 	int getTotRecCntAdmin(String part);
 
-	//List<InquiryVO> getRecntInquiryList(String userId, int i);
+	List<InquiryVO> getRecntInquiryList(String userId, int i);
+
 
 }

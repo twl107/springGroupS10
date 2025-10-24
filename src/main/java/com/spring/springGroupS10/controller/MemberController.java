@@ -70,7 +70,6 @@ public class MemberController {
 		return "/member/memberLogin";
 	}
 	
-	// 일반 로그인 처리
 	@PostMapping("/memberLogin")
 	public String memberLoginPost(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(name="userId", defaultValue="", required = false) String userId,
@@ -84,7 +83,7 @@ public class MemberController {
 		if(vo != null &&  passwordEncoder.matches(password, vo.getPassword())) {
 			
 			if(vo.isDeleted()) {
-				return "redirect:/message/loginDelError";
+				return "redirect:/message/confirmRecovery?userId=" + userId;
 			}
 			
 			String strLevel = "";
@@ -211,8 +210,10 @@ public class MemberController {
 		model.addAttribute("myCartList", myCartList);
 		
 		// 문의 내역
-		//List<InquiryVO> myInquiryList = inquiryService.getRecntInquiryList(userId, 4);
-		//model.addAttribute("myInquiryList", myInquiryList);
+		List<InquiryVO> myInquiryList = inquiryService.getRecntInquiryList(userId, 4);
+		model.addAttribute("myInquiryList", myInquiryList);
+		
+		System.out.println("myInquiryList : " + myInquiryList);
 		
 		return "/member/memberMain";
 	}
@@ -383,10 +384,32 @@ public class MemberController {
     return "redirect:/message/pwdMathOk";
   }
 	
+	@GetMapping("/userDelete")
+	public String userDeleteGet() {
+		return "member/userDeletePwdCheck";
+	}
 	
+	@PostMapping("/userDelete")
+	public String userDeletePost(Model model, HttpSession session, @RequestParam("password") String password) {
+		
+		String userId = (String) session.getAttribute("sUserId");
+		
+		boolean userDeleteOk = memberService.userDelete(userId, password);
+		
+		if(userDeleteOk) {
+			session.invalidate();
+			return "redirect:/message/userDeleteOk";
+		}
+		else {
+			return "redirect:/message/userDeleteNo";
+		}
+	}
 	
-	
-	
+	@GetMapping("/memberDeleteRecovery")
+	public String memberDeleteRecoveryGet(Model model, @RequestParam("userId") String userId) {
+		model.addAttribute("userId", userId);
+		return "member/memberDeleteRecovery";
+	}
 	
 	
 	
