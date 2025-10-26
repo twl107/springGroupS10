@@ -9,7 +9,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
-	<title>마이페이지</title>
+	<title>TWAUDIO</title>
 	<script>
 		'use strict';
 		
@@ -63,7 +63,7 @@
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="${ctp}/member/memberPwdUpdate">
+                <a class="dropdown-item" href="${ctp}/member/memberPwdCheck">
                   <i class="bi bi-lock-fill"></i> 비밀번호 변경
                 </a>
               </li>

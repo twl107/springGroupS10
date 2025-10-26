@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>회원 탈퇴 - 비밀번호 확인</title>
+    <title>TWAUDIO</title>
     <jsp:include page="/WEB-INF/views/include/bs5.jsp" />
 </head>
 <body>

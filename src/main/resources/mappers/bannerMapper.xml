@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.springGroupS10.dao.BannerDAO">
+	
+	<select id="getActiveBannersOrdered" resultType="com.spring.springGroupS10.vo.BannerVO">
+		SELECT idx, fSName, linkUrl, displayOrder, isActive, createdAt
+		FROM banner
+		WHERE isActive = TRUE
+		ORDER BY displayOrder ASC, idx DESC
+	</select>
+	
+	<select id="getAllBannersOrdered" resultType="com.spring.springGroupS10.vo.BannerVO">
+		SELECT idx, fSName, linkUrl, displayOrder, isActive, createdAt
+		FROM banner
+		ORDER BY displayOrder ASC, idx DESC
+	</select>
+	
+	<select id="getBannerByIdx" resultType="com.spring.springGroupS10.vo.BannerVO">
+		SELECT idx, fSName, linkUrl, displayOrder, isActive, createdAt
+		FROM banner WHERE idx = #{idx}
+	</select>
+	
+	<insert id="addBanner">
+		INSERT INTO banner (fSName, linkUrl, displayOrder, isActive)
+		VALUES (#{vo.fSName}, #{vo.linkUrl}, #{vo.displayOrder}, #{vo.isActive})
+	</insert>
+	
+	<delete id="deleteBanner">
+		DELETE FROM banner WHERE idx = #{idx}
+	</delete>
+  
+  
+	
+
+</mapper>

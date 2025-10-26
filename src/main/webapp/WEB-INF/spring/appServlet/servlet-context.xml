@@ -27,13 +27,7 @@
 	<resources mapping="/images/**" location="/resources/images/" />
 	<resources mapping="/member/**" location="/resources/data/member/" />
 	<resources mapping="/inquiry/**" location="/resources/data/inquiry/" />
-	
-<!-- 	
-	<resources mapping="/css/**" location="/resources/css/" />
-	<resources mapping="/pds/**" location="/resources/data/pds/" />
-	<resources mapping="/qrCode/**" location="/resources/data/qrCode/" />
--->
-	
+	<resources mapping="/banner/**" location="/resources/data/banner/" />
 	
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
@@ -57,6 +51,9 @@
 	<tx:annotation-driven transaction-manager="transactionManager" />
 	
 	<task:annotation-driven />
+	
+	<beans:bean id="restTemplate" class="org.springframework.web.client.RestTemplate" />
+	
 	
 	
 	

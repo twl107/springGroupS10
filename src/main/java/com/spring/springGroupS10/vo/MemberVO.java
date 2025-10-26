@@ -37,6 +37,7 @@ public class MemberVO {
 	private String lastLoginAt;
 	
 	private int deleteDiff;
+	private long kakaoId;
 	
 }
 

@@ -5,15 +5,15 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
+import java.util.List;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,27 +21,36 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
-import lombok.extern.slf4j.Slf4j;
+import com.spring.springGroupS10.service.BannerService;
+import com.spring.springGroupS10.service.DbShopService;
+import com.spring.springGroupS10.vo.BannerVO;
+import com.spring.springGroupS10.vo.DbProductVO;
 
-@Slf4j
+//@Slf4j
 @Controller
 public class HomeController {
 	
+	@Autowired
+	BannerService bannerService;
+	
+	@Autowired
+	DbShopService dbShopService;
+	
 	@RequestMapping(value = {"/","/h","/index","/main"}, method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
-		log.info("Welcome home! The client locale is {}.", locale);
+	public String home(Model model) {
 		
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+		List<BannerVO> bannerList = bannerService.getActiveBannersOrdered();
+		model.addAttribute("bannerList", bannerList);
 		
-		String formattedDate = dateFormat.format(date);
-		
-		model.addAttribute("serverTime", formattedDate );
+		List<DbProductVO> bestSellerList = dbShopService.getBestSellerProducts(4);
+    model.addAttribute("bestSellerList", bestSellerList);
+
+    List<DbProductVO> recommendedProductList = dbShopService.getRecommendedProducts(4);
+    model.addAttribute("recommendedProductList", recommendedProductList);
 		
 		return "home";
 	}
 	
-	// data폴더아래 다운받고자 할때 수행하는 메소드(다운받을 경로와 파일명을 넘져줘서 처리한다.)
 	@RequestMapping(value = "/fileDownAction", method = RequestMethod.GET)
 	public void fileDownActionGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String path = request.getParameter("path");

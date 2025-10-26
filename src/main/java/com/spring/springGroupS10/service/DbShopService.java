@@ -71,6 +71,29 @@ public interface DbShopService {
 
 	List<DbProductVO> getProductsByProductNames(List<String> middleCategoryNames);
 
+	List<DbProductVO> getBestSellerProducts(int limit);
+
+	List<DbProductVO> getRecommendedProducts(int limit);
+
+	int updateProductRecommendation(int idx, boolean isRecommended);
+
+	int getTotalProductCount();
+
+	int getProductSearchTotRecCnt(String keyword);
+
+	int getProductByMainCategoryTotRecCnt(String mainCategoryCode);
+
+	List<DbProductVO> getProductSearchPaging(String keyword, int startIndexNo, int pageSize);
+
+	List<DbProductVO> getProductByMainCategoryPaging(String mainCategoryCode, int startIndexNo, int pageSize);
+
+	List<DbProductVO> getDbProductListAdmin(int startIndexNo, int pageSize);
+
+	List<DbProductVO> getDbShopListPaging(List<String> mainCategories, List<String> middleCategories, int startIndexNo,
+			int pageSize);
+
+	int getDbShopListTotRecCnt(List<String> mainCategories, List<String> middleCategories);
+
 
 
 

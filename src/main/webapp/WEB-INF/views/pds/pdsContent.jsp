@@ -2,6 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<% pageContext.setAttribute("newLine", "\n"); %>
 <c:set var="ctp" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
@@ -9,7 +10,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
-	<title>자료실 상세 보기</title>
+	<title>TWAUDIO</title>
 	<script>
 	  'use strict';
 	  
@@ -90,8 +91,9 @@
           </div>
           
           <div class="p-3" style="min-height:200px; line-height: 1.8;">
-            ${vo.content.replace("<p>", "").replace("</p>", "<br/>")}
-          </div>
+				    <c:set var="tempContent" value="${vo.content.replace('<p>', '').replace('</p>', '<br/>')}" />
+				    ${fn:replace(tempContent, newLine, '<br/>')}
+					</div>
         </div>
         
         <div class="card-footer bg-transparent border-0 pt-4 p-4 p-md-5">

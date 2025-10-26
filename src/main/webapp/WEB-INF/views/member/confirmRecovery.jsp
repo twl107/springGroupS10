@@ -5,7 +5,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>계정 복구 확인</title>
+	<title>TWAUDIO</title>
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
 </head>
 <body>

@@ -34,6 +34,19 @@ public interface MemberDAO {
 
 	int updateMemberDelete(@Param("userId") String userId);
 
+	boolean recoverAccount(@Param("userId") String userId);
+
+	void updateLastLogin(@Param("userId") String userId);
+
+	int setUpdateMember(@Param("vo") MemberVO vo);
+
+	int getNewMemberCountToday();
+
+	MemberVO getMemberByKakaoId(@Param("kakaoId") long kakaoId);
+
+	MemberVO getMemberByEmail(@Param("email") String email);
+
+
 
 	
 	

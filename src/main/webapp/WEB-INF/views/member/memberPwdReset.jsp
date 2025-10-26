@@ -5,7 +5,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>비밀번호 재설정</title>
+  <title>TWAUDIO</title>
   <jsp:include page="/WEB-INF/views/include/bs5.jsp" />
   <script>
     function validateForm() {
@@ -23,7 +23,7 @@
         return false;
       }
       
-      return true; // 폼 제출
+      return true;
     }
   </script>
 </head>

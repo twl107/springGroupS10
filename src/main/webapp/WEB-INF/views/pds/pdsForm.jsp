@@ -7,7 +7,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
-	<title>자료 올리기</title>
+	<title>TWAUDIO</title>
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/include/header.jsp" />

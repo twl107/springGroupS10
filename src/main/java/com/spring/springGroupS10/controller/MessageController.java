@@ -1,5 +1,6 @@
 package com.spring.springGroupS10.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.spring.springGroupS10.vo.PageVO;
 
@@ -20,15 +23,16 @@ public class MessageController {
 			@RequestParam(name="userId", defaultValue = "", required = false) String userId,
 			@RequestParam(name="memberId", defaultValue = "0", required = false) int memberId,
 			@RequestParam(name="idx", defaultValue = "0", required = false) int idx
-			//@RequestParam(name="tempFlag", defaultValue = "", required = false) String tempFlag
-			//@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
-			//@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize
 		) {
 		
 		
+			/*
+			 * if(msgFlag.equals("memberLoginOk")) { model.addAttribute("message", userId +
+			 * "님 환영합니다."); model.addAttribute("url", "/member/home?userId="+userId); }
+			 */
 		if(msgFlag.equals("memberLoginOk")) {
-			model.addAttribute("message", userId + "님 환영합니다.");
-			model.addAttribute("url", "/member/home?userId="+userId);
+			model.addAttribute("message", "로그인 되었습니다.");
+			model.addAttribute("url", "/");
 		}
 		
 		else if(msgFlag.equals("memberLoginNo")) {
@@ -192,10 +196,45 @@ public class MessageController {
 			model.addAttribute("url", "/member/userDeletePwdCheck");
 		}
 		else if(msgFlag.equals("confirmRecovery")) {
-			model.addAttribute("message", "...");
-			model.addAttribute("url", "/member/userDeletePwdCheck");
+			model.addAttribute("message", userId + "님 환영합니다.");
+			model.addAttribute("url", "/member/confirmRecovery?userId=" + userId);
 		}
-		
+		else if(msgFlag.equals("memberUpdateOk")) {
+			model.addAttribute("message", "회원정보가 수정되었습니다.");
+			model.addAttribute("url", "/member/memberMain");
+		}
+		else if(msgFlag.equals("memberUpdateNo")) {
+			model.addAttribute("message", "회원정보가 수정에 실패했습니다.");
+			model.addAttribute("url", "/member/memberUpdate");
+		}
+		else if(msgFlag.equals("pwdUpdateOk")) {
+			model.addAttribute("message", "비밀번호가 변경되었습니다.");
+			model.addAttribute("url", "/member/memberMain");
+		}
+		else if(msgFlag.equals("invalidAccess")) {
+			model.addAttribute("message", "잘못된 접근입니다.");
+			model.addAttribute("url", "/member/memberMain");
+		}
+		else if(msgFlag.equals("adminBannerAddOk")) {
+			model.addAttribute("message", "새 배너가 등록되었습니다.");
+			model.addAttribute("url", "/admin/banner/adminBannerList");
+		}
+		else if(msgFlag.equals("adminBannerAddNo")) {
+			HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+			String reason = request.getParameter("reason");
+			String message = "배너 등록에 실패했습니다.";
+			if ("upload".equals(reason)) message += " (파일 업로드 오류)";
+			model.addAttribute("message", message);
+			model.addAttribute("url", "/admin/banner/bannerAdd");
+		}
+		else if(msgFlag.equals("adminBannerDeleteOk")) {
+			model.addAttribute("message", "배너가 삭제되었습니다.");
+			model.addAttribute("url", "/admin/banner/adminBannerList");
+		}
+		else if(msgFlag.equals("adminBannerDeleteNo")) {
+			model.addAttribute("message", "배너 삭제에 실패했습니다.");
+			model.addAttribute("url", "/admin/banner/adminBannerForm");
+		}
 		
 		
 		

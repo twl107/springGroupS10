@@ -37,5 +37,9 @@ public interface OrderDAO {
 
 	int getMyOrdersTotRecCnt(@Param("memberIdx") int memberIdx, @Param("startJumun") String startJumun, @Param("endJumun") String endJumun, @Param("orderStatus") String orderStatus);
 
+	int getOrderCountByStatus(@Param("orderStatus") String orderStatus);
+
+	long getSalesByDate(@Param("period") String period);
+
 
 }

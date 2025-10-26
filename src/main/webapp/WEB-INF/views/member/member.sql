@@ -38,6 +38,9 @@ CREATE TABLE member (
     UNIQUE (nickname)
 );
 
+ALTER TABLE member ADD COLUMN kakaoId BIGINT UNIQUE NULL;
+
+
 
 
 desc member;

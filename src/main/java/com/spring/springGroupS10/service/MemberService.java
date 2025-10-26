@@ -32,6 +32,20 @@ public interface MemberService {
 
 	boolean userDelete(String userId, String password);
 
+	boolean recoverAccount(String userId);
+
+	void updateLastLogin(String userId);
+
+	int setUpdateMember(MemberVO vo);
+
+	boolean checkCurrentPassword(String userId, String currentPassword);
+
+	int getNewMemberCountToday();
+
+	MemberVO getMemberByKakaoId(long kakaoId);
+
+	MemberVO getMemberByEmail(String email);
+
 
 }
 

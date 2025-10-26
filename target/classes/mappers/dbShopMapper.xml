@@ -54,26 +54,22 @@
 	</select>
 	
 	<select id="getDbShopList" parameterType="map" resultType="com.spring.springGroupS10.vo.DbProductVO">
-	  SELECT * FROM dbProduct
-	  <where>
-	    <if test="mainCategories != null and mainCategories.size() > 0">
-	      categoryMainCode IN
-	      <foreach item="mainCode" collection="mainCategories" open="(" separator="," close=")">
-	        #{mainCode}
-	      </foreach>
-	    </if>
-	    
-	    <if test="middleCategories != null and middleCategories.size() > 0">
-	      <if test="mainCategories != null and mainCategories.size() > 0">
-	        OR
-	      </if>
-	      categoryMiddleCode IN
-	      <foreach item="middleCode" collection="middleCategories" open="(" separator="," close=")">
-	        #{middleCode}
-	      </foreach>
-	    </if>
-	  </where>
-	  ORDER BY idx DESC
+	  SELECT * FROM dbProduct
+	  <where>
+	    <if test="mainCategories != null and mainCategories.size() > 0">
+	      categoryMainCode IN
+	      <foreach item="mainCode" collection="mainCategories" open="(" separator="," close=")">
+	        #{mainCode}
+	      </foreach>
+	    </if>
+	    <if test="middleCategories != null and middleCategories.size() > 0">
+			AND categoryMiddleName IN
+	      <foreach item="middleCode" collection="middleCategories" open="(" separator="," close=")">
+	        #{middleCode}
+	      </foreach>
+	    </if>
+	  </where>
+	  ORDER BY idx DESC
 	</select>
 	
 	<select id="getDbShopProduct" resultType="com.spring.springGroupS10.vo.DbProductVO">
@@ -127,8 +123,8 @@
 		select * from dbProduct where productName like concat('%', #{keyword}, '%') order by idx desc;
 	</select>
 	
-	<select id="getDbShopOptionOne" resultType="com.spring.springGroupS10.vo.DbProductVO" parameterType="int">
-		select * from dbOption where idx = #{optionIdx};
+	<select id="getDbShopOptionOne" resultType="com.spring.springGroupS10.vo.DbOptionVO">
+		SELECT * FROM dbOption WHERE idx = #{optionIdx}
 	</select>
 	
 	<select id="getMiddleCategoryNamesByCodes" resultType="String">
@@ -153,6 +149,98 @@
 	</where>
 	</select>
 	
+	<select id="getBestSellerProducts" resultType="com.spring.springGroupS10.vo.DbProductVO">
+    SELECT
+        p.*, SUM(od.quantity) as totalSold
+    FROM orderDetails od
+    JOIN dbProduct p ON od.productIdx = p.idx
+    WHERE p.idx IS NOT NULL GROUP BY od.productIdx
+    ORDER BY totalSold DESC
+    LIMIT #{limit}
+  </select>
+
+  <select id="getRecommendedProducts" resultType="com.spring.springGroupS10.vo.DbProductVO">
+    SELECT *
+    FROM dbProduct
+    WHERE isRecommended = TRUE
+    ORDER BY idx DESC
+    LIMIT #{limit}
+  </select>
+  
+  <select id="getTotalProductCount" resultType="int">
+  	SELECT count(*) FROM dbProduct;
+  </select>
+	
+	<select id="getProductSearchTotRecCnt" resultType="int">
+	  select count(*) from dbProduct 
+	  where productName like concat('%', #{keyword}, '%');
+	</select>
+	
+	<select id="getProductByMainCategoryTotRecCnt" resultType="int">
+	  select count(*) from dbProduct 
+	  where categoryMainCode = #{mainCategoryCode};
+	</select>
+	
+	<select id="getProductSearchPaging" resultType="com.spring.springGroupS10.vo.DbProductVO">
+	  select * from dbProduct 
+	  where productName like concat('%', #{keyword}, '%') 
+	  order by idx desc
+	  LIMIT #{startIndexNo}, #{pageSize};
+	</select>
+	
+	<select id="getProductByMainCategoryPaging" resultType="com.spring.springGroupS10.vo.DbProductVO">
+	  select * from dbProduct 
+	  where categoryMainCode = #{mainCategoryCode} 
+	  order by idx desc
+	  LIMIT #{startIndexNo}, #{pageSize};
+	</select>
+	
+	<select id="getDbProductListAdmin" resultType="com.spring.springGroupS10.vo.DbProductVO">
+	  select * from dbProduct 
+	  order by idx desc
+	  LIMIT #{startIndexNo}, #{pageSize};
+	</select>
+	
+	<select id="getDbShopListTotRecCnt" resultType="int">
+		SELECT count(P.idx) 
+		FROM dbProduct P
+		INNER JOIN categoryMiddle M 
+			ON P.categoryMiddleCode = M.categoryMiddleCode
+		<where>
+			<if test="mainCategories != null and mainCategories.size() > 0">
+				P.categoryMainCode IN
+				<foreach item="mainCode" collection="mainCategories" open="(" separator="," close=")">
+					#{mainCode}
+				</foreach>
+			</if>
+			<if test="middleCategories != null and middleCategories.size() > 0">
+				AND M.categoryMiddleName IN <foreach item="middleCode" collection="middleCategories" open="(" separator="," close=")">
+					#{middleCode}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	
+	<select id="getDbShopListPaging" resultType="com.spring.springGroupS10.vo.DbProductVO">
+		SELECT P.* FROM dbProduct P
+		INNER JOIN categoryMiddle M 
+			ON P.categoryMiddleCode = M.categoryMiddleCode
+		<where>
+			<if test="mainCategories != null and mainCategories.size() > 0">
+				P.categoryMainCode IN
+				<foreach item="mainCode" collection="mainCategories" open="(" separator="," close=")">
+					#{mainCode}
+				</foreach>
+			</if>
+			<if test="middleCategories != null and middleCategories.size() > 0">
+				AND M.categoryMiddleName IN <foreach item="middleCode" collection="middleCategories" open="(" separator="," close=")">
+					#{middleCode}
+				</foreach>
+			</if>
+		</where>
+		ORDER BY P.idx DESC
+		LIMIT #{startIndexNo}, #{pageSize}
+	</select>
 	
 	
 	
@@ -165,7 +253,7 @@
 	</insert>
 
 	<insert id="setDbProductInput">
-    insert into dbProduct value (#{vo.idx},#{vo.categoryMainCode},#{vo.categoryMiddleCode},#{vo.productCode},#{vo.productName},#{vo.detail},#{vo.mainPrice},#{vo.fSName},#{vo.content});
+    insert into dbProduct value (#{vo.idx},#{vo.categoryMainCode},#{vo.categoryMiddleCode},#{vo.productCode},#{vo.productName},#{vo.detail},#{vo.mainPrice},#{vo.fSName},#{vo.content},#{vo.isRecommended});
   </insert>
 	
   <insert id="setDbOptionInput">
@@ -173,6 +261,12 @@
   </insert>	
 	
 	
+	
+	<update id="updateProductRecommendation">
+    UPDATE dbProduct
+    SET isRecommended = #{isRecommended}
+    WHERE idx = #{idx}
+  </update>
 	
 	
 	

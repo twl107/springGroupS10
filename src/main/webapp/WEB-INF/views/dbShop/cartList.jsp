@@ -7,7 +7,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>cartList.jsp</title>
+	<title>TWAUDIO</title>
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
 <style>
     .product-img {

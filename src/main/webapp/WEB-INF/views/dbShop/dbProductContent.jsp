@@ -7,7 +7,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>${productVO.productName} - 상세 정보</title>
+	<title>TWAUDIO</title>
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<style>

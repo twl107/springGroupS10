@@ -27,6 +27,8 @@ public interface AdminDAO {
 
 	void setAdInquiryDelete(@Param("idx") int idx, @Param("fSName") String fSName, @Param("reIdx") int reIdx);
 
+	int getPendingInquiryCount();
+
 	
 	
 	

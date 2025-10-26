@@ -184,11 +184,7 @@ public class PdsController {
 	}
 	
 	@PostMapping("/pdsUpdate")
-	public String pdsUpdatePost(PdsVO vo,
-			String[] deleteFiles,
-			MultipartFile[] newFiles,
-			HttpServletRequest request
-		) {
+	public String pdsUpdatePost(PdsVO vo, String[] deleteFiles, MultipartFile[] newFiles, HttpServletRequest request) {
 		
 		if(deleteFiles != null) {
 			pdsService.deletedPdsFiles(deleteFiles, request);

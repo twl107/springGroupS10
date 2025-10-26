@@ -35,6 +35,12 @@ create table dbProduct (
   foreign key(categoryMiddleCode) references categoryMiddle(categoryMiddleCode)
 );
 
+ALTER TABLE dbProduct
+ADD COLUMN isRecommended BOOLEAN DEFAULT FALSE;
+
+
+
+
 /* 상품 옵션 테이블 */
 create table dbOption (
   idx    int not null auto_increment, /* 옵션 고유번호 */

@@ -9,7 +9,6 @@ import lombok.Data;
 @Data
 public class OrderVO {
 
-	// orders 테이블의 기본 컬럼
 	private long idx;
 	private String orderId;
 	private long memberIdx;

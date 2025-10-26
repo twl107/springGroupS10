@@ -7,7 +7,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>공지사항 수정</title>
+  <title>TWAUDIO</title>
   <script src="${ctp}/ckeditor/ckeditor.js"></script>
   <script>
   	'use strict';

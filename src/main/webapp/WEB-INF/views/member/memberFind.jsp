@@ -5,7 +5,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>아이디/비밀번호 찾기</title>
+  <title>TWAUDIO</title>
   <jsp:include page="/WEB-INF/views/include/bs5.jsp" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <style>
@@ -17,7 +17,7 @@
       border-radius: 5px;
     }
     .timer {
-      color: #dc3545; /* 빨간색 글씨 */
+      color: #dc3545;
       font-weight: bold;
     }
   </style>
@@ -38,7 +38,6 @@
 
   <div class="tab-content p-4 border border-top-0 rounded-bottom">
     
-    <!-- 아이디 찾기 탭 -->
     <div class="tab-pane fade show active" id="find-id" role="tabpanel" aria-labelledby="find-id-tab">
       <p>가입 시 사용한 이메일 주소를 입력해주세요.</p>
       <div class="input-group mb-3">
@@ -47,13 +46,12 @@
       </div>
       <div class="input-group mb-3" id="authBoxId" style="display: none;">
         <input type="text" class="form-control" id="authKeyId" placeholder="인증키 8자리">
-        <span class="input-group-text timer" id="timerId">05:00</span>
+        <span class="input-group-text timer" id="timerId">03:00</span>
         <button class="btn btn-primary" type="button" id="btnVerifyId">아이디 찾기</button>
       </div>
       <div id="findIdResult" class="find-result"></div>
     </div>
     
-    <!-- 비밀번호 찾기 탭 -->
     <div class="tab-pane fade" id="find-pw" role="tabpanel" aria-labelledby="find-pw-tab">
       <p>가입 시 사용한 <b>아이디</b>와 <b>이메일 주소</b>를 입력해주세요.</p>
       <div class="input-group mb-3">
@@ -65,7 +63,7 @@
       </div>
       <div class="input-group mb-3" id="authBoxPw" style="display: none;">
         <input type="text" class="form-control" id="authKeyPw" placeholder="인증키 8자리">
-        <span class="input-group-text timer" id="timerPw">05:00</span>
+        <span class="input-group-text timer" id="timerPw">03:00</span>
         <button class="btn btn-primary" type="button" id="btnVerifyPw">인증 확인</button>
       </div>
     </div>
@@ -100,7 +98,6 @@
   }
 
   $(function() {
-    // 1. (아이디) 인증번호 발송
     $("#btnSendAuthId").click(function() {
       const email = $("#findIdEmail").val();
       if(email === "") { alert("이메일을 입력하세요."); return; }
@@ -110,10 +107,9 @@
         type: "POST", data: { email: email },
         success: function(res) {
           if(res === "1") {
-            alert("인증키가 발송되었습니다. 5분 이내에 입력해주세요.");
+            alert("인증키가 발송되었습니다. 3분 이내에 입력해주세요.");
             $("#authBoxId").show();
-            // [수정] 타이머 시작 로직 추가
-            const fiveMinutes = 60 * 5;
+            const fiveMinutes = 60 * 3;
             const display = $('#timerId');
             display.siblings('input').prop('disabled', false);
             display.siblings('button').prop('disabled', false);
@@ -127,7 +123,6 @@
       });
     });
     
-    // 2. (아이디) 인증번호 확인 및 아이디 찾기
     $("#btnVerifyId").click(function() {
       const email = $("#findIdEmail").val();
       const authKey = $("#authKeyId").val(); 
@@ -139,7 +134,7 @@
           if(res === "0") {
             alert("인증키가 일치하지 않습니다.");
           } else {
-            clearInterval(timerInterval); // [수정] 인증 성공 시 타이머 중지
+            clearInterval(timerInterval);
             $("#findIdResult").html("해당 이메일로 가입된 아이디는 <b>" + res + "</b> 입니다.");
             $("#findIdResult").show();
           }
@@ -147,7 +142,6 @@
       });
     });
     
-    // 3. (비밀번호) 인증번호 발송
     $("#btnSendAuthPw").click(function() {
       const userId = $("#findPwUserId").val();
       const email = $("#findPwEmail").val();
@@ -160,10 +154,9 @@
         type: "POST", data: { userId: userId, email: email },
         success: function(res) {
           if(res === "1") {
-            alert("인증키가 발송되었습니다. 5분 이내에 입력해주세요.");
+            alert("인증키가 발송되었습니다. 3분 이내에 입력해주세요.");
             $("#authBoxPw").show();
-            // [수정] 타이머 시작 로직 추가
-            const fiveMinutes = 60 * 5;
+            const fiveMinutes = 60 * 3;
             const display = $('#timerPw');
             display.siblings('input').prop('disabled', false);
             display.siblings('button').prop('disabled', false);
@@ -177,7 +170,6 @@
       });
     });
     
-    // 4. (비밀번호) 인증번호 확인
     $("#btnVerifyPw").click(function() {
       const authKey = $("#authKeyPw").val(); 
       if(authKey === "") { alert("인증키를 입력하세요."); return; }
@@ -187,7 +179,7 @@
         type: "POST", data: { authKey: authKey },
         success: function(res) {
           if(res === "1") {
-            clearInterval(timerInterval); // [수정] 인증 성공 시 타이머 중지
+            clearInterval(timerInterval);
             alert("인증에 성공했습니다. 비밀번호 변경 페이지로 이동합니다.");
             location.href = "${ctp}/member/memberPwdReset";
           } else {

@@ -92,6 +92,45 @@ public class MemberServiceImpl implements MemberService {
 		else return false;
 	}
 
+	@Override
+	public boolean recoverAccount(String userId) {
+		return memberDAO.recoverAccount(userId);
+	}
+
+	@Override
+	public void updateLastLogin(String userId) {
+		memberDAO.updateLastLogin(userId);
+	}
+
+	@Override
+	public int setUpdateMember(MemberVO vo) {
+		return memberDAO.setUpdateMember(vo);
+	}
+
+	@Override
+	public boolean checkCurrentPassword(String userId, String currentPassword) {
+		MemberVO member = memberDAO.getMemberByUserId(userId);
+		if (member != null && passwordEncoder.matches(currentPassword, member.getPassword())) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public int getNewMemberCountToday() {
+		return memberDAO.getNewMemberCountToday();
+	}
+
+	@Override
+	public MemberVO getMemberByKakaoId(long kakaoId) {
+		return memberDAO.getMemberByKakaoId(kakaoId);
+	}
+
+	@Override
+	public MemberVO getMemberByEmail(String email) {
+		return memberDAO.getMemberByEmail(email);
+	}
+
 	
 	
 	

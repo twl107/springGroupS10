@@ -73,6 +73,28 @@ public interface DbShopDAO {
 
 	List<DbProductVO> getProductsByProductNames(@Param("middleCategoryNames") List<String> middleCategoryNames);
 
+	List<DbProductVO> getBestSellerProducts(@Param("limit") int limit);
+
+	List<DbProductVO> getRecommendedProducts(@Param("limit") int limit);
+
+	int updateProductRecommendation(@Param("idx") int idx, @Param("isRecommended") boolean isRecommended);
+
+	int getTotalProductCount();
+
+	int getProductSearchTotRecCnt(@Param("keyword") String keyword);
+
+	int getProductByMainCategoryTotRecCnt(@Param("mainCategoryCode") String mainCategoryCode);
+
+	List<DbProductVO> getProductSearchPaging(@Param("keyword") String keyword, @Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize);
+
+	List<DbProductVO> getProductByMainCategoryPaging(@Param("mainCategoryCode") String mainCategoryCode, @Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize);
+
+	List<DbProductVO> getDbProductListAdmin(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize);
+
+	List<DbProductVO> getDbShopListPaging(@Param("mainCategories") List<String> mainCategories, @Param("middleCategories") List<String> middleCategories, @Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize);
+
+	int getDbShopListTotRecCnt(@Param("mainCategories") List<String> mainCategories, @Param("middleCategories") List<String> middleCategories);
+
 
 
 

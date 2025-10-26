@@ -1,9 +1,13 @@
 package com.spring.springGroupS10.controller;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,11 +19,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.springGroupS10.common.Pagination;
+import com.spring.springGroupS10.common.ProjectProvide;
 import com.spring.springGroupS10.service.AdminService;
+import com.spring.springGroupS10.service.BannerService;
+import com.spring.springGroupS10.service.DbShopService;
 import com.spring.springGroupS10.service.MemberService;
 import com.spring.springGroupS10.service.OrderService;
+import com.spring.springGroupS10.vo.BannerVO;
+import com.spring.springGroupS10.vo.DbProductVO;
 import com.spring.springGroupS10.vo.InquiryReplyVO;
 import com.spring.springGroupS10.vo.InquiryVO;
 import com.spring.springGroupS10.vo.MemberVO;
@@ -42,6 +52,15 @@ public class AdminController {
 	@Autowired
 	OrderService orderService;
 	
+	@Autowired
+	BannerService bannerService;
+	
+	@Autowired
+	ProjectProvide projectProvide;
+	
+	@Autowired
+	DbShopService dbShopService;
+	
 	
 	@GetMapping("/adminMain")
 	public String adminMainGet() {
@@ -54,7 +73,24 @@ public class AdminController {
 	}
 	
 	@GetMapping("/adminContent")
-	public String adminContentGet() {
+	public String adminContentGet(Model model) {
+		
+		int newOrders = orderService.getOrderCountByStatus("결제완료");
+    int preparingShipment = orderService.getOrderCountByStatus("배송준비중");
+    int pendingInquiries = adminService.getPendingInquiryCount();
+    int newMembers = memberService.getNewMemberCountToday();
+
+    model.addAttribute("newOrders", newOrders);
+    model.addAttribute("preparingShipment", preparingShipment);
+    model.addAttribute("pendingInquiries", pendingInquiries);
+    model.addAttribute("newMembers", newMembers);
+		
+    long todaySales = orderService.getSalesByDate("today");
+    long monthSales = orderService.getSalesByDate("month");
+    
+    model.addAttribute("todaySales", todaySales);
+    model.addAttribute("monthSales", monthSales);
+    
 		return "/admin/adminContent";
 	}
 	
@@ -84,13 +120,13 @@ public class AdminController {
 	public String adInquiryListGet(Model model,
 			@RequestParam(name = "part", defaultValue = "전체", required = false) String part,
 			@RequestParam(name = "pag", defaultValue = "1", required = false) int pag,
-			@RequestParam(name = "pageSize", defaultValue = "5", required = false) int pageSize
+			@RequestParam(name = "pageSize", defaultValue = "15", required = false) int pageSize
 		) {
 		PageVO pageVO = new PageVO();
 		pageVO.setPart(part);
 		pageVO.setPag(pag);
 		pageVO.setPageSize(pageSize);
-		pageVO.setSection("adminInquiry");
+		pageVO.setSection("adInquiry");
 		pageVO = pagination.pagination(pageVO);
 		
 		ArrayList<InquiryVO> vos = adminService.getInquiryListAdmin(pageVO.getStartIndexNo(), pageSize, part);
@@ -137,7 +173,6 @@ public class AdminController {
 	public String adInquiryReplyUpdatePost(InquiryReplyVO reVO) {
 		int res = adminService.setInquiryReplyUpdate(reVO);
 		
-		System.out.println("res : " + res);
 		if(res != 0) return "redirect:/message/adInquiryReplyUpdateOk?idx="+reVO.getInquiryIdx();
 		return "redirect:/message/adInquiryReplyUpdateNo?idx="+reVO.getInquiryIdx();
 	}
@@ -201,6 +236,103 @@ public class AdminController {
 		else return "Status Update Failed";
 	}
 	
+	@GetMapping("/banner/adminBannerList")
+	public String bannerManagementGet(Model model, HttpSession session) {
+		Integer sLevel = (Integer) session.getAttribute("sLevel");
+		if (sLevel == null || sLevel != 0) return "redirect:/";
+
+		List<BannerVO> bannerList = bannerService.getAllBannersOrdered();
+		model.addAttribute("bannerList", bannerList);
+		return "admin/banner/adminBannerList";
+	}
+
+	@GetMapping("/banner/bannerAdd")
+	public String bannerAddGet(HttpSession session) {
+		Integer sLevel = (Integer) session.getAttribute("sLevel");
+		if (sLevel == null || sLevel != 0) return "redirect:/";
+		return "admin/banner/adminBannerForm";
+	}
+
+	@PostMapping("/banner/bannerAdd")
+	public String bannerAddPost(BannerVO vo, MultipartFile file, HttpSession session, Model model, HttpServletRequest request) {
+		Integer sLevel = (Integer) session.getAttribute("sLevel");
+		if (sLevel == null || sLevel != 0) return "redirect:/";
+		
+		if (vo.getIsActive() == null) {
+			vo.setIsActive(false);
+		}
+
+		try {
+			if (file != null && !file.isEmpty()) {
+				String savedFileName = projectProvide.saveFile(file, "banner", request);
+				if (savedFileName != null) {
+					vo.setFSName(savedFileName);
+
+					int res = bannerService.addBanner(vo);
+					if (res > 0) {
+						return "redirect:/message/adminBannerAddOk";
+					}
+				}
+			} else {
+				model.addAttribute("message", "배너 이미지를 첨부해주세요.");
+				model.addAttribute("url", "/admin/banner/bannerAdd");
+				return "include/message";
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "redirect:/message/adminBannerAddNo?reason=upload";
+		}
+		return "redirect:/message/adminBannerAddNo";
+	}
+
+	@PostMapping("/banner/bannerDelete")
+	public String bannerDeletePost(@RequestParam("idx") int idx, HttpSession session) {
+		Integer sLevel = (Integer) session.getAttribute("sLevel");
+		if (sLevel == null || sLevel != 0) return "redirect:/";
+
+		boolean res = bannerService.deleteBanner(idx);
+
+		if (res) {
+			return "redirect:/message/adminBannerDeleteOk";
+		} else {
+			return "redirect:/message/adminBannerDeleteNo";
+		}
+	}
+	
+	@GetMapping("/banner/adminMainProductList")
+  public String mainProductManagementGet(Model model, PageVO pageVO, HttpSession session) {
+      Integer sLevel = (Integer) session.getAttribute("sLevel");
+      if (sLevel == null || sLevel != 0) return "redirect:/";
+
+      pageVO.setSection("adminProductList");
+      if (pageVO.getPageSize() == 0) pageVO.setPageSize(10);
+      
+      pageVO = pagination.pagination(pageVO);
+      List<DbProductVO> productList = dbShopService.getDbProductListAdmin(pageVO.getStartIndexNo(), pageVO.getPageSize());
+
+      model.addAttribute("productList", productList);
+      model.addAttribute("pageVO", pageVO);
+
+      return "admin/banner/adminMainProductList";
+  }
+	
+	@ResponseBody
+  @PostMapping("/banner/toggleRecommendation")
+  public String toggleProductRecommendation(
+          @RequestParam("idx") int idx,
+          @RequestParam("isRecommended") boolean isRecommended,
+          HttpSession session) {
+
+    Integer sLevel = (Integer) session.getAttribute("sLevel");
+    if (sLevel == null || sLevel != 0) {
+      return "AUTH_ERROR"; // 권한 없음
+    }
+
+    int res = dbShopService.updateProductRecommendation(idx, isRecommended);
+
+    return (res > 0) ? "SUCCESS" : "FAIL";
+  }
+
 	
 	
 	

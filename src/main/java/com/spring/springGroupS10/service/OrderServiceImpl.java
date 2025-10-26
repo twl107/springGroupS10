@@ -93,6 +93,16 @@ public class OrderServiceImpl implements OrderService {
 		return orderDAO.getMyOrdersTotRecCnt(memberIdx, startJumun, endJumun, orderStatus);
 	}
 
+	@Override
+	public int getOrderCountByStatus(String orderStatus) {
+		return orderDAO.getOrderCountByStatus(orderStatus);
+	}
+
+	@Override
+	public long getSalesByDate(String period) {
+		return orderDAO.getSalesByDate(period);
+	}
+
 	
 	
 	

@@ -14,6 +14,10 @@
 		select * from inquiryReply where inquiryIdx = #{idx}; 
 	</select>
 	
+	<select id="getPendingInquiryCount" resultType="int">
+	  SELECT count(*) FROM inquiry WHERE reply = '답변대기중';
+	</select>
+	
 	
 	
 	
@@ -34,7 +38,7 @@
     update inquiryReply set reContent = #{reVO.reContent} where reIdx = #{reVO.reIdx};
   </update>
   
-   <update id="setInquiryReplyStatusUpdate">
+  <update id="setInquiryReplyStatusUpdate">
     update inquiry set reply = '답변대기중' where idx = #{inquiryIdx};
   </update>
 	
@@ -46,7 +50,6 @@
   </delete>
   
   <delete id="setAdInquiryDelete">
-    delete from inquiryReply where reIdx = #{reIdx};
     delete from inquiry where idx = #{idx};
   </delete>
   

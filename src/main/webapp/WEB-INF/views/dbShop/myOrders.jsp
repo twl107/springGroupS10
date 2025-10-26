@@ -6,7 +6,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>주문 내역</title>
+  <title>TWAUDIO</title>
   <script>
     'use strict';
     

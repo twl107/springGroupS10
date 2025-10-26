@@ -6,7 +6,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>주문 상세 내역</title>
+	<title>TWAUDIO</title>
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
 </head>
 <body>

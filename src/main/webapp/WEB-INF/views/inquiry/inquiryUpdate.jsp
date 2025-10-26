@@ -8,7 +8,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
-	<title>inquiryUpdate.jsp</title>
+	<title>TWAUDIO</title>
 	<script type="text/javascript">
     var sel_files = [];
 

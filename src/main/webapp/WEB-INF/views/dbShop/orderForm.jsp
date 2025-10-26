@@ -11,7 +11,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-	<title>주문서 작성</title>
+	<title>TWAUDIO</title>
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/include/header.jsp" />
@@ -23,11 +23,9 @@
 		<p class="text-muted">주문하실 상품과 배송 정보를 확인해주세요.</p>
 	</div>
 
-	<!-- 주문서 메인 폼 -->
 	<form name="orderForm" id="orderForm" method="post" action="${ctp}/dbShop/createOrder">
 		<div class="row g-5">
 			
-			<!-- 왼쪽: 배송 정보 입력 -->
 			<div class="col-lg-7">
         <h4 class="mb-4 fw-bold border-bottom pb-2">배송 정보</h4>
         
@@ -44,7 +42,6 @@
         <div class="mb-2">
           <label for="postCode" class="form-label small">우편번호</label>
           <div class="input-group">
-            <%-- [수정] name="postCode" -> "recipientPostCode" --%>
             <input type="text" class="form-control" id="postCode" name="recipientPostCode" placeholder="우편번호" value="${memberVO.postCode}" readonly>
             <button type="button" class="btn btn-outline-secondary" onclick="execDaumPostcode()">우편번호 찾기</button>
           </div>
@@ -52,13 +49,11 @@
         
         <div class="mb-2">
           <label for="address1" class="form-label small">기본 주소</label>
-          <%-- [수정] name="address1" -> "recipientAddress1" --%>
           <input type="text" class="form-control" id="address1" name="recipientAddress1" placeholder="기본 주소" value="${memberVO.address1}" readonly>
         </div>
         
         <div class="mb-2">
           <label for="address2" class="form-label small">상세 주소</label>
-          <%-- [수정] name="address2" -> "recipientAddress2" --%>
           <input type="text" class="form-control" id="address2" name="recipientAddress2" value="${memberVO.address2}" placeholder="상세 주소">
         </div>
         
@@ -68,7 +63,6 @@
         </div>
       </div>
 			
-			<!-- 오른쪽: 주문 상품 및 결제 정보 요약 -->
 			<div class="col-lg-5">
 				<div class="card border-0 shadow-sm sticky-top" style="top: 2rem;">
 					<div class="card-body p-4">
@@ -77,7 +71,6 @@
 						<ul class="list-group list-group-flush mb-4">
 							<c:forEach var="item" items="${orderItems}" varStatus="st">
 								<li class="list-group-item d-flex align-items-center px-0">
-									<img src="${ctp}/data/product/${item.FSName}" class="rounded" style="width: 60px; height: 60px; object-fit: cover;">
 									<div class="ms-3 flex-grow-1">
 										<div class="fw-bold small">${item.productName}</div>
 										<c:if test="${not empty item.optionName}"><div class="text-muted small">옵션: ${item.optionName}</div></c:if>
@@ -88,7 +81,7 @@
 								<input type="hidden" name="orderDetails[${st.index}].productIdx" value="${item.productIdx}">
 								<input type="hidden" name="orderDetails[${st.index}].optionIdx" value="${item.optionIdx}">
 								<input type="hidden" name="orderDetails[${st.index}].quantity" value="${item.quantity}">
-								<%-- <input type="hidden" name="orderDetails[${st.index}].price" value="${item.totalPrice / item.quantity}"> --%>
+								<c:set var="unitPrice" value="${item.totalPrice / item.quantity}" />
 								<c:set var="unitPrice" value="${item.totalPrice / item.quantity}" />
 								<input type="hidden" name="orderDetails[${st.index}].price" value="<fmt:formatNumber value='${unitPrice}' pattern='0' />">
 								<input type="hidden" name="cartIdxs" value="${item.idx}">
@@ -108,12 +101,11 @@
 							</li>
 							<li class="list-group-item d-flex justify-content-between align-items-center px-0 fw-bold fs-5 border-top pt-3">
 								<span>최종 결제 금액</span>
-								<%-- <span class="text-danger"><fmt:formatNumber value="${totalOrderPrice + 3000}" pattern="#,###" />원</span> --%>
 								<span class="text-danger"><fmt:formatNumber value="${totalOrderPrice}" pattern="#,###" />원</span>
 							</li>
 						</ul>
-						<%-- <input type="hidden" name="totalPrice" id="totalPrice" value="${totalOrderPrice + 3000}"> --%>
-						<input type="hidden" name="totalPrice" id="totalPrice" value="${totalOrderPrice}">
+						<%-- <input type="hidden" name="totalPrice" id="totalPrice" value="${totalOrderPrice}"> --%>
+						<input type="hidden" name="totalPrice" id="totalPrice" value="10">
 						
 						<div class="d-grid mt-4">
 							<button type="button" id="paymentBtn" class="btn btn-primary btn-lg">결제하기</button>

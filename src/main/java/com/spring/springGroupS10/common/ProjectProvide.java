@@ -31,9 +31,7 @@ public class ProjectProvide {
 	
 	@Autowired
 	JavaMailSender mailSender;
-	
 
-	// 메일 보내기
 	public String mailSend(
 			String toMail,
 			String title,
@@ -50,11 +48,9 @@ public class ProjectProvide {
 		messageHelper.setSubject(title);
 		messageHelper.setText(content);
 		
-		// 메세지보관함에 저장되는 'content'변수안에 발신자의 필요한 정보를 추가로 담아준다.
 		content = content.replace("\n", "<br>");
-		content += "<br><hr><h3>SpringGroup에서 보냅니다.</h3><hr>";
+		content += "<br><hr><h3>TWAUDIO에서 보냅니다.</h3><hr>";
 		content += "<font size='5' color='red'><b>"+mailFlag+"</b></font><hr>";
-		content += "<p><img src=\"cid:main.jpg\" width='500px'></p>";
 		content += "<p>방문하기 : <a href='http://49.142.157.251:9090/cjgreen'>springGroup</a></p>";
 		content += "<hr>";
 		messageHelper.setText(content, true);
@@ -91,8 +87,6 @@ public class ProjectProvide {
 		return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
 	}
 	
-	
-	// 지정된 경로의 파일 삭제하기
 	public void deleteFile(String serverFileName, String part, HttpServletRequest request) {
 		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/"+part+"/");
 		
@@ -123,19 +117,17 @@ public class ProjectProvide {
 		}
 	}
 	
-	
 	public List<String> extractImageFileNames(String content, String directory) {
 		List<String> fileNames = new ArrayList<>();
 		if (content == null || content.isEmpty()) {
 			return fileNames;
 		}
 		
-		// "src="/springGroupS10/data/notice/([^\"]+)" 와 같은 형태의 정규식 생성
 		Pattern pattern = Pattern.compile("src=\"/springGroupS10/data/" + Pattern.quote(directory) + "/([^\"]+)\"");
 		Matcher matcher = pattern.matcher(content);
 		
 		while(matcher.find()) {
-			fileNames.add(matcher.group(1)); // 괄호 ( ) 안에 매칭된 파일명만 추출
+			fileNames.add(matcher.group(1));
 		}
 		
 		return fileNames;

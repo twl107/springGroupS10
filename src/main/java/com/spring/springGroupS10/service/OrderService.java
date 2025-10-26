@@ -30,5 +30,9 @@ public interface OrderService {
 
 	int getMyOrdersTotRecCnt(int memberIdx, String startJumun, String endJumun, String orderStatus);
 
+	int getOrderCountByStatus(String orderStatus);
+
+	long getSalesByDate(String period);
+
 
 }

@@ -1,9 +1,15 @@
 package com.spring.springGroupS10.common;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.springGroupS10.service.AdminService;
+import com.spring.springGroupS10.service.DbShopService;
 import com.spring.springGroupS10.service.InquiryService;
 import com.spring.springGroupS10.service.MemberService;
 import com.spring.springGroupS10.service.NoticeService;
@@ -31,6 +37,9 @@ public class Pagination {
 	
 	@Autowired
 	OrderService orderService;
+	
+	@Autowired
+	DbShopService dbShopService;
 	
 	
   public PageVO pagination(PageVO pageVO) {
@@ -74,7 +83,44 @@ public class Pagination {
 
       totRecCnt = orderService.getMyOrdersTotRecCnt(memberIdx, startJumun, endJumun, orderStatus);
     }
-    
+    else if(pageVO.getSection().equals("adminProductList")) {
+      totRecCnt = dbShopService.getTotalProductCount();
+    }
+    else if(pageVO.getSection().equals("dbProductList")) {
+      String keyword = pageVO.getSearchString() == null ? "" : pageVO.getSearchString();
+      String mainCategoryCode = pageVO.getPart() == null ? "" : pageVO.getPart();
+      
+      if(!keyword.equals("")) {
+          totRecCnt = dbShopService.getProductSearchTotRecCnt(keyword);
+      }
+      else if(!mainCategoryCode.equals("")) {
+          totRecCnt = dbShopService.getProductByMainCategoryTotRecCnt(mainCategoryCode);
+      }
+      else {
+          totRecCnt = dbShopService.getTotalProductCount();
+      }
+    }
+    else if(pageVO.getSection().equals("adminDbShopList")) {
+    	String mainCatStr = pageVO.getPart();
+    	String middleCatStr = pageVO.getSearchString();
+			
+    	List<String> mainCategories = null;
+    	List<String> middleCategories = null;
+			
+    	if(mainCatStr != null && !mainCatStr.isEmpty()) {
+    		mainCategories = new ArrayList<>(Arrays.asList(mainCatStr.split(",")));
+    	} else {
+				mainCategories = Collections.emptyList();
+			}
+			
+    	if(middleCatStr != null && !middleCatStr.isEmpty()) {
+    		middleCategories = new ArrayList<>(Arrays.asList(middleCatStr.split(",")));
+    	} else {
+				middleCategories = Collections.emptyList();
+			}
+			
+    	totRecCnt = dbShopService.getDbShopListTotRecCnt(mainCategories, middleCategories);
+    }
     
     int totPage = (totRecCnt % pageSize) == 0 ? totRecCnt / pageSize : (totRecCnt / pageSize) + 1;
     int startIndexNo = (pag - 1) * pageSize;

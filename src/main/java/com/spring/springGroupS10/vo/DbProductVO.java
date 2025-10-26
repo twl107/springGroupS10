@@ -16,4 +16,6 @@ public class DbProductVO {
 	private String categoryMainName;
 	private String categoryMiddleCode;
 	private String categoryMiddleName;
+	private Boolean isRecommended;
+	private int totalSold;
 }

@@ -83,7 +83,6 @@ public class DbShopServiceImpl implements DbShopService {
 		int res = 0;
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
-		// 1. 메인 이미지 업로드
 		try {
 			if(file != null && !file.isEmpty()) {
 				String saveFileName = projectProvide.saveFile(file, "dbShop/product", request);
@@ -94,7 +93,6 @@ public class DbShopServiceImpl implements DbShopService {
 			e.printStackTrace();
 		}
 		
-		// 2. ckeditor에서 올린 이미지 파일 처리
 		String content = vo.getContent();
 		if(content != null && content.indexOf("src=\"/") != -1) {
 			String uploadPath = request.getSession().getServletContext().getRealPath("/resources/data/");
@@ -113,7 +111,6 @@ public class DbShopServiceImpl implements DbShopService {
 			vo.setContent(content.replace("/data/ckeditor/", "/data/dbShop/product/"));
 		}
 		
-		// 3. 고유번호 idx값 만들기(상품코드 만들 때 필요)
 		int maxIdx = 1;
 		DbProductVO maxVO = dbShopDAO.getProductMaxIdx();
 		if(maxVO != null) maxIdx = maxVO.getIdx() + 1;
@@ -121,7 +118,6 @@ public class DbShopServiceImpl implements DbShopService {
 		vo.setIdx(maxIdx);
 		vo.setProductCode(vo.getCategoryMainCode()+vo.getCategoryMiddleCode() + maxIdx);
 		
-		// 4. DB 저장
 		res = dbShopDAO.setDbProductInput(vo);
 		
 		return res;
@@ -225,6 +221,61 @@ public class DbShopServiceImpl implements DbShopService {
 	@Override
 	public List<DbProductVO> getProductsByProductNames(List<String> middleCategoryNames) {
 		return dbShopDAO.getProductsByProductNames(middleCategoryNames);
+	}
+
+	@Override
+	public List<DbProductVO> getBestSellerProducts(int limit) {
+		return dbShopDAO.getBestSellerProducts(limit);
+	}
+
+	@Override
+	public List<DbProductVO> getRecommendedProducts(int limit) {
+		return dbShopDAO.getRecommendedProducts(limit);
+	}
+
+	@Override
+	public int updateProductRecommendation(int idx, boolean isRecommended) {
+		return dbShopDAO.updateProductRecommendation(idx, isRecommended);
+	}
+
+	@Override
+	public int getTotalProductCount() {
+		return dbShopDAO.getTotalProductCount();
+	}
+
+	@Override
+	public int getProductSearchTotRecCnt(String keyword) {
+		return dbShopDAO.getProductSearchTotRecCnt(keyword);
+	}
+
+	@Override
+	public int getProductByMainCategoryTotRecCnt(String mainCategoryCode) {
+		return dbShopDAO.getProductByMainCategoryTotRecCnt(mainCategoryCode);
+	}
+
+	@Override
+	public List<DbProductVO> getProductSearchPaging(String keyword, int startIndexNo, int pageSize) {
+		return dbShopDAO.getProductSearchPaging(keyword, startIndexNo, pageSize);
+	}
+
+	@Override
+	public List<DbProductVO> getProductByMainCategoryPaging(String mainCategoryCode, int startIndexNo, int pageSize) {
+		return dbShopDAO.getProductByMainCategoryPaging(mainCategoryCode, startIndexNo, pageSize);
+	}
+
+	@Override
+	public List<DbProductVO> getDbProductListAdmin(int startIndexNo, int pageSize) {
+		return dbShopDAO.getDbProductListAdmin(startIndexNo, pageSize);
+	}
+
+	@Override
+	public List<DbProductVO> getDbShopListPaging(List<String> mainCategories, List<String> middleCategories, int startIndexNo, int pageSize) {
+		return dbShopDAO.getDbShopListPaging(mainCategories, middleCategories, startIndexNo, pageSize);
+	}
+
+	@Override
+	public int getDbShopListTotRecCnt(List<String> mainCategories, List<String> middleCategories) {
+		return dbShopDAO.getDbShopListTotRecCnt(mainCategories, middleCategories);
 	}
 
 		

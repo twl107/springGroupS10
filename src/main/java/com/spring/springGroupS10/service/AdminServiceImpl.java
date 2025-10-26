@@ -59,6 +59,11 @@ public class AdminServiceImpl implements AdminService {
 	public void setAdInquiryDelete(int idx, String fSName, int reIdx) {
 		adminDAO.setAdInquiryDelete(idx, fSName, reIdx);
 	}
+
+	@Override
+	public int getPendingInquiryCount() {
+		return adminDAO.getPendingInquiryCount();
+	}
 	
 	
 	

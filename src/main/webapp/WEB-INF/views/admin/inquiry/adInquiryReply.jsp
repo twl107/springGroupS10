@@ -11,7 +11,6 @@
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
 	<title>.jsp</title>
 	<script>
-		// 답변글 작성하기
 		function inquiryReply() {
 			var inquiryIdx = "${vo.idx}";
 			var reContent = replyForm.reContent.value;
@@ -38,7 +37,6 @@
 			});
 		}
 		
-		// 답변글만 삭제하기
 		function deleteReplyCheck() {
 			var ans = confirm("답변글을 삭제하시겠습니까?");
 			if(!ans) return false;
@@ -60,12 +58,10 @@
 			});
 		}
 		
-		// 답변글 수정폼 호출하기(replySw값을 U(수정)을 보내어서 그 값이 U(수정)이면 textarea창의 readonly속성을 풀어준다.)
 		function adUpdateReplyCheck() {
 			location.href = "${ctp}/admin/inquiry/adInquiryReply?idx=${vo.idx}&replySw=U";
 		}
 		 
-		// 원본 게시글 삭제하기(원본게시글은 답변글이 달리기전에는 수정/삭제 가능하다)
 		function deleteCheck() {
 			var ans = confirm("삭제하시겠습니까?");
 			if(!ans) return false;
@@ -125,23 +121,20 @@
 		</tr>
 	</table>
 	
-	
 	<div style="text-align: right">
-		<c:if test="${sUserId==vo.userId || sLevel == 0}">	<!-- 작성글을 관리자라가 삭제처리할수 있다.(만약 답변이 달려있는 글이라면 답변글을 먼저 지우고 원본글을 삭제한다. -->
+		<c:if test="${sUserId==vo.userId || sLevel == 0}">
 			<input type="button" value="원본글삭제" onclick="deleteCheck()" class="btn btn-danger btn-sm"/>
 		</c:if>
 		<input type="button" value="목록" onclick="location.href='${ctp}/admin/inquiry/adInquiryList?pag=${pag}'" class="btn btn-secondary btn-sm"/>
 	</div>
 	
 	<hr/>
-	<!-- 답변서가 작성되어 있을때 수행하는 곳 -->
 	<c:if test="${!empty reVO.reContent}">
 		<form name="replyForm" method="post">
-			<!-- <label for="reContent"><h5>답변내용</h5></label> -->
 			<h5>답변내용</h5>
-			<c:if test="${empty replySw || replySw != 'U'}">	<!-- 답변서 작성되어 있고, 수정가능상태는 readonly로 처리후 '수정'버튼 누르면 'readonly'해제후 '수정완료'버튼으로 바꾼다. -->
+			<c:if test="${empty replySw || replySw != 'U'}">
 				<textarea name="reContent" rows="5"  id="reContent" readonly="readonly" class="form-control" >${reVO.reContent}</textarea>
-				<div style="text-align: right">		<!-- 수정을 위해서는 현재 답변글의 글번호(reIdx)를 넘겨야하지만, 현재는 답변글이 항상 1개이기에 넘기지않아도 알수 있다. -->
+				<div style="text-align: right">
 					<input type="button" value="수정" id="updateBtn" onclick="adUpdateReplyCheck()" class="btn btn-secondary btn-sm mt-2"/>
 					<input type="button" value="답변글삭제" id="deleteBtn" onclick="deleteReplyCheck()" class="btn btn-danger btn-sm mt-2"/>
 				</div>
@@ -158,7 +151,6 @@
 		</form>
 	</c:if>
 
-	<!-- 답변서가 작성되어 있지 않을때 수행하는 곳 -->
 	<c:if test="${empty reVO.reContent}">
 		<form name="replyForm">
 			<label for="reContent">답변글 작성하기</label>

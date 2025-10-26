@@ -87,6 +87,20 @@
 		</div>
 	</c:if>
 	
+	<c:if test="${pageVO.totPage > 1}">
+    <div class="d-flex justify-content-center mt-4">
+      <ul class="pagination">
+        <c:if test="${pageVO.pag > 1}"><li class="page-item"><a href="${ctp}/admin/product/mainProductManagement?pag=1&pageSize=${pageVO.pageSize}" class="page-link">처음</a></li></c:if>
+        <c:if test="${pageVO.curBlock > 0}"><li class="page-item"><a href="${ctp}/admin/product/mainProductManagement?pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}" class="page-link">이전</a></li></c:if>
+
+        <c:forEach var="i" begin="${(pageVO.curBlock*pageVO.blockSize)+1}" end="${(pageVO.curBlock*pageVO.blockSize)+pageVO.blockSize}" varStatus="st"><c:if test="${i <= pageVO.totPage}"><li class="page-item ${i == pageVO.pag ? 'active' : ''}"><a href='${ctp}/admin/product/mainProductManagement?pag=${i}&pageSize=${pageVO.pageSize}' class="page-link">${i}</a></li></c:if></c:forEach>
+
+        <c:if test="${pageVO.curBlock < pageVO.lastBlock}"><li class="page-item"><a href="${ctp}/admin/product/mainProductManagement?pag=${(pageVO.curBlock+1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}" class="page-link">다음</a></li></c:if>
+        <c:if test="${pageVO.pag < pageVO.totPage}"><li class="page-item"><a href="${ctp}/admin/product/mainProductManagement?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}" class="page-link">마지막</a></li></c:if>
+      </ul>
+    </div>
+  </c:if>
+  
 </div>
 <p><br/></p>
 <jsp:include page="/WEB-INF/views/include/footer.jsp" />

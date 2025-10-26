@@ -7,7 +7,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <jsp:include page="/WEB-INF/views/include/bs5.jsp" />
-  <title>회원가입</title>
+  <title>TWAUDIO</title>
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/include/header.jsp" />
@@ -209,7 +209,6 @@
     let idCheckSw = false;
     let nickCheckSw = false;
     
-    // --- 아이디 중복확인 (URL 경로 수정) ---
     $("#userIdCheckBtn").on("click", function() {
       const userId = $("#userId").val().trim();
       if (!/^[a-zA-Z0-9_]{4,20}$/.test(userId)) {
@@ -217,7 +216,7 @@
         return;
       }
       $.ajax({
-        url: "${ctp}/member/userIdCheck", // 수정된 URL
+        url: "${ctp}/member/userIdCheck",
         type: "post", 
         data: { userId: userId },
         success: (res) => {
@@ -235,7 +234,6 @@
       });
     });
     
-    // --- 닉네임 중복확인 (URL 경로 수정) ---
     $('#nickNameCheckBtn').on('click', function() {
       const nickName = $('#nickName').val().trim();
       if (!/^[a-zA-Z가-힣0-9]{2,10}$/.test(nickName)) {
@@ -243,7 +241,7 @@
         return;
       }
       $.ajax({
-        url: '${ctp}/member/nickNameCheck', // 수정된 URL
+        url: '${ctp}/member/nickNameCheck',
         type: 'POST', 
         data: { nickName: nickName },
         success: (res) => {
@@ -301,7 +299,7 @@
 
       if (!regUserId.test(userId)) { alert("아이디는 4~20자의 영문, 숫자, 밑줄(_)만 사용 가능합니다."); return; }
       //if (!regPassword.test(password)) { alert("비밀번호는 6~20자 길이의 영문 대/소문자, 숫자, 특수문자(!@#$%^&*)를 모두 포함해야 합니다."); return; }
-      if (password !== passwordCheck) { alert("비밀번호가 일치하지 않습니다."); return; } // 변수명 수정
+      if (password !== passwordCheck) { alert("비밀번호가 일치하지 않습니다."); return; }
       if (!regNickName.test(nickName)) { alert("닉네임은 2~10자의 한글, 영문, 숫자만 사용 가능합니다."); return; }
       if (!regName.test(name)) { alert("이름은 한글 또는 영문만 사용 가능합니다."); return; }
       if (!email1 || !email2) { alert("이메일을 모두 입력해주세요."); return; }

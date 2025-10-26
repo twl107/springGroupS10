@@ -8,7 +8,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
-	<title>1:1 문의</title>
+	<title>TWAUDIO</title>
 	<script>
 		function updateCheck() {
 			var ans = confirm("수정하시겠습니까?");

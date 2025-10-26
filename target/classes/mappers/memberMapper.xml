@@ -27,11 +27,27 @@
 	</select>
 	
 	<select id="findUserIdByEmail" resultType="string" parameterType="string">
-		select userId from member where email = #{email}
+		select userId from member where email = #{email};
 	</select>
 	
 	<select id="getProductSearch" resultType="com.spring.springGroupS10.vo.MemberVO">
-		select * from member where nickName = #{nickName}
+		select * from member where nickName = #{nickName};
+	</select>
+	
+	<select id="getNewMemberCountToday" resultType="int">
+	  SELECT count(*) FROM member WHERE DATE(createdAt) = CURDATE();
+	</select>
+	
+	<select id="getMemberByKakaoId" resultType="com.spring.springGroupS10.vo.MemberVO">
+    SELECT * FROM member
+    WHERE kakaoId = #{kakaoId}
+      AND isDeleted = false;
+	</select>
+
+  <select id="getMemberByEmail" resultType="com.spring.springGroupS10.vo.MemberVO">
+    SELECT * FROM member
+    WHERE email = #{email}
+      AND isDeleted = false;
 	</select>
 	
 	
@@ -40,37 +56,53 @@
 	
 	
 	<insert id="setMemberJoin">
-		insert into member (userId, password, nickName, name, email, tel, birthday, gender, postCode, address1, address2) 
-		values (#{vo.userId}, #{vo.password}, #{vo.nickName}, #{vo.name}, #{vo.email}, #{vo.tel}, #{vo.birthday}, #{vo.gender}, #{vo.postCode}, #{vo.address1}, #{vo.address2})
+		insert into member (userId, password, nickName, name, email, tel, birthday, gender, postCode, address1, address2, kakaoId) 
+		values (#{vo.userId}, #{vo.password}, #{vo.nickName}, #{vo.name}, #{vo.email}, #{vo.tel}, #{vo.birthday}, #{vo.gender}, #{vo.postCode}, #{vo.address1}, #{vo.address2}, #{vo.kakaoId})
 	</insert>
 	
+	
+	
+	
+	
+	
 	<update id="setMemberLevelUp">
-		update member set level = 2 where userId = #{userId}
+		update member set level = 2 where userId = #{userId};
 	</update>
 	
 	<update id="setMemberTodayCntClear">
-		update member set todayCnt = 0 where userId = #{userId}
+		update member set todayCnt = 0 where userId = #{userId};
 	</update>
 	
 	<update id="setMemberInforUpdate">
-		update member set visitCnt=visitCnt+1, lastLoginAt=now(), todayCnt=todayCnt+1, point=point+#{point} where userId = #{userId}
+		update member set visitCnt=visitCnt+1, lastLoginAt=now(), todayCnt=todayCnt+1, point=point+#{point} where userId = #{userId};
 	</update>
 	
   <update id="updateMemberLevel">
-    update member set level = #{level} where idx = #{idx}
+    update member set level = #{level} where idx = #{idx};
   </update>
   
   <update id="updatePasswordByUserId">
-  	update member set password = #{encodedPassword} where userId = #{userId}
+  	update member set password = #{encodedPassword} where userId = #{userId};
   </update>	
 	
 	<update id="updateMemberDelete">
 		update member set isDeleted = true, deletedAt = now() where userId = #{userId};
 	</update>
 	
+	<update id="recoverAccount">
+		update member set isDeleted = false, deletedAt = null where userId = #{userId}; 
+	</update>
 	
+	<update id="updateLastLogin">
+		update member set lastLoginAt = now() where userId = #{userId};
+	</update>
 	
-	
+	<update id="setUpdateMember">
+		update member set nickName = #{vo.nickName}, name = #{vo.name}, email = #{vo.email}, tel = #{vo.tel},
+			postCode = #{vo.postCode}, address1 = #{vo.address1}, address2 = #{vo.address2}, birthday = #{vo.birthday}, gender = #{vo.gender}
+		where userId = #{vo.userId};
+	</update>
+
 	
 	
   <delete id="deleteExpiredMembers">

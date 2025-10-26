@@ -8,110 +8,93 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
-	<title>adInquiryList.jsp</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/ko.js"></script>
-	<style>
-		td {text-align:center;}
-	</style>
+	<title>1:1 문의 관리</title>
 	<script>
-	  'use strict'; 
-	  
-	  // 화면의 날짜를 moment라이브러리를 사용하여 시간으로 환산하고 있다.
-		$(document).ready(function() {
-			let wDate = document.getElementsByClassName('wDate');
-			for(let i=0; i<wDate.length; i++) {		// 여러개의 날짜를 숫자로 변환하는부분이 있다면 그 클래스 갯수만큼 돌린다.
-				var fromNow = moment(wDate[i].value).fromNow();		// 해당클래스의 value값을 넘겨주면 현재날짜와의 차이를 시간으로 계산해서 돌려준다.
-		    document.getElementsByClassName('inputDate')[i].innerText = fromNow;	// 재계산된 시간을 inputDate클래스에 뿌려준다.
-			}
-		});
-	
-	  // 카테고리별 항목 리스트 출력하기
+	  'use strict';
+	  $(document).ready(function() {
+	    $('.wDate').each(function(index) {
+	      var wDateValue = $(this).val();
+	      var fromNow = moment(wDateValue).fromNow();
+	      $('.inputDate').eq(index).text(fromNow);
+	    });
+	  });
+
 		function categoryCheck() {
-			let part = categoryForm.part.value;
-			location.href="${ctp}/admin/inquiry/adInquiryList?part="+part+"&pag=${pageVO.pag}";
+			let part = document.categoryForm.part.value;
+			location.href="${ctp}/admin/inquiry/adInquiryList?part="+part+"&pag=1";
 		}
 	</script>
-	<style>
-	  th {text-align:center}
-	</style>
 </head>
 <body>
+<div class="container my-4 w3-main">
+	<div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+		<h2 class="fw-bold">1:1 문의 관리 <span class="fs-5 text-muted">(${part})</span></h2>
+		<form name="categoryForm" style="width:200px;" onchange="categoryCheck()">
+			<select class="form-select" name="part">
+				<option value="전체" <c:if test="${part=='전체'}">selected</c:if>>전체 문의</option>
+				<option value="답변대기중" <c:if test="${part=='답변대기중'}">selected</c:if>>답변 대기중</option>
+				<option value="답변완료" <c:if test="${part=='답변완료'}">selected</c:if>>답변 완료</option>
+			</select>
+		</form>
+	</div>
 
-<p><br/></p>
-<div class="container w3-main">
-	<h3>☞ 1:1문의 관리(${pageVO.part})</h3>
-	<p><br/></p>
-	<form name="categoryForm" style="width:200px;" onchange="categoryCheck()">
-		<select class="form-select" name="part">
-	    <option value="전체" <c:if test="${part=='전체'}">selected</c:if>>전체문의글</option>
-	    <option value="답변대기중" <c:if test="${part=='답변대기중'}">selected</c:if>>답변대기중</option>
-	    <option value="답변완료" <c:if test="${part=='답변완료'}">selected</c:if>>답변완료</option>
-		</select>
-	</form>
-  <br/>
-	<table class="table table-hover">
-		<tr class="table-secondary"> 
-			<th>번호</th>
-			<th class="text-start"> &nbsp; &nbsp; &nbsp; &nbsp; 제 &nbsp; 목</th>
-			<th>작성자ID</th>
-			<th>작성일</th>
-			<th>답변상태</th>
-		</tr>
-		<c:set var="curScrStartNo" value="${pageVO.curScrStartNo}"/>
-		<c:forEach var="vo" items="${vos}">
+	<table class="table table-hover text-center align-middle">
+		<thead class="table-light">
 			<tr>
-				<td>${curScrStartNo}</td>
-				<td class="text-start"><a href="${ctp}/admin/inquiry/adInquiryReply?idx=${vo.idx}&pag=${pageVO.pag}&part=${part}" class="title-decoration-none">[${vo.part}] ${vo.title}</a></td>
-				<td>${vo.userId}</td>
-				<td>
-					<span class="inputDate"></span>
-					<input type="hidden" class="wDate" value="${vo.WDate}"/>
-				</td>
-				<td>
-					<c:if test="${vo.reply=='답변대기중'}">
-						<span class="badge bg-secondary">${vo.reply}</span>						
-					</c:if>
-					<c:if test="${vo.reply=='답변완료'}">
-						<span class="badge bg-danger">${vo.reply}</span>						
-					</c:if>
-				</td>
+				<th style="width:10%;">번호</th>
+				<th class="text-start" style="width:50%;">제목</th>
+				<th style="width:15%;">작성자ID</th>
+				<th style="width:15%;">작성일</th>
+				<th style="width:10%;">답변상태</th>
 			</tr>
-			<c:set var="curScrStartNo" value="${curScrStartNo-1}"/>
-		</c:forEach>
-		<tr><td colspan="5" class="p-0 m-0"></td></tr>
+		</thead>
+		<tbody>
+			<c:if test="${empty vos}">
+				<tr>
+					<td colspan="5" class="text-center py-5">등록된 문의가 없습니다.</td>
+				</tr>
+			</c:if>
+			<c:forEach var="vo" items="${vos}" varStatus="st">
+				<tr>
+					<td>${pageVO.curScrStartNo - st.index}</td>
+					<td class="text-start">
+						<a href="${ctp}/admin/inquiry/adInquiryReply?idx=${vo.idx}&pag=${pageVO.pag}&pageSize=${pageVO.pageSize}&part=${part}" class="text-decoration-none text-dark">[${vo.part}] ${vo.title}</a>
+					</td>
+					<td>${vo.userId}</td>
+					<td>
+						<span class="inputDate small text-muted"></span>
+						<input type="hidden" class="wDate" value="${fn:substring(vo.WDate,0,10)}"/>
+					</td>
+					<td>
+						<c:choose>
+							<c:when test="${vo.reply=='답변완료'}">
+								<span class="badge bg-success">${vo.reply}</span>
+							</c:when>
+							<c:otherwise>
+								<span class="badge bg-warning text-dark">${vo.reply}</span>
+							</c:otherwise>
+						</c:choose>
+					</td>
+				</tr>
+			</c:forEach>
+		</tbody>
 	</table>
-	
-	<!-- 페이징 처리 시작 -->
-	<c:if test="${pageVO.totRecCnt != 0}">
-		<div class="text-center">
-			<ul class="pagination justify-content-center">
-			  <c:if test="${pageVO.pag > 1}">
-			    <li class="page-item"><a href="adInquiryList?pag=1&pageSize=${pageVO.pageSize}" class="page-link text-secondary">◁◁</a></li>
-			  </c:if>
-			  <c:if test="${pageVO.curBlock > 0}">
-			    <li class="page-item"><a href="adInquiryList?pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}" class="page-link text-secondary">◀</a></li>
-			  </c:if>
-			  <c:forEach var="i" begin="${(pageVO.curBlock*pageVO.blockSize)+1}" end="${(pageVO.curBlock*pageVO.blockSize)+pageVO.blockSize}">
-			    <c:if test="${i <= pageVO.totPage && i == pageVO.pag}">
-			      <li class="page-item active"><a href="adInquiryList?pag=${i}&pageSize=${pageVO.pageSize}" class="page-link text-light bg-secondary border-secondary">${i}</a></li>
-			    </c:if>
-			    <c:if test="${i <= pageVO.totPage && i != pageVO.pag}">
-			      <li class="page-item"><a href='adInquiryList?pag=${i}&pageSize=${pageVO.pageSize}' class="page-link text-secondary">${i}</a></li>
-			    </c:if>
-			  </c:forEach>
-			  <c:if test="${pageVO.curBlock < pageVO.lastBlock}">
-			    <li class="page-item"><a href="adInquiryList?pag=${(pageVO.curBlock+1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}" class="page-link text-secondary">▶</a></li>
-			  </c:if>
-			  <c:if test="${pageVO.pag != pageVO.totPage}">
-			    <li class="page-item"><a href="adInquiryList?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}" class="page-link text-secondary">▷▷</a></li>
-			  </c:if>
-		  </ul>
+
+	<c:if test="${pageVO.totRecCnt > 0}">
+		<div class="d-flex justify-content-center mt-4">
+			<ul class="pagination">
+				<c:if test="${pageVO.pag > 1}"><li class="page-item"><a class="page-link" href="${ctp}/admin/inquiry/adInquiryList?part=${part}&pag=1&pageSize=${pageVO.pageSize}">처음</a></li></c:if>
+				<c:if test="${pageVO.curBlock > 0}"><li class="page-item"><a class="page-link" href="${ctp}/admin/inquiry/adInquiryList?part=${part}&pag=${(pageVO.curBlock-1) * pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">이전</a></li></c:if>
+				<c:forEach var="i" begin="${(pageVO.curBlock * pageVO.blockSize) + 1}" end="${(pageVO.curBlock * pageVO.blockSize) + pageVO.blockSize}" varStatus="st"><c:if test="${i <= pageVO.totPage}"><li class="page-item ${i == pageVO.pag ? 'active' : ''}"><a class="page-link" href="${ctp}/admin/inquiry/adInquiryList?part=${part}&pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li></c:if></c:forEach>
+				<c:if test="${pageVO.curBlock < pageVO.lastBlock}"><li class="page-item"><a class="page-link" href="${ctp}/admin/inquiry/adInquiryList?part=${part}&pag=${(pageVO.curBlock+1) * pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">다음</a></li></c:if>
+				<c:if test="${pageVO.pag < pageVO.totPage}"><li class="page-item"><a class="page-link" href="${ctp}/admin/inquiry/adInquiryList?part=${part}&pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">마지막</a></li></c:if>
+			</ul>
 		</div>
 	</c:if>
-	<!-- 페이징 처리 끝 -->
-	
-</div>
 
+</div>
 </body>
 </html>
