@@ -126,12 +126,8 @@
       <c:forEach var="vo" items="${vos}">
         <tr>
           <td><input type="checkbox" class="form-check-input chk" name="orderIds" value="${vo.orderId}"></td>
-          <td title="주문상세보기">
-            <a href="${ctp}/admin/dbShop/orderDetail?orderId=${vo.orderId}&pag=${pageVO.pag}&orderStatus=${orderStatus}&startJumun=${startJumun}&endJumun=${endJumun}" class="text-decoration-none">
-              ${vo.orderId}
-            </a>
-          </td>
-          <td><fmt:formatDate value="${vo.orderDate}" pattern="yyyy-MM-dd HH:mm"/></td>
+          <td title="주문상세보기">${vo.orderId}</td>
+          <td><fmt:formatDate value="${vo.orderDate}" pattern="yyyy-MM-dd"/></td>
           <td>${vo.memberIdx}</td>
           <td>${vo.recipientName}</td>
           <td><fmt:formatNumber value="${vo.totalPrice}" pattern="#,###" />원</td>

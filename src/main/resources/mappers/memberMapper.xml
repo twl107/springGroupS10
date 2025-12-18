@@ -51,18 +51,10 @@
 	</select>
 	
 	
-	
-	
-	
-	
 	<insert id="setMemberJoin">
 		insert into member (userId, password, nickName, name, email, tel, birthday, gender, postCode, address1, address2, kakaoId) 
 		values (#{vo.userId}, #{vo.password}, #{vo.nickName}, #{vo.name}, #{vo.email}, #{vo.tel}, #{vo.birthday}, #{vo.gender}, #{vo.postCode}, #{vo.address1}, #{vo.address2}, #{vo.kakaoId})
 	</insert>
-	
-	
-	
-	
 	
 	
 	<update id="setMemberLevelUp">
@@ -102,7 +94,6 @@
 			postCode = #{vo.postCode}, address1 = #{vo.address1}, address2 = #{vo.address2}, birthday = #{vo.birthday}, gender = #{vo.gender}
 		where userId = #{vo.userId};
 	</update>
-
 	
 	
   <delete id="deleteExpiredMembers">

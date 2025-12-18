@@ -10,52 +10,50 @@
 	<title>상품 목록</title>
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp"/>
 	<script>
-'use strict';
-// 필터 제출 함수: 폼을 바로 제출하여 모든 체크된 항목을 URL 파라미터로 전송합니다.
-function filterSubmit() {
-	document.getElementById("filterForm").submit();
-}
-	</script>
-	<style>
-a { text-decoration: none; }
-.category-box {	
-	border: 1px solid #ddd;	
-	padding: 15px;	
-	border-radius: 5px;	
-}
-.list-title-highlight {
-	color: brown;
-	font-weight: bold;
-}
-.product-item a {
-	color: inherit;
-	text-decoration: none;
-}
-.product-item img {
-	width: 200px;
-	height: 180px;
-	object-fit: cover;
-	border-radius: 4px;
-}
-.product-name {
-	font-size: 0.95rem;
-	font-weight: 500;
-	color: #333;
-}
-.product-price {
-	font-size: 0.9rem;
-	color: #fd7e14;
-	font-weight: bold;
-}
-.product-detail {
-	font-size: 0.85rem;
-	color: #6c757d;
-}
+		'use strict';
+		function filterSubmit() {
+			document.getElementById("filterForm").submit();
+		}
+			</script>
+			<style>
+		a { text-decoration: none; }
+		.category-box {	
+			border: 1px solid #ddd;	
+			padding: 15px;	
+			border-radius: 5px;	
+		}
+		.list-title-highlight {
+			color: brown;
+			font-weight: bold;
+		}
+		.product-item a {
+			color: inherit;
+			text-decoration: none;
+		}
+		.product-item img {
+			width: 200px;
+			height: 180px;
+			object-fit: cover;
+			border-radius: 4px;
+		}
+		.product-name {
+			font-size: 0.95rem;
+			font-weight: 500;
+			color: #333;
+		}
+		.product-price {
+			font-size: 0.9rem;
+			color: #fd7e14;
+			font-weight: bold;
+		}
+		.product-detail {
+			font-size: 0.85rem;
+			color: #6c757d;
+		}
 	</style>
 </head>
 <body>
 <div class="container mt-4">
-	<!-- 브라우저의 기본 폼 제출 기능 사용 -->
 	<form method="get" action="${ctp}/dbShop/dbShopList" id="filterForm">	
 		<div class="category-box mb-4">
 			<h5>
@@ -66,7 +64,6 @@ a { text-decoration: none; }
 				<c:forEach var="main" items="${mainCategoryVOS}">
 					<c:set var="mainChecked" value="${not empty selectedMainCodes and fn:contains(selectedMainCodes, main.categoryMainCode)}"/>
 					<div class="form-check me-3">
-						<!-- name이 mainCategory이므로, 체크된 값들이 모두 서버로 전송됩니다. -->
 						<input class="form-check-input" type="checkbox" name="mainCategory" value="${main.categoryMainCode}" id="main_${main.categoryMainCode}" onchange="filterSubmit()"
 							<c:if test="${mainChecked}">checked</c:if> >
 						<label class="form-check-label" for="main_${main.categoryMainCode}">${main.categoryMainName} (${main.categoryMainCode})</label>
@@ -85,7 +82,6 @@ a { text-decoration: none; }
 					<c:forEach var="middle" items="${middleCategoryVOS}">
 						<c:set var="middleChecked" value="${not empty selectedMiddleCodes and fn:contains(selectedMiddleCodes, middle.categoryMiddleName)}"/>
 						<div class="form-check me-3">
-							<!-- value를 categoryMiddleName으로 설정하고, 체크 상태는 categoryMiddleName 기준으로 유지 -->
 							<input class="form-check-input" type="checkbox" name="middleCategory" value="${middle.categoryMiddleName}" id="middle_${middle.categoryMiddleCode}" onchange="filterSubmit()"
 								<c:if test="${middleChecked}">checked</c:if> >
 							<label class="form-check-label" for="middle_${middle.categoryMiddleCode}">${middle.categoryMiddleName} (${middle.categoryMiddleCode})</label>
@@ -99,7 +95,6 @@ a { text-decoration: none; }
 	<div class="row">
 		<div class="col">
 			<h4>상품 리스트 :	
-				<!-- JSTL 공백 오류 방지 적용된 상태 -->
 				<span class="list-title-highlight"><c:choose><c:when test="${not empty selectedMiddleName}">${selectedMiddleName}</c:when><c:when test="${not empty selectedMainName}">${selectedMainName}</c:when><c:otherwise>전체 상품</c:otherwise></c:choose></span>
 			</h4>
 		</div>

@@ -104,7 +104,7 @@
     </tbody>
   </table>
 
-<div class="d-flex justify-content-center mt-4">
+	<div class="d-flex justify-content-center mt-4">
     <ul class="pagination">
       <c:set var="url" value="${ctp}/admin/banner/adminMainProductList" />
 
@@ -131,8 +131,7 @@
       </c:if>
     </ul>
   </div>
-  </div>
-
 </div>
+
 </body>
 </html>

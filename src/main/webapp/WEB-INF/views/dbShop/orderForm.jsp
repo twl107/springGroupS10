@@ -133,7 +133,7 @@
 
 	$(document).ready(function() {
 		const IMP = window.IMP;
-		IMP.init("imp50352711");
+		IMP.init("=====");
 
 		$("#paymentBtn").on("click", function() {
 			if ($("#recipientName").val() === "" || $("#recipientTel").val() === "" || $("#postCode").val() === "") {

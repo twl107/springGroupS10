@@ -23,7 +23,7 @@
       let query = "orderStatus=" + encodeURIComponent(orderStatus);
       query += "&startJumun=" + encodeURIComponent(startJumun);
       query += "&endJumun=" + encodeURIComponent(endJumun);
-      query += "&pag=1&pageSize=5"; // pageSize=5 고정
+      query += "&pag=1&pageSize=5";
       
       location.href = "${ctp}/dbShop/myOrders?" + query;
     }

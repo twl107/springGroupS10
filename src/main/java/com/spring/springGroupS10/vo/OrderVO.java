@@ -15,7 +15,6 @@ public class OrderVO {
 	private Date orderDate;
 	private int totalPrice;
 	
-	// 배송지 정보
 	private String recipientName;
 	private String recipientTel;
 	private String recipientPostCode;

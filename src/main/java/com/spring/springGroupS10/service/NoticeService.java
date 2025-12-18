@@ -26,5 +26,4 @@ public interface NoticeService {
 
 	int noticeImgSave(MultipartFile file, NoticeVO vo, Long sMemberIdx);
 
-
 }

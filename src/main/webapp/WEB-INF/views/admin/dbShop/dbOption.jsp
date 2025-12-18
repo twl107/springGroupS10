@@ -13,7 +13,6 @@
   	'use strict';
     let cnt = 1;
     
-    // 옵션항목 추가
     function addOption() {
     	let strOption = "";
     	let test = "t" + cnt; 
@@ -35,14 +34,11 @@
     }
     
     $(document).ready(function() {
-  	  // 옵션 그룹을 담는 부모 요소에 이벤트 핸들러를 위임
   	  $('#optionType').on('click', '.remove-option-btn', function() {
-  	    // 클릭된 버튼에서 가장 가까운.option-group 클래스를 가진 부모 요소를 찾아 제거
   	    $(this).closest('.option-group').remove();
   	  });
   	});
     
-    // 옵션 입력후 등록전송
     function fCheck() {
     	for(let i=1; i<=cnt; i++) {
     		if($("#t"+i).length != 0 && document.getElementById("optionName"+i).value=="") {
@@ -75,7 +71,7 @@
     		return false;
     	}
     	
-			let formData = $("#myForm").serialize();	// 폼 안의 모든 입력 데이터를 전송 가능한 형태로 만듦
+			let formData = $("#myForm").serialize();
     		
   		$.ajax({
     		type	: "post",
@@ -99,7 +95,6 @@
 	 		});
     }
     
-    // 상품 입력창에서 대분류 선택(Change)시 중분류가져와서 중분류 선택박스에 뿌리기
     function categoryMainChange() {
     	var categoryMainCode = myform.categoryMainCode.value;
 			$.ajax({
@@ -120,7 +115,6 @@
 			});
   	}
     
-    // 상품 입력창에서 중분류 선택(Change)시 해당 상품들을 가져와서 품목 선택박스에 뿌리기
     function categoryMiddleChange() {
     	var categoryMainCode = myform.categoryMainCode.value;
     	var categoryMiddleCode = myform.categoryMiddleCode.value;
@@ -145,10 +139,8 @@
 			});
   	}
     
-    // 상품리스트 상세보기에서 옵션등록 버튼클릭시 수행하는 부분....
     <c:if test="${!empty productVO}">productNameCheck('${productVO.productName}')</c:if>
     
-    // 상품명을 선택하면 상품의 설명을 띄워준다.
     function productNameCheck(productName) {
     	if(productName == "") productName = document.getElementById("productName").value;
     	
@@ -178,7 +170,6 @@
     	});
     }
     
-    // 옵션상세내역보기
     function optionShow(productIdx) {
     	$.ajax({
     		type : "post",
@@ -204,7 +195,6 @@
     	});
     }
     
-    // 옵션항목 삭제하기
     function optionDelete(idx) {
     	let ans = confirm("현재 선택한 옵션을 삭제하시겠습니까?");
     	if(!ans) return false;
@@ -223,7 +213,6 @@
     	});
     }
     
-    // 콤마찍기
     function numberWithCommas(x) {
 		  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		}

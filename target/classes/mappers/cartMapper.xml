@@ -73,17 +73,11 @@
 	</select>
 
 
-
-
 	<insert id="addCart">
 		insert into cart (memberIdx, productIdx, optionIdx, quantity) 
 		values (#{vo.memberIdx}, #{vo.productIdx}, #{vo.optionIdx}, #{vo.quantity})
 	</insert>
 
-	
-	
-	
-	
 	
 	<update id="updateCartQuantity">
 		update cart set quantity = quantity + #{vo.quantity} where idx = #{vo.idx}
@@ -94,18 +88,8 @@
 	</update>
 	
 	
-	
-	
-	
-	
 	<delete id="deleteCartItem">
 		delete from cart where idx = #{cartIdx}
 	</delete>
-	
-	
-	
-	
-	
-	
 
 </mapper>

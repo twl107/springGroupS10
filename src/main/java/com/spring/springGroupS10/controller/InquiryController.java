@@ -112,11 +112,4 @@ public class InquiryController {
 		else return "redirect:/message/inquiryDeleteNo?idx="+idx;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
 }

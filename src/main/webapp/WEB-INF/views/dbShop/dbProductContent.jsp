@@ -21,7 +21,6 @@
 			margin-top: 1rem;
 			margin-bottom: 1rem;
 		}
-		/* [삭제] 탭 관련 CSS 제거 */
 	</style>
 	<script>
 		$(document).ready(function() {

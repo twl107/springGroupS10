@@ -30,18 +30,11 @@
 	<select id="getRecntInquiryList" resultType="com.spring.springGroupS10.vo.InquiryVO">
 		select * from inquiry where userId = #{userId} order by wDate desc limit #{i};
 	</select>
-
-
-
-	
 	
 	
 	<insert id="setInquiryInput">
 		insert into inquiry values (default,#{vo.userId},#{vo.title},#{vo.part},default,#{vo.orderId},#{vo.content},#{vo.FName},#{vo.FSName},default);
 	</insert>
-
-
-
 
 
 	<update id="setInquiryUpdate">
@@ -50,13 +43,8 @@
 	</update>
 
 
-
-
-
 	<delete id="setInquiryDelete">
 		delete from inquiry where idx = #{idx};
 	</delete>
-
-	
 
 </mapper>

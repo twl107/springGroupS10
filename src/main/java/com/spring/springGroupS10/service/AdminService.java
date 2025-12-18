@@ -26,10 +26,5 @@ public interface AdminService {
 	void setAdInquiryDelete(int idx, String fSName, int reIdx);
 
 	int getPendingInquiryCount();
-
-	
-	
-	
-	
 	
 }

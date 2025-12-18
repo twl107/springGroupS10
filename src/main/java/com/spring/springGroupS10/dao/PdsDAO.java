@@ -24,10 +24,4 @@ public interface PdsDAO {
 
 	int pdsUpdate(@Param("vo") PdsVO vo);
 
-	
-	
-	
-	
-	
-
 }

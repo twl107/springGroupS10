@@ -22,13 +22,11 @@
 					<h2 class="card-title text-center fw-bold mb-4">자료 수정하기</h2>
 					
 					<form name="pdsUpdateForm" method="post" action="${ctp}/pds/pdsUpdate" enctype="multipart/form-data">
-						<%-- 컨트롤러에 vo객체로 넘기기 위해 기존 파일정보를 hidden으로 담아둔다. --%>
 						<input type="hidden" name="idx" value="${vo.idx}">
 						<input type="hidden" name="fName" value="${vo.FName}">
 						<input type="hidden" name="fSName" value="${vo.FSName}">
 						<input type="hidden" name="fSize" value="${vo.FSize}">
 						
-						<!-- 기존 파일 목록 (삭제 가능) -->
 						<div class="mb-4">
 							<label class="form-label fw-bold">현재 첨부된 파일 (삭제할 파일을 체크하세요)</label>
 							<div class="p-3 border rounded bg-light">
@@ -46,13 +44,11 @@
 							</div>
 						</div>
 						
-						<!-- 파일 추가 -->
 						<div class="mb-3">
 							<label for="newFiles" class="form-label">새 파일 추가 (선택)</label>
 							<input class="form-control" type="file" id="newFiles" name="newFiles" multiple>
 						</div>
 
-						<!-- 분류 -->
 						<div class="mb-3">
 							<label for="part" class="form-label">분류</label>
 							<select class="form-select" id="part" name="part">
@@ -62,19 +58,16 @@
 							</select>
 						</div>
 						
-						<!-- 제목 -->
 						<div class="form-floating mb-3">
 							<input type="text" class="form-control" id="title" name="title" value="${vo.title}" required>
 							<label for="title">제목</label>
 						</div>
 						
-						<!-- 상세 설명 -->
 						<div class="form-floating mb-3">
 							<textarea class="form-control" id="content" name="content" style="height: 150px">${vo.content}</textarea>
 							<label for="content">상세 설명</label>
 						</div>
 						
-						<!-- 공개 여부 -->
 						<div class="mb-4">
 							<label class="form-label d-block">공개 여부</label>
 							<div class="form-check form-check-inline">

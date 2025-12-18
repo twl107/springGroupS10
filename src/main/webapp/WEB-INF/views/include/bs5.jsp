@@ -9,6 +9,5 @@
 
 
 <script src="https://kit.fontawesome.com/fa3667321f.js" crossorigin="anonymous"></script>
-<!-- <script src="https://kit.fontawesome.com/df66332deb.js" crossorigin="anonymous"></script> -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 

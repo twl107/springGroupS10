@@ -13,7 +13,6 @@
   <script>
     'use strict';
     
-    // 상품 등록하기전에 체크후 전송...
     function fCheck() {
     	let categoryMainCode = myform.categoryMainCode.value;
     	let categoryMiddleCode = myform.categoryMiddleCode.value;
@@ -50,7 +49,7 @@
 				return false;
 			}
 			else if(document.getElementById("file").value != "") {
-				var maxSize = 1024 * 1024 * 10;  // 10MByte까지 허용
+				var maxSize = 1024 * 1024 * 10;
 				var fileSize = document.getElementById("file").files[0].size;
 				if(fileSize > maxSize) {
 					alert("첨부파일의 크기는 10MB 이내로 등록하세요");
@@ -62,7 +61,6 @@
 			}
     }
     
-    // 상품 입력창에서 대분류 선택(onChange)시 중분류를 가져와서 중분류 선택박스에 뿌리기
     function categoryMainChange() {
     	var categoryMainCode = myform.categoryMainCode.value;
 			$.ajax({
@@ -114,7 +112,7 @@
         <input type="text" name="productName" id="productName" class="form-control" placeholder="상품 모델명을 입력하세요" required />
       </div>
       <div class="form-group">
-        <label for="file">메인이미지</label>	<!-- 파일의 name값은 db테이블의 필드명과 꼭 다르게 줘야함. 즉 vo필드명과 달라야 한다. -->
+        <label for="file">메인이미지</label>
         <input type="file" name="file" id="file" class="form-control-file border" accept=".jpg,.gif,.png,.jpeg" required />
         (업로드 가능파일:jpg, jpeg, gif, png)
       </div>

@@ -314,7 +314,7 @@ public class MemberController {
     String sAuthEmail = (String) session.getAttribute("sAuthEmail");
     
     if (sAuthKey == null || !sAuthKey.equals(authKey) || sAuthEmail == null || !sAuthEmail.equals(email)) {
-      return "0"; // 0: 인증 실패
+      return "0";
     }
     
     List<String> userIds = memberService.findUserIdByEmail(email);
@@ -332,7 +332,7 @@ public class MemberController {
     String sAuthUserId = (String) session.getAttribute("sAuthUserId");
     
     if (sAuthKey == null || !sAuthKey.equals(authKey) || sAuthUserId == null) {
-      return "0"; //
+      return "0";
     }
     
     session.setAttribute("pwResetUserId", sAuthUserId);
@@ -541,11 +541,9 @@ public class MemberController {
       Model model
     ) {
 
-    // 1. 액세스 토큰으로 카카오 사용자 정보 요청
     KakaoProfile profile = getKakaoUserInfo(accessToken);
 
     if (profile == null) {
-      // 토큰이 유효하지 않거나 정보 조회 실패
       return "redirect:/message/kakaoLoginFail";
     }
 
@@ -575,7 +573,6 @@ public class MemberController {
       member.setEmail(email);
       member.setNickName(nickName);
 
-      // ID/PW 자동 생성
       String tempUserId = "kakao_" + kakaoId;
       String tempPassword = passwordEncoder.encode(UUID.randomUUID().toString());
 
@@ -634,8 +631,6 @@ public class MemberController {
       return null;
     }
   }
-
-	
 	
 	
 }

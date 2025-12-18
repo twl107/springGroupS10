@@ -101,7 +101,7 @@ public class DbShopServiceImpl implements DbShopService {
 			Matcher matcher = pattern.matcher(content);
 			
 			while(matcher.find()) {
-				String imgFile = matcher.group(1); // 정규식 괄호 안에 매칭된 파일명 가져옴
+				String imgFile = matcher.group(1);
 				
 				String oriFilePath = uploadPath + "ckeditor/" + imgFile;
 				String copyFilePath = uploadPath + "dbShop/product/" + imgFile;
@@ -277,14 +277,5 @@ public class DbShopServiceImpl implements DbShopService {
 	public int getDbShopListTotRecCnt(List<String> mainCategories, List<String> middleCategories) {
 		return dbShopDAO.getDbShopListTotRecCnt(mainCategories, middleCategories);
 	}
-
-		
-		
-		
-		
-
-	
-	
-	
 	
 }

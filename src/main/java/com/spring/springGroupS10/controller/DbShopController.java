@@ -254,11 +254,9 @@ public class DbShopController {
 		pageVO.setPageSize(20);
     pageVO.setSection("dbProductList");
     
-    // 3. Pagination 서비스가 총 개수를 계산할 수 있도록 검색어/카테고리 설정
     pageVO.setSearchString(keyword != null ? keyword : "");
     pageVO.setPart(mainCategoryCode != null ? mainCategoryCode : "");
     
-    // 4. 페이지 정보 계산 (totRecCnt, startIndexNo 등)
     pageVO = pagination.pagination(pageVO);
     
     List<DbProductVO> vos;
@@ -269,7 +267,7 @@ public class DbShopController {
     }
     else if(mainCategoryCode != null && !mainCategoryCode.trim().isEmpty()) {
         vos = dbShopService.getProductByMainCategoryPaging(mainCategoryCode, pageVO.getStartIndexNo(), pageVO.getPageSize());
-        model.addAttribute("mainCategoryCode", mainCategoryCode); // JSP에서 사용
+        model.addAttribute("mainCategoryCode", mainCategoryCode);
     }
     else {
         vos = dbShopService.getDbProductListAdmin(pageVO.getStartIndexNo(), pageVO.getPageSize());
@@ -510,11 +508,5 @@ public class DbShopController {
 		
 		return "dbShop/orderDetail";
 	}
-	
-	
-	
-	
-	
-	
 	
 }

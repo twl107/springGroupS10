@@ -18,6 +18,4 @@ public interface CartService {
 
 	List<CartVO> getRecentCartList(Long memberIdx, int i);
 
-	//List<CartVO> getRecentCartList(Long memberIdx, int i);
-
 }

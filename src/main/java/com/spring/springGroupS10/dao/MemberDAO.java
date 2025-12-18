@@ -46,15 +46,6 @@ public interface MemberDAO {
 
 	MemberVO getMemberByEmail(@Param("email") String email);
 
-
-
-	
-	
-	
-	
-	
-	
-	
 	
 }
 

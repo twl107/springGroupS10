@@ -22,15 +22,10 @@
     </select>
 
 
-
-
-
     <insert id="setNoticeInput">
         INSERT INTO notice (title, content, memberIdx) 
         VALUES (#{vo.title}, #{vo.content}, #{vo.memberIdx});
     </insert>
-
-
 
 
     <update id="setViewCntUpdate">
@@ -42,10 +37,8 @@
     </update>
 
 
-
     <delete id="setNoticeDelete">
         DELETE FROM notice WHERE idx = #{idx};
     </delete>
-    
     
 </mapper>

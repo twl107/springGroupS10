@@ -22,10 +22,6 @@
 	</select>
 	
 	
-	
-	
-	
-	
 	<insert id="pdsUpload" parameterType="com.spring.springGroupS10.vo.PdsVO">
 	    insert into pds (
 	        memberIdx, fName, fSName, fSize, part, title, content, openSw, hostIp, createdAt, downNum) 
@@ -33,10 +29,6 @@
 	        #{vo.memberIdx}, #{vo.fName}, #{vo.fSName}, #{vo.fSize}, #{vo.part}, #{vo.title}, #{vo.content}, #{vo.openSw}, 
 	        #{vo.hostIp}, now(), 0 );
 	</insert>
-	
-	
-	
-	
 	
 	
 	<update id="setPdsDownNumCheck">
@@ -56,15 +48,8 @@
 	</update>
 	
 	
-	
-	
-	
-	
 	<delete id="getPdsDelelte">
 		delete from pds where idx = #{idx};
 	</delete>
-	
-	
-	
 
 </mapper>

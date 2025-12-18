@@ -325,7 +325,7 @@ public class AdminController {
 
     Integer sLevel = (Integer) session.getAttribute("sLevel");
     if (sLevel == null || sLevel != 0) {
-      return "AUTH_ERROR"; // 권한 없음
+      return "AUTH_ERROR";
     }
 
     int res = dbShopService.updateProductRecommendation(idx, isRecommended);
@@ -333,8 +333,4 @@ public class AdminController {
     return (res > 0) ? "SUCCESS" : "FAIL";
   }
 
-	
-	
-	
-		
 }

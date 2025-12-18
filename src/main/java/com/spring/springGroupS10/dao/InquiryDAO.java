@@ -28,5 +28,4 @@ public interface InquiryDAO {
 
 	List<InquiryVO> getRecntInquiryList(@Param("userId") String userId, @Param("i") int i);
 
-
 }

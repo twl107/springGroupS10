@@ -14,6 +14,4 @@ public interface BannerService {
 
 	boolean deleteBanner(int idx);
 
-
-
 }

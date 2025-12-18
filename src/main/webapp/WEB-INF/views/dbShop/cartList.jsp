@@ -9,7 +9,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>TWAUDIO</title>
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
-<style>
+	<style>
     .product-img {
       width: 100px;
       height: 100px;
@@ -136,37 +136,28 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
   $(function() {
-    // --- 합계 금액을 계산하고 화면에 업데이트하는 함수 ---
     function updateTotals() {
       let totalProductsPrice = 0;
       
-      // 장바구니의 모든 상품을 순회
       $(".cart-item").each(function() {
         const unitPrice = parseFloat($(this).data('unit-price'));
         const quantity = parseInt($(this).find('.quantity-input').val());
         const subtotal = unitPrice * quantity;
         
-        // 각 상품별 합계 금액은 항상 업데이트 (수량 변경 시 반영)
         $(this).find('.item-subtotal').text(subtotal.toLocaleString() + '원');
         
-        // 체크된 상품의 합계만 계산
         if ($(this).find('.item-check').is(':checked')) {
           totalProductsPrice += subtotal;
         }
       });
       
-      // 배송비 계산 (예: 5만원 이상 무료배송)
-      //const shippingFee = totalProductsPrice >= 50000 || totalProductsPrice === 0 ? 0 : 3000;
       const shippingFee = 0;
-      
       const grandTotal = totalProductsPrice + shippingFee;
       
-      // 최종 결제 정보 업데이트
       $('#total-products-price').text(totalProductsPrice.toLocaleString() + '원');
       $('#shipping-fee').text(shippingFee.toLocaleString() + '원');
       $('#grand-total').text(grandTotal.toLocaleString() + '원');
       
-      // 주문 버튼 활성화/비활성화
       const $orderButton = $('#btn-order');
       if (totalProductsPrice === 0) {
         $orderButton.prop('disabled', true).text('주문할 상품을 선택하세요');
@@ -174,20 +165,18 @@
         $orderButton.prop('disabled', false).text('주문하기');
       }
 
-      // 장바구니가 비게 되면 '비어있음' 화면으로 새로고침
       if ($(".cart-item").length === 0) {
         location.reload();
       }
     }
 
-    // --- 수량 변경 또는 상품 삭제 시 서버에 업데이트 요청하는 함수 ---
     function updateCart(cartIdx, quantity) {
       $.ajax({
         url: "${ctp}/dbShop/cartUpdateQuantity",
         type: "POST",
         data: { cartIdx: cartIdx, quantity: quantity },
         success: function() {
-          updateTotals(); // 서버 업데이트 성공 시 화면에도 합계 반영
+          updateTotals();
         },
         error: function() {
           alert("수량 변경 중 오류가 발생했습니다.");
@@ -195,7 +184,6 @@
       });
     }
 
-    // --- 이벤트 위임을 사용하여 +, -, x 버튼 클릭 처리 ---
     $('#cart-list-container').on('click', function(e) {
       const $target = $(e.target);
       const $item = $target.closest('.cart-item');
@@ -206,14 +194,12 @@
       const $quantityInput = $item.find('.quantity-input');
       let quantity = parseInt($quantityInput.val());
 
-      // 수량 증가(+) 버튼
       if ($target.hasClass('btn-plus')) {
         quantity++;
         $quantityInput.val(quantity);
         updateCart(cartIdx, quantity);
       }
       
-      // 수량 감소(-) 버튼
       if ($target.hasClass('btn-minus')) {
         if (quantity > 1) {
           quantity--;
@@ -222,7 +208,6 @@
         }
       }
       
-      // 삭제(x) 버튼
       if ($target.hasClass('btn-delete')) {
         if (confirm("해당 상품을 장바구니에서 삭제하시겠습니까?")) {
           $.ajax({
@@ -241,14 +226,12 @@
       }
     });
 
-    // --- 전체 선택 체크박스 클릭 이벤트 ---
     $('#check-all').on('click', function() {
       const isChecked = $(this).is(':checked');
       $('.item-check').prop('checked', isChecked);
       updateTotals();
     });
     
-    // --- 개별 체크박스 클릭 이벤트 ---
     $('#cart-list-container').on('click', '.item-check', function() {
       const totalCheckboxes = $('.item-check').length;
       const checkedCheckboxes = $('.item-check:checked').length;
@@ -258,45 +241,35 @@
       updateTotals();
     });
 
-    // --- 페이지 첫 로드 시 합계 금액 계산 ---
     <c:if test="${not empty vos}">
       updateTotals();
     </c:if>
     
-    // 주문하기 버튼 클릭 이벤트
     $("#btn-order").on('click', function() {
-        // 1. 버튼이 비활성화 상태면 중단
         if ($(this).prop('disabled')) {
             alert("주문할 상품을 선택해주세요.");
             return;
         }
 
-        // 2. 선택된 상품들의 cartIdx를 담을 배열
         const selectedCartIds = [];
 
-        // 3. 체크된(.item-check:checked) 항목들을 순회
         $(".item-check:checked").each(function() {
-            // 4. 각 항목의 부모 .cart-item에서 data-cart-idx 값을 가져옴
             const cartIdx = $(this).closest('.cart-item').data('cart-idx');
             selectedCartIds.push(cartIdx);
         });
 
-        // 5. 서버로 전송할 동적 <form> 생성
-        //    GET 방식은 URL 길이에 제한이 있으므로, POST로 전송
         const $form = $('<form></form>');
         $form.attr("method", "POST");
         $form.attr("action", "${ctp}/dbShop/orderForm");
 
-        // 6. 선택된 cartIdx들을 <input type="hidden">으로 추가
         selectedCartIds.forEach(function(cartIdx) {
             $form.append($('<input>', {
                 type: 'hidden',
-                name: 'cartIdxs', // 컨트롤러에서 @RequestParam("cartIdxs")로 받음
+                name: 'cartIdxs',
                 value: cartIdx
             }));
         });
 
-        // 7. 폼을 body에 추가하고 submit (페이지 이동)
         $('body').append($form);
         $form.submit();
     });

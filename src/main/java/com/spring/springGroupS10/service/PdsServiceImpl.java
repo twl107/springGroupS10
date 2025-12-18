@@ -48,7 +48,6 @@ public class PdsServiceImpl implements PdsService {
 		try {
 			List<MultipartFile> fileList = vo.getFiles();
 			
-			// 리스트가 비어있지 않았을 경우 실행
 			if(fileList != null && !fileList.isEmpty() && fileList.get(0).getSize() > 0) {
 				
 				StringBuilder oFileNames = new StringBuilder();
@@ -143,7 +142,6 @@ public class PdsServiceImpl implements PdsService {
 	@Override
 	public void updatePdsVO(PdsVO vo, String[] deleteFiles, Map<String, String> newFilesMap, HttpServletRequest request) {
 		
-		// 1. 기존 파일 정보를 List로 변환
 		List<String> fNameList = new ArrayList<>(Arrays.asList(vo.getFName().split("/")));
 		List<String> fSNameList = new ArrayList<>(Arrays.asList(vo.getFSName().split("/")));
 		
@@ -152,7 +150,6 @@ public class PdsServiceImpl implements PdsService {
 			fSNameList.addAll(Arrays.asList(vo.getFSName().split("/")));
 		}
 		
-		// 2. 삭제할 파일 정보를 List에서 제거
 		if(deleteFiles != null && deleteFiles.length > 0) {
 			for(String delFSName : deleteFiles) {
 				int index = fSNameList.indexOf(delFSName);
@@ -163,7 +160,6 @@ public class PdsServiceImpl implements PdsService {
 			}
 		}
 		
-		// 3. 새로 추가된 파일 정보를 List에 추가
 		if(newFilesMap != null && !newFilesMap.isEmpty()) {
 			for(String sFileName : newFilesMap.keySet()) {
 				fSNameList.add(sFileName);
@@ -174,7 +170,6 @@ public class PdsServiceImpl implements PdsService {
 		fNameList = fNameList.stream().filter(name -> !name.trim().isEmpty()).collect(Collectors.toList());
 		fSNameList = fSNameList.stream().filter(name -> !name.trim().isEmpty()).collect(Collectors.toList());
 		
-		// 4. 다시 '/'로 묶어서 VO에 저장
 		vo.setFName(String.join("/", fNameList));
 		vo.setFSName(String.join("/", fSNameList));
 		
@@ -195,11 +190,6 @@ public class PdsServiceImpl implements PdsService {
 	public int pdsUpdate(PdsVO vo) {
 		return pdsDAO.pdsUpdate(vo);
 	}
-	
-	
-	
-	
-	
 	
 	
 }

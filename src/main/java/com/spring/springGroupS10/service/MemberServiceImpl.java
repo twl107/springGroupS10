@@ -131,11 +131,5 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.getMemberByEmail(email);
 	}
 
-	
-	
-	
-	
-	
-	
 }
 

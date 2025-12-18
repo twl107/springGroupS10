@@ -26,7 +26,6 @@ import com.spring.springGroupS10.service.DbShopService;
 import com.spring.springGroupS10.vo.BannerVO;
 import com.spring.springGroupS10.vo.DbProductVO;
 
-//@Slf4j
 @Controller
 public class HomeController {
 	
@@ -87,7 +86,6 @@ public class HomeController {
 		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/ckeditor/");
 		String oFileName = upload.getOriginalFilename();
 		
-		// 확장자 제한처리(이미지파일(jpg,gif,png) + 동영상파일(mp4))
 		String regExt = "(jpg|jpeg|gif|png|mp4)";
 		String ext = oFileName.substring(oFileName.lastIndexOf(".")+1);
 		if(!ext.matches(regExt)) {
@@ -95,7 +93,6 @@ public class HomeController {
 			return;
 		}
 		
-		// 파일명 중복방지를 위해 날짜구분기호로 처리
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
 		oFileName = sdf.format(date) + "_" + oFileName;
@@ -110,8 +107,6 @@ public class HomeController {
 		
 		fos.close();
 	}
-	
-	
 	
 	
 }

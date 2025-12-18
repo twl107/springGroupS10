@@ -13,9 +13,9 @@
     'use strict';
     function updateLevel(idx, obj) {
       let level = obj.value;
-      let originalLevel = obj.dataset.originalLevel; // data 속성에서 원래 등급을 가져옴
+      let originalLevel = obj.dataset.originalLevel;
       if (!confirm("해당 회원의 등급을 변경하시겠습니까?")) {
-        obj.value = originalLevel; // 취소 시 원래 등급으로 복원
+        obj.value = originalLevel;
         return;
       }
       
@@ -26,18 +26,18 @@
         success: function(res) {
           if (res != 0) {
             alert("등급이 변경되었습니다.");
-            obj.dataset.originalLevel = level; // 변경 성공 시 data 속성도 업데이트
+            obj.dataset.originalLevel = level;
             if (level != ${pageVO.level} && ${pageVO.level} != 99) {
               location.reload();
             }
           } else {
             alert("등급 변경 실패. 다시 시도해주세요.");
-            obj.value = originalLevel; // 실패 시 원래 등급으로 복원
+            obj.value = originalLevel;
           }
         },
         error: function() {
           alert("전송 오류가 발생했습니다.");
-          obj.value = originalLevel; // 실패 시 원래 등급으로 복원
+          obj.value = originalLevel;
         }
       });
     }
@@ -51,7 +51,6 @@
   <div class="row mb-3">
     <div class="col">
       <form name="filterForm" method="get" action="${ctp}/admin/member/adminMemberList" class="d-flex justify-content-between">
-        <%-- 회원등급 필터 --%>
         <div class="d-flex align-items-center">
           <label for="levelSelect" class="me-2 fw-bold">회원등급 :</label>
           <select name="level" id="levelSelect" class="form-select" onchange="this.form.submit()" style="width: 150px;">
@@ -63,7 +62,6 @@
           </select>
         </div>
   
-        <%-- 페이지당 회원 수 필터 --%>
         <div class="d-flex align-items-center">
           <label for="pageSizeSelect" class="me-2 fw-bold">페이지당 회원 수 :</label>
           <select name="pageSize" id="pageSizeSelect" class="form-select" onchange="this.form.submit()" style="width: 100px;">
@@ -97,7 +95,6 @@
         <td>${vo.email}</td>
         <td>${fn:substring(vo.lastLoginAt,0,16)}</td>
         <td>
-          <%-- ===== 탈퇴 경과 일수 표시 (수정된 부분) ===== --%>
           <c:if test="${!vo.isDeleted()}">활동중</c:if>
           <c:if test="${vo.isDeleted()}">
             탈퇴신청
@@ -117,23 +114,6 @@
       </tr>
     </c:forEach>
   </table>
-
-  <!-- 페이지네이션 (level 파라미터 및 '/admin' 경로 확인) -->
-  <%-- <div class="d-flex justify-content-center">
-    <ul class="pagination">
-	    <c:if test="${pageVO.pag > 1}"><li class="page-item"><a class="page-link" href="${ctp}/admin/dbShop/adminOrderList?status=${status}&pag=1&pageSize=${pageVO.pageSize}">처음</a></li></c:if>
-	    <c:if test="${pageVO.curBlock > 0}"><li class="page-item"><a class="page-link" href="${ctp}/admin/dbShop/adminOrderList?status=${status}&pag=${(pageVO.curBlock-1) * pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">이전</a></li></c:if>
-	    <c:forEach var="i" begin="${(pageVO.curBlock * pageVO.blockSize) + 1}" end="${(pageVO.curBlock * pageVO.blockSize) + pageVO.blockSize}" varStatus="st">
-	      <c:if test="${i <= pageVO.totPage}">
-	        <li class="page-item ${i == pageVO.pag ? 'active' : ''}">
-	        	<a class="page-link" href="${ctp}/admin/dbShop/adminOrderList?status=${status}&pag=${i}&pageSize=${pageVO.pageSize}">${i}</a>
-	        </li>
-	      </c:if>
-	    </c:forEach>
-	    <c:if test="${pageVO.curBlock < pageVO.lastBlock}"><li class="page-item"><a class="page-link" href="${ctp}/admin/dbShop/adminOrderList?status=${status}&pag=${(pageVO.curBlock+1) * pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">다음</a></li></c:if>
-	    <c:if test="${pageVO.pag < pageVO.totPage}"><li class="page-item"><a class="page-link" href="${ctp}/admin/dbShop/adminOrderList?status=${status}&pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">마지막</a></li></c:if>
-	  </ul>
-  </div> --%>
 </div>
 <p><br/></p>
 </body>

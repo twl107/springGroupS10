@@ -243,7 +243,6 @@
 	</select>
 	
 	
-	
 	<insert id="setCategoryMainInput">
 		insert into categoryMain values (#{vo.categoryMainCode},#{vo.categoryMainName});
 	</insert>
@@ -261,14 +260,11 @@
   </insert>	
 	
 	
-	
 	<update id="updateProductRecommendation">
     UPDATE dbProduct
     SET isRecommended = #{isRecommended}
     WHERE idx = #{idx}
   </update>
-	
-	
 	
 	
 	<delete id="setCategoryMainDelete">
@@ -282,9 +278,5 @@
 	<delete id="setOptionDelete">
 		delete from dbOption where idx = #{idx};
 	</delete>
-	
-	
-	
-	
 
 </mapper>

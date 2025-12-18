@@ -20,16 +20,15 @@
 		FROM banner WHERE idx = #{idx}
 	</select>
 	
+	
 	<insert id="addBanner">
 		INSERT INTO banner (fSName, linkUrl, displayOrder, isActive)
 		VALUES (#{vo.fSName}, #{vo.linkUrl}, #{vo.displayOrder}, #{vo.isActive})
 	</insert>
 	
+	
 	<delete id="deleteBanner">
 		DELETE FROM banner WHERE idx = #{idx}
 	</delete>
-  
-  
-	
 
 </mapper>

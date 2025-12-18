@@ -19,16 +19,10 @@
 	</select>
 	
 	
-	
-	
   <insert id="setInquiryInputAdmin">
     insert into inquiryReply values (default,#{vo.inquiryIdx},default,#{vo.reContent});
   </insert>
-	
-	
-	
-	
-	
+
 	
   <update id="setInquiryUpdateAdmin">
     update inquiry set reply = '답변완료' where idx = #{inquiryIdx};
@@ -43,8 +37,6 @@
   </update>
 	
 	
-	
-	
   <delete id="setAdInquiryReplyDelete">
     delete from inquiryReply where reIdx = #{reIdx};
   </delete>
@@ -52,9 +44,5 @@
   <delete id="setAdInquiryDelete">
     delete from inquiry where idx = #{idx};
   </delete>
-  
-  
-  
-	
 
 </mapper>

@@ -102,8 +102,5 @@ public class OrderServiceImpl implements OrderService {
 	public long getSalesByDate(String period) {
 		return orderDAO.getSalesByDate(period);
 	}
-
-	
-	
 	
 }

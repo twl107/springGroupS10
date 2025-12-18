@@ -11,7 +11,6 @@
   <script>
     'use strict';
     
-    // 대분류 등록하기
     function categoryMainCheck() {
     	let categoryMainCode = categoryMainForm.categoryMainCode.value.toUpperCase();
     	let categoryMainName = categoryMainForm.categoryMainName.value;
@@ -40,7 +39,6 @@
     	});
     }
     
-    // 대분류 삭제
     function categoryMainDelete(categoryMainCode) {
     	let ans = confirm("대분류 항복을 삭제하시겠습니까?");
     	if(!ans) return false;
@@ -60,7 +58,6 @@
     	});
     }
     
-    // 중분류 등록하기
     function categoryMiddleCheck() {
     	let categoryMainCode = categoryMiddleForm.categoryMainCode.value;
     	let categoryMiddleCode = categoryMiddleForm.categoryMiddleCode.value;
@@ -89,7 +86,6 @@
     	});
     }
     
-    // 중분류 삭제
     function categoryMiddleDelete(categoryMiddleCode) {
     	let ans = confirm("중분류항목을 삭제하시겠습니까?");
     	if(!ans) return false;

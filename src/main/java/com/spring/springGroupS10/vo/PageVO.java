@@ -14,13 +14,13 @@ public class PageVO {
 	private int curBlock;
 	private int lastBlock;
 	
-	private String section;	// 'guest/board/pds/member'....
-	private String part;		// '학습/여행/음식/기타'...
-	private String search;  // '글제목/글쓴이/글내용'
-	private String searchString;  // '검색어...'
-	private String searchStr; // '글제목/글쓴이/글내용'
-	private String boardFlag;	// 검색기에서 글내용보기 호출시 사용하는 변수
+	private String section;
+	private String part;
+	private String search;
+	private String searchString;
+	private String searchStr;
+	private String boardFlag;
 	
-	private int level;	// 회원 등급(초기값:99 - 비회원)
+	private int level;
 	
 }

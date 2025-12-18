@@ -25,11 +25,6 @@ public class MessageController {
 			@RequestParam(name="idx", defaultValue = "0", required = false) int idx
 		) {
 		
-		
-			/*
-			 * if(msgFlag.equals("memberLoginOk")) { model.addAttribute("message", userId +
-			 * "님 환영합니다."); model.addAttribute("url", "/member/home?userId="+userId); }
-			 */
 		if(msgFlag.equals("memberLoginOk")) {
 			model.addAttribute("message", "로그인 되었습니다.");
 			model.addAttribute("url", "/");
@@ -235,9 +230,6 @@ public class MessageController {
 			model.addAttribute("message", "배너 삭제에 실패했습니다.");
 			model.addAttribute("url", "/admin/banner/adminBannerForm");
 		}
-		
-		
-		
 		
 		return "include/message";
 	}

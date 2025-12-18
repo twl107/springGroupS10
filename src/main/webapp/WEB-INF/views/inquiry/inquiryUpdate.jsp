@@ -17,9 +17,9 @@
     }); 
 
     function handleImgsFileSelect(e) {
-      var files = e.target.files;		// 파일의 정보를 담아온다.
-      var filesArr = Array.prototype.slice.call(files);	// 여러개의 파일일경우는 배열로 저장되어 있다. 각 파일객체별로 잘라서 정보를 filesArr배열에 담는다.
-      $(".imgs_wrap").html('');	// 기존에 존재하는것들 clear시킨후 아래쪽에서 append시켜준다.
+      var files = e.target.files;
+      var filesArr = Array.prototype.slice.call(files);
+      $(".imgs_wrap").html('');
 
       filesArr.forEach(function(f) {
         if(!f.type.match("image.*")) {
@@ -122,7 +122,6 @@
 			<tr> 
 				<th>이미지</th>
 				<td>
-					<!-- <input type="file" multiple="multiple" name="file" id="file" accept=".zip,.jpg,.gif,.png"/><br/><br/> -->
 					<input type="file" name="file" id="file" class="form-control" accept=".zip,.jpg,.gif,.png"/><br/><br/>
 					- 파일 형식은 zip / jpg / gif / png만 허용합니다.(<font color="red">사진을 변경하시면 기존 사진은 삭제됩니다.</font>)
 				</td>

@@ -21,7 +21,6 @@
           <h2 class="card-title text-center fw-bold mb-4">회원가입</h2>
           <form name="myform" id="myform" method="post" action="${ctp}/member/memberJoin">
             
-            <!-- 아이디 -->
             <div class="input-group mb-3">
               <div class="form-floating">
                 <input type="text" class="form-control" id="userId" name="userId" placeholder="아이디" required>
@@ -30,19 +29,16 @@
               <button class="btn btn-outline-secondary" type="button" id="userIdCheckBtn">중복확인</button>
             </div>
 
-            <!-- 비밀번호 -->
             <div class="form-floating mb-3">
               <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호" required>
               <label for="password">비밀번호</label>
             </div>
 
-            <!-- 비밀번호 확인 (id, name, for 수정) -->
             <div class="form-floating mb-3">
               <input type="password" class="form-control" id="passwordCheck" name="passwordCheck" placeholder="비밀번호 확인" required>
               <label for="passwordCheck">비밀번호 확인</label>
             </div>
 
-            <!-- 닉네임 -->
             <div class="input-group mb-3">
               <div class="form-floating">
                 <input type="text" class="form-control" id="nickName" name="nickName" placeholder="닉네임" required>
@@ -51,13 +47,11 @@
               <button class="btn btn-outline-secondary" type="button" id="nickNameCheckBtn">중복확인</button>
             </div>
             
-            <!-- 이름 -->
             <div class="form-floating mb-3">
               <input type="text" class="form-control" id="name" name="name" placeholder="이름" required>
               <label for="name">이름</label>
             </div>
             
-            <!-- 이메일 -->
             <div class="mb-3">
               <label class="form-label small ms-1">이메일</label>
               <div class="input-group">
@@ -79,7 +73,6 @@
               <div id="demoSpin" class="mt-2"></div>
             </div>
             
-            <!-- 연락처 -->
             <div class="mb-3">
               <label class="form-label small ms-1">연락처</label>
               <div class="input-group">
@@ -92,13 +85,11 @@
               <input type="hidden" id="tel" name="tel">
             </div>
 
-            <!-- 생년월일 -->
             <div class="form-floating mb-3">
               <input type="date" class="form-control" id="birthday" name="birthday" required>
               <label for="birthday">생년월일</label>
             </div>
 
-            <!-- 성별 -->
             <div class="mb-3">
               <label class="form-label small ms-1">성별</label>
               <div>
@@ -113,7 +104,6 @@
               </div>
             </div>
 
-            <!-- 주소 -->
             <div class="input-group mb-2">
               <input type="text" class="form-control" id="postCode" name="postCode" placeholder="우편번호" readonly>
               <button type="button" class="btn btn-outline-secondary" onclick="execDaumPostcode()">우편번호 찾기</button>
@@ -127,7 +117,6 @@
               <label for="address2">상세 주소</label>
             </div>
             
-            <!-- 버튼 -->
             <div class="d-grid gap-2">
               <button type="submit" class="btn btn-primary btn-lg">가입하기</button>
               <button type="button" class="btn btn-outline-secondary" onclick="location.href='${ctp}/'">취소</button>
@@ -272,13 +261,12 @@
       $('#demoSpin').html("");
     });
     
-    // --- 최종 회원가입 전 유효성 검사 (변수명 수정) ---
     $('#myform').on('submit', function(e) {
       e.preventDefault();
       
       const userId = $("#userId").val().trim();
       const password = $("#password").val();
-      const passwordCheck = $("#passwordCheck").val(); // 변수명 수정
+      const passwordCheck = $("#passwordCheck").val();
       const nickName = $("#nickName").val().trim();
       const name = $("#name").val().trim();
       const email1 = $("#email1").val().trim();
@@ -291,14 +279,14 @@
       const tel = tel1 + "-" + tel2 + "-" + tel3;
       
       const regUserId = /^[a-zA-Z0-9_]{4,20}$/;
-      //const regPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,20}$/;
+      const regPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,20}$/;
       const regNickName = /^[a-zA-Z가-힣0-9]{2,10}$/;
       const regName = /^[a-zA-Z가-힣]+$/;
       const regEmail = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
       const regTel = /^\d{2,3}-\d{3,4}-\d{4}$/;
 
       if (!regUserId.test(userId)) { alert("아이디는 4~20자의 영문, 숫자, 밑줄(_)만 사용 가능합니다."); return; }
-      //if (!regPassword.test(password)) { alert("비밀번호는 6~20자 길이의 영문 대/소문자, 숫자, 특수문자(!@#$%^&*)를 모두 포함해야 합니다."); return; }
+      if (!regPassword.test(password)) { alert("비밀번호는 6~20자 길이의 영문 대/소문자, 숫자, 특수문자(!@#$%^&*)를 모두 포함해야 합니다."); return; }
       if (password !== passwordCheck) { alert("비밀번호가 일치하지 않습니다."); return; }
       if (!regNickName.test(nickName)) { alert("닉네임은 2~10자의 한글, 영문, 숫자만 사용 가능합니다."); return; }
       if (!regName.test(name)) { alert("이름은 한글 또는 영문만 사용 가능합니다."); return; }

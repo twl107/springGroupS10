@@ -60,8 +60,5 @@ public class BannerServiceImpl implements BannerService {
 		}
 		return false;
 	}
-
-	
-	
 	
 }

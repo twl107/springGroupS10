@@ -113,7 +113,6 @@
 	</select>
 
 
-
 	<insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderVO.idx">
 		INSERT INTO orders (
 			orderId, memberIdx, totalPrice,
@@ -132,14 +131,9 @@
 	</insert>
 	
 	
-	
 	<update id="setUpdateStatus">
 		update orders set orderStatus = #{orderStatus} where orderId = #{orderId};
 	</update>
-	
-	
-	
-	
 	
 	
 	<delete id="deleteCartItems">
@@ -148,10 +142,6 @@
 			#{idx}
 		</foreach>
 	</delete>
-
-
-
-
 
 </mapper>
 

@@ -29,5 +29,4 @@ public interface InquiryService {
 
 	List<InquiryVO> getRecntInquiryList(String userId, int i);
 
-
 }

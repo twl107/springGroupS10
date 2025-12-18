@@ -95,18 +95,4 @@ public interface DbShopDAO {
 
 	int getDbShopListTotRecCnt(@Param("mainCategories") List<String> mainCategories, @Param("middleCategories") List<String> middleCategories);
 
-
-
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

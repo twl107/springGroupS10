@@ -20,7 +20,6 @@
 	</div>
 
 	<div class="row g-5">
-		<!-- 왼쪽: 주문 상품 정보 -->
 		<div class="col-lg-7">
 			<div class="card shadow-sm">
 				<div class="card-header"><h5 class="mb-0">주문 상품</h5></div>
@@ -46,7 +45,6 @@
 			</div>
 		</div>
 
-		<!-- 오른쪽: 배송 및 결제 정보 -->
 		<div class="col-lg-5">
 			<div class="card shadow-sm mb-4">
 				<div class="card-header"><h5 class="mb-0">배송 정보</h5></div>

@@ -113,18 +113,4 @@ public class InquiryServiceImpl implements InquiryService {
 		return inquiryDAO.getRecntInquiryList(userId, i);
 	}
 	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

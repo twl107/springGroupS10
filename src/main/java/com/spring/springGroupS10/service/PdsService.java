@@ -32,11 +32,5 @@ public interface PdsService {
 	void updatePdsVO(PdsVO vo, String[] deleteFiles, Map<String, String> newFilesMap, HttpServletRequest request);
 
 	int pdsUpdate(PdsVO vo);
-
-
-	
-	
-	
-	
 	
 }
