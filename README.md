@@ -35,6 +35,7 @@
 데이터 연동 (MyBatis): [DAO 바로가기](https://github.com/twl107/springGroupS10/tree/master/src/main/java/com/spring/springGroupS10/dao) | [Mapper XML 바로가기](https://github.com/twl107/springGroupS10/tree/master/src/main/resources)
 
 프론트엔드 (JSP): [WEB-INF/views 바로가기](https://github.com/twl107/springGroupS10/tree/master/src/main/webapp/WEB-INF/views)
+
 ---
 
 ## ✨ Key Features
