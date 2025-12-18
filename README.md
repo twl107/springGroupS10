@@ -27,10 +27,11 @@
 
 ### Tools & API
 <img src="https://img.shields.io/badge/STS-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
-<img src="https://img.shields.io/badge/PortOne_API-5D3FD3?style=for-the-badge"> </div>
+<img src="https://img.shields.io/badge/PortOne_API-5D3FD3?style=for-the-badge"> 
 
+</div>
 
-🔵 TWAUDIO (Personal Project)
+###🔵 TWAUDIO (Personal Project)
 비즈니스 로직: [Controller 바로가기](https://github.com/twl107/springGroupS10/tree/master/src/main/java/com/spring/springGroupS10/controller) | [Service 바로가기](https://github.com/twl107/springGroupS10/tree/master/src/main/java/com/spring/springGroupS10/service)
 
 데이터 연동 (MyBatis): [DAO 바로가기](https://github.com/twl107/springGroupS10/tree/master/src/main/java/com/spring/springGroupS10/dao) | [Mapper XML 바로가기](https://github.com/twl107/springGroupS10/tree/master/src/main/resources/mappers)
